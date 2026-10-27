@@ -1,5 +1,6 @@
 import React from 'react';
 import { DerechoPeticionData, DocumentStyleConfig } from '../../types/documents';
+import { SignatureBlock } from './SignatureBlock';
 
 interface Props {
   data: DerechoPeticionData;
@@ -47,7 +48,7 @@ export const DerechoPeticionTemplate: React.FC<Props> = ({ data, styleConfig }) 
         </div>
 
         {/* Asunto & Referencia */}
-        <div className="bg-slate-50 border-l-4 border-slate-900 p-3 my-3">
+        <div className="bg-slate-50 border border-slate-300 rounded-lg p-3.5 my-3">
           <p className="font-bold text-slate-950 text-xs md:text-sm uppercase">
             ASUNTO:{' '}
             <span className="font-semibold normal-case text-slate-900">
@@ -152,7 +153,7 @@ export const DerechoPeticionTemplate: React.FC<Props> = ({ data, styleConfig }) 
         )}
 
         {/* V. Notificaciones */}
-        <div className="bg-slate-50 border border-slate-200 p-3 text-xs">
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs">
           <h2 className="font-bold text-slate-900 uppercase tracking-wide text-xs mb-1">
             V. Lugar de Notificación
           </h2>
@@ -181,20 +182,18 @@ export const DerechoPeticionTemplate: React.FC<Props> = ({ data, styleConfig }) 
 
       {/* Firma */}
       <div className="pt-8 mt-6 border-t border-slate-200">
-        <p className="text-xs text-slate-500 mb-8">Atentamente y con el debido respeto,</p>
-        <div className="w-80">
-          <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-          <p className="font-bold text-slate-950 uppercase text-sm">
-            {data.nombrePeticionario || 'NOMBRE DEL PETICIONARIO'}
-          </p>
-          <p className="text-xs text-slate-700">
-            {data.tipoDocumento}:{' '}
-            <span className="font-mono">{data.numeroDocumento || '________________'}</span>
-            {data.lugarExpedicion ? ` de ${data.lugarExpedicion}` : ''}
-          </p>
-          {data.telefono && <p className="text-xs text-slate-600">Tel: {data.telefono}</p>}
-          {data.correo && <p className="text-xs text-slate-600">Email: {data.correo}</p>}
-        </div>
+        <SignatureBlock
+          signatureType={data.signatureType}
+          signatureDataUrl={data.signatureDataUrl}
+          name={data.nombrePeticionario || 'NOMBRE DEL PETICIONARIO'}
+          docType={data.tipoDocumento || 'Cédula de Ciudadanía'}
+          docNumber={data.numeroDocumento || '________________'}
+          expedition={data.lugarExpedicion}
+          phone={data.telefono}
+          email={data.correo}
+          address={data.direccionNotificacion}
+          label="Atentamente y con el debido respeto,"
+        />
       </div>
     </div>
   );

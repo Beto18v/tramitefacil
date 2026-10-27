@@ -155,3 +155,9 @@ export function calcularTotalesCuentaCobro(
     totalNeto,
   };
 }
+
+export function calcularSubtotalConceptos(items?: Array<{ cantidad: number; valorUnitario: number }>): number {
+  if (!items || items.length === 0) return 0;
+  return items.reduce((acc, item) => acc + (Math.max(0, item.cantidad || 0) * Math.max(0, item.valorUnitario || 0)), 0);
+}
+

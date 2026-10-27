@@ -1,6 +1,7 @@
 import React from 'react';
 import { ContratoArrendamientoData, DocumentStyleConfig } from '../../types/documents';
 import { formatearMoneda, numeroALetras } from '../../utils/numberToWords';
+import { SignatureBlock } from './SignatureBlock';
 
 interface Props {
   data: ContratoArrendamientoData;
@@ -41,10 +42,12 @@ export const ContratoArrendamientoTemplate: React.FC<Props> = ({ data, styleConf
             Entre los suscritos a saber: de una parte, <strong>{data.nombreArrendador || '[NOMBRE DEL ARRENDADOR]'}</strong>,
             identificado(a) con {data.tipoDocArrendador} N° <strong>{data.numDocArrendador || '____________'}</strong>,
             teléfono {data.telefonoArrendador || ''}, quien para todos los efectos del presente contrato se denominará el{' '}
-            <strong>ARRENDADOR</strong>; y de la otra parte, <strong>{data.nombreArrendatario || '[NOMBRE DEL ARRENDATARIO]'}</strong>,
+            <strong>ARRENDADOR</strong>; de otra parte, <strong>{data.nombreArrendatario || '[NOMBRE DEL ARRENDATARIO]'}</strong>,
             identificado(a) con {data.tipoDocArrendatario} N° <strong>{data.numDocArrendatario || '____________'}</strong>,
-            teléfono {data.telefonoArrendatario || ''}, quien se denominará el <strong>ARRENDATARIO</strong>, hemos convenido
-            celebrar el presente Contrato de Arrendamiento de Vivienda Urbana sujeto a las siguientes cláusulas:
+            teléfono {data.telefonoArrendatario || ''}, quien se denominará el <strong>ARRENDATARIO</strong>
+            {data.incluyeCodeudor && data.nombreCodeudor ? (
+              <>; y de tercera parte, <strong>{data.nombreCodeudor}</strong>, identificado(a) con {data.tipoDocCodeudor} N° <strong>{data.numDocCodeudor || '____________'}</strong>, teléfono {data.telefonoCodeudor || ''}, quien concurre en calidad de <strong>CODEUDOR / FIADOR SOLIDARIO</strong></>
+            ) : ''}, hemos convenido celebrar el presente Contrato de Arrendamiento de Vivienda Urbana sujeto a las siguientes cláusulas:
           </p>
         </div>
 
@@ -116,30 +119,61 @@ export const ContratoArrendamientoTemplate: React.FC<Props> = ({ data, styleConf
               por el uso legítimo. Cualquier modificación locativa requerirá autorización expresa y por escrito del ARRENDADOR.
             </p>
           </div>
+
+          {data.incluyeCodeudor && data.nombreCodeudor && (
+            <div>
+              <h2 className="font-bold text-slate-950 uppercase text-xs border-b border-slate-200 pb-0.5 mb-1">
+                SÉPTIMA. CODEUDOR / FIADOR SOLIDARIO:
+              </h2>
+              <p className="leading-relaxed text-[11px] text-slate-600">
+                Concurre a la suscripción del presente contrato <strong>{data.nombreCodeudor}</strong>, quien declara que se constituye
+                en deudor solidario del ARRENDATARIO por todas las obligaciones patrimoniales derivadas del presente contrato, tales como
+                cánones de arrendamiento, cuotas de administración, servicios públicos domiciliarios e indemnizaciones por daños,
+                renunciando de manera expresa al beneficio de excusión y división.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Firmas Arrendador y Arrendatario */}
-      <div className="pt-8 mt-6 border-t border-slate-300">
-        <p className="text-xs text-slate-500 mb-8">
-          En constancia de lo anterior, los contratantes suscriben el presente contrato en dos ejemplares con destino a cada una de las partes:
+      {/* Firmas */}
+      <div className="pt-6 mt-6 border-t border-slate-300">
+        <p className="text-xs text-slate-500 mb-6">
+          En constancia de lo anterior, los contratantes suscriben el presente contrato en ejemplares de idéntico tenor probatorio:
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <div>
-            <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-            <p className="font-bold text-slate-950 uppercase text-xs">EL ARRENDADOR:</p>
-            <p className="font-semibold text-slate-900 text-xs">{data.nombreArrendador || 'Nombre Arrendador'}</p>
-            <p className="text-[11px] text-slate-600">{data.tipoDocArrendador}: {data.numDocArrendador}</p>
-            <p className="text-[10px] text-slate-500">Tel: {data.telefonoArrendador}</p>
-          </div>
+        <div className={`grid grid-cols-1 ${data.incluyeCodeudor && data.nombreCodeudor ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-6 items-end`}>
+          <SignatureBlock
+            label="EL ARRENDADOR:"
+            signatureType="text"
+            name={data.nombreArrendador}
+            docType={data.tipoDocArrendador}
+            docNumber={data.numDocArrendador}
+            phone={data.telefonoArrendador}
+            widthClass="w-full"
+          />
 
-          <div>
-            <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-            <p className="font-bold text-slate-950 uppercase text-xs">EL ARRENDATARIO:</p>
-            <p className="font-semibold text-slate-900 text-xs">{data.nombreArrendatario || 'Nombre Arrendatario'}</p>
-            <p className="text-[11px] text-slate-600">{data.tipoDocArrendatario}: {data.numDocArrendatario}</p>
-            <p className="text-[10px] text-slate-500">Tel: {data.telefonoArrendatario}</p>
-          </div>
+          <SignatureBlock
+            label="EL ARRENDATARIO:"
+            signatureType={data.signatureType || 'text'}
+            signatureDataUrl={data.signatureDataUrl}
+            name={data.nombreArrendatario}
+            docType={data.tipoDocArrendatario}
+            docNumber={data.numDocArrendatario}
+            phone={data.telefonoArrendatario}
+            widthClass="w-full"
+          />
+
+          {data.incluyeCodeudor && data.nombreCodeudor && (
+            <SignatureBlock
+              label="CODEUDOR SOLIDARIO:"
+              signatureType="text"
+              name={data.nombreCodeudor}
+              docType={data.tipoDocCodeudor}
+              docNumber={data.numDocCodeudor}
+              phone={data.telefonoCodeudor}
+              widthClass="w-full"
+            />
+          )}
         </div>
       </div>
     </div>

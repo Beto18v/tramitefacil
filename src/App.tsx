@@ -4,6 +4,7 @@ import {
   DocumentStyleConfig,
   AllDocumentsData,
   AppStorageState,
+  UserProfile,
 } from './types/documents';
 import {
   defaultStyleConfig,
@@ -20,6 +21,9 @@ import {
   defaultDerechoPeticion,
   defaultPoderAutorizacion,
   defaultHabeasData,
+  defaultAcuerdoNda,
+  defaultCompraventaVehiculo,
+  defaultAutorizacionPatios,
   sampleCuentaCobro,
   samplePropuestaServicios,
   sampleContratoPrestacion,
@@ -32,11 +36,16 @@ import {
   sampleDerechoPeticion,
   samplePoderAutorizacion,
   sampleHabeasData,
+  sampleAcuerdoNda,
+  sampleCompraventaVehiculo,
+  sampleAutorizacionPatios,
 } from './data/initialData';
 import { Header } from './components/Header';
 import { CatalogView } from './components/CatalogView';
 import { EditorView } from './components/EditorView';
-import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
+import { UserProfileModal } from './components/UserProfileModal';
+import { loadUserProfile, saveUserProfile, injectProfileIntoDocument } from './utils/profileInjector';
+import { LuCircleCheck, LuCircleAlert, LuInfo, LuX } from 'react-icons/lu';
 
 const STORAGE_KEY = 'tramite_facil_state_v1';
 
@@ -54,13 +63,19 @@ export default function App() {
     return getInitialFullStorageState().documents;
   });
 
+  // User Profile state (tramitefacil_profile_v1)
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(() => {
+    return loadUserProfile();
+  });
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
   const [toast, setToast] = useState<ToastState>({
     show: false,
     message: '',
     type: 'info',
   });
 
-  // 1. Load initial state from LocalStorage
+  // 1. Load initial document state from LocalStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -76,7 +91,6 @@ export default function App() {
           setStyleConfig(parsed.styleConfig);
         }
         if (parsed.documents) {
-          // Merge with defaults in case schema evolves
           const initial = getInitialFullStorageState().documents;
           setDocumentsData({
             ...initial,
@@ -89,7 +103,7 @@ export default function App() {
     }
   }, []);
 
-  // 2. Persist state to LocalStorage
+  // 2. Persist document state to LocalStorage
   useEffect(() => {
     try {
       const stateToPersist: AppStorageState = {
@@ -142,6 +156,49 @@ export default function App() {
     }));
   };
 
+  // Save profile and update state
+  const handleSaveProfile = (newProfile: UserProfile) => {
+    setUserProfile(newProfile);
+    saveUserProfile(newProfile);
+    showToast('Perfil emisor guardado en tu navegador.', 'success');
+  };
+
+  // Save drawn signature directly to profile
+  const handleSaveSignatureToProfile = (dataUrl: string) => {
+    const current = userProfile || {
+      nombreCompleto: '',
+      tipoDocumento: 'Cédula de Ciudadanía',
+      numeroDocumento: '',
+      expedicionDocumento: '',
+      ciudad: '',
+      telefono: '',
+      correo: '',
+      direccion: '',
+      cargoOProfesion: '',
+      banco: '',
+      tipoCuenta: 'Ahorros' as const,
+      numeroCuenta: '',
+    };
+    const updated = { ...current, signatureDataUrl: dataUrl };
+    setUserProfile(updated);
+    saveUserProfile(updated);
+    showToast('Firma digital guardada en tu perfil para futuros documentos.', 'success');
+  };
+
+  // Apply user profile to currently selected document
+  const handleApplyProfile = () => {
+    if (!userProfile || !userProfile.nombreCompleto) {
+      // Open modal to configure first
+      setIsProfileModalOpen(true);
+      showToast('Configura tus datos para autocompletar tus trámites.', 'info');
+      return;
+    }
+
+    const updated = injectProfileIntoDocument(selectedDocId, documentsData, userProfile);
+    setDocumentsData(updated);
+    showToast(`¡Datos de ${userProfile.nombreCompleto.split(' ')[0]} autocompletados con éxito!`, 'success');
+  };
+
   // Load sample for a document
   const handleLoadSample = (docType: DocumentType) => {
     switch (docType) {
@@ -180,6 +237,15 @@ export default function App() {
         break;
       case 'habeas_data':
         handleUpdateData('habeasData', sampleHabeasData);
+        break;
+      case 'acuerdo_nda':
+        handleUpdateData('acuerdoNda', sampleAcuerdoNda);
+        break;
+      case 'compraventa_vehiculo':
+        handleUpdateData('compraventaVehiculo', sampleCompraventaVehiculo);
+        break;
+      case 'autorizacion_patios':
+        handleUpdateData('autorizacionPatios', sampleAutorizacionPatios);
         break;
     }
   };
@@ -223,23 +289,38 @@ export default function App() {
       case 'habeas_data':
         handleUpdateData('habeasData', defaultHabeasData);
         break;
+      case 'acuerdo_nda':
+        handleUpdateData('acuerdoNda', defaultAcuerdoNda);
+        break;
+      case 'compraventa_vehiculo':
+        handleUpdateData('compraventaVehiculo', defaultCompraventaVehiculo);
+        break;
+      case 'autorizacion_patios':
+        handleUpdateData('autorizacionPatios', defaultAutorizacionPatios);
+        break;
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-100 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
       {/* 1. Global Navigation Header */}
       <Header
         currentView={currentView}
         selectedDocId={selectedDocId}
         onGoToCatalog={handleGoToCatalog}
         onSelectDoc={(id) => setSelectedDocId(id)}
+        userProfile={userProfile}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
       />
 
       {/* 2. Main Viewport */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {currentView === 'catalog' ? (
-          <CatalogView onSelectDoc={handleSelectDocFromCatalog} />
+          <CatalogView
+            onSelectDoc={handleSelectDocFromCatalog}
+            userProfile={userProfile}
+            onOpenProfileModal={() => setIsProfileModalOpen(true)}
+          />
         ) : (
           <EditorView
             selectedDoc={selectedDocId}
@@ -251,19 +332,32 @@ export default function App() {
             styleConfig={styleConfig}
             onUpdateStyle={setStyleConfig}
             onTriggerToast={showToast}
+            userProfile={userProfile}
+            onOpenProfileModal={() => setIsProfileModalOpen(true)}
+            onApplyProfile={handleApplyProfile}
+            onSaveSignatureToProfile={handleSaveSignatureToProfile}
           />
         )}
       </main>
 
-      {/* 3. Floating Toast Feedback */}
+      {/* 3. User Profile Modal (tramitefacil_profile_v1) */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        currentProfile={userProfile}
+        onSaveProfile={handleSaveProfile}
+        onApplyToCurrentDoc={currentView === 'editor' ? handleApplyProfile : undefined}
+      />
+
+      {/* 4. Floating Toast Feedback */}
       {toast.show && (
         <aside
           aria-live="polite"
-          className="no-print fixed bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-800 animate-in slide-in-from-bottom-4 duration-200 max-w-sm sm:max-w-md"
+          className="no-print fixed bottom-20 lg:bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-800 animate-in slide-in-from-bottom-4 duration-200 max-w-sm sm:max-w-md"
         >
-          {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
-          {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />}
-          {toast.type === 'info' && <Info className="w-5 h-5 text-blue-400 shrink-0" />}
+          {toast.type === 'success' && <LuCircleCheck className="w-5 h-5 text-emerald-400 shrink-0" />}
+          {toast.type === 'error' && <LuCircleAlert className="w-5 h-5 text-rose-400 shrink-0" />}
+          {toast.type === 'info' && <LuInfo className="w-5 h-5 text-blue-400 shrink-0" />}
 
           <span className="text-xs font-medium leading-snug flex-1">
             {toast.message}
@@ -271,10 +365,10 @@ export default function App() {
 
           <button
             onClick={() => setToast((prev) => ({ ...prev, show: false }))}
-            className="p-1 text-slate-400 hover:text-white rounded-lg transition min-h-[32px] min-w-[32px] flex items-center justify-center cursor-pointer"
+            className="p-1 text-slate-400 hover:text-white rounded-xl transition min-h-[32px] min-w-[32px] flex items-center justify-center cursor-pointer"
             aria-label="Cerrar notificación"
           >
-            <X className="w-4 h-4" />
+            <LuX className="w-4 h-4" />
           </button>
         </aside>
       )}

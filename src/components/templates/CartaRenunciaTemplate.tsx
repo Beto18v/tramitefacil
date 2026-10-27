@@ -1,5 +1,6 @@
 import React from 'react';
 import { CartaRenunciaData, DocumentStyleConfig } from '../../types/documents';
+import { SignatureBlock } from './SignatureBlock';
 
 interface Props {
   data: CartaRenunciaData;
@@ -82,11 +83,11 @@ export const CartaRenunciaTemplate: React.FC<Props> = ({ data, styleConfig }) =>
           </p>
 
           {data.solicitaExoneracionPreaviso && (
-            <p className="bg-slate-50 border-l-4 border-slate-900 p-2.5 text-xs text-slate-800">
+            <div className="bg-slate-50 border border-slate-300 rounded-lg p-3 text-xs text-slate-800">
               <strong>Solicitud de Exoneración de Preaviso:</strong> Solicito comedidamente a la empresa me sea
-              concedida la exoneración del término legal o contractual de preaviso, permitiéndome hacer efectiva
-              mi salida voluntaria en la fecha señalada sin que ello cause perjuicio o penalidad alguna.
-            </p>
+              concedida la exoneración del término legal o convencional de preaviso, permitiéndome hacer efectiva
+              mi salida voluntaria en la fecha señalada sin que ello cause perjuicio o descuento alguno.
+            </div>
           )}
 
           {data.motivoDetalle ? (
@@ -123,31 +124,23 @@ export const CartaRenunciaTemplate: React.FC<Props> = ({ data, styleConfig }) =>
       </div>
 
       {/* Despedida y firma */}
-      <div className="pt-10 mt-8 border-t border-slate-200">
-        <p className="text-xs text-slate-500 mb-8">
-          Agradeciendo de antemano su amable atención y deseándoles continuos éxitos,
-        </p>
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-          <div className="w-72">
-            <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-            <p className="font-bold text-slate-950 uppercase text-sm">
-              {data.nombreTrabajador || 'NOMBRE DEL TRABAJADOR'}
-            </p>
-            <p className="text-xs text-slate-700">
-              {data.tipoDocumento}:{' '}
-              <span className="font-mono">{data.numeroDocumento || '________________'}</span>
-            </p>
-            {data.cargoTrabajador && (
-              <p className="text-xs text-slate-600">{data.cargoTrabajador}</p>
-            )}
-          </div>
+      <div className="pt-10 mt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-end gap-6">
+        <SignatureBlock
+          signatureType={data.signatureType}
+          signatureDataUrl={data.signatureDataUrl}
+          name={data.nombreTrabajador || 'NOMBRE DEL TRABAJADOR'}
+          docType={data.tipoDocumento || 'C.C.'}
+          docNumber={data.numeroDocumento || '________________'}
+          role={data.cargoTrabajador}
+          label="Agradeciendo de antemano su amable atención y deseándoles continuos éxitos,"
+        />
 
-          <div className="w-56 border border-dashed border-slate-300 p-3 bg-slate-50 text-center text-[11px] text-slate-500">
-            <p className="font-semibold text-slate-700 mb-1">Recibido por la Empresa:</p>
-            <div className="h-6"></div>
-            <div className="border-b border-slate-300 mx-4 mb-1"></div>
-            <p className="text-[10px]">Firma / Sello de RRHH y Fecha</p>
-          </div>
+        {/* Recibido de RRHH */}
+        <div className="w-56 p-3 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-600 space-y-1">
+          <p className="font-bold text-slate-800 uppercase text-[10px]">Constancia de Radicado:</p>
+          <p>Recibido por: __________________</p>
+          <p>Fecha de radicación: ___/___/2026</p>
+          <p>Hora: ________ Sello RRHH</p>
         </div>
       </div>
     </div>

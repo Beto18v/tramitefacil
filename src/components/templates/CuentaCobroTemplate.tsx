@@ -1,6 +1,12 @@
 import React from 'react';
 import { CuentaCobroData, DocumentStyleConfig } from '../../types/documents';
-import { numeroALetras, formatearMoneda, calcularTotalesCuentaCobro } from '../../utils/numberToWords';
+import {
+  numeroALetras,
+  formatearMoneda,
+  calcularTotalesCuentaCobro,
+  calcularSubtotalConceptos,
+} from '../../utils/numberToWords';
+import { SignatureBlock } from './SignatureBlock';
 
 interface Props {
   data: CuentaCobroData;
@@ -17,8 +23,13 @@ export const CuentaCobroTemplate: React.FC<Props> = ({ data, styleConfig }) => {
       ? 'text-[15px] leading-relaxed'
       : 'text-[13.5px] leading-relaxed';
 
+  const subtotalCalculado =
+    data.usarConceptosMultiples && data.conceptos && data.conceptos.length > 0
+      ? calcularSubtotalConceptos(data.conceptos)
+      : data.valorSubtotal || 0;
+
   const { subtotal, reteFuente, reteICA, totalNeto } = calcularTotalesCuentaCobro(
-    data.valorSubtotal || 0,
+    subtotalCalculado,
     data.aplicaReteFuente,
     data.porcentajeReteFuente,
     data.aplicaReteICA,
@@ -79,6 +90,52 @@ export const CuentaCobroTemplate: React.FC<Props> = ({ data, styleConfig }) => {
           </div>
         </div>
 
+        {/* Conceptos Multilínea o Concepto General */}
+        {data.usarConceptosMultiples && data.conceptos && data.conceptos.length > 0 ? (
+          <div className="my-5 border border-slate-300 rounded-lg overflow-hidden">
+            <div className="bg-slate-100 p-2.5 border-b border-slate-300 text-xs font-bold text-slate-800 uppercase tracking-wide">
+              Desglose de Conceptos y Servicios Prestados:
+            </div>
+            <table className="w-full text-xs md:text-sm">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-700 uppercase text-[11px]">
+                <tr>
+                  <th className="text-left p-2.5">Descripción del Servicio</th>
+                  <th className="text-center p-2.5 w-20">Cant.</th>
+                  <th className="text-right p-2.5 w-32">Valor Unit.</th>
+                  <th className="text-right p-2.5 w-36">Total</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 text-slate-800">
+                {data.conceptos.map((item, idx) => (
+                  <tr key={item.id || idx}>
+                    <td className="p-2.5">{item.descripcion || `Concepto de honorarios ${idx + 1}`}</td>
+                    <td className="p-2.5 text-center font-mono">{item.cantidad || 1}</td>
+                    <td className="p-2.5 text-right font-mono">{formatearMoneda(item.valorUnitario || 0)}</td>
+                    <td className="p-2.5 text-right font-mono font-semibold">
+                      {formatearMoneda((item.cantidad || 0) * (item.valorUnitario || 0))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="my-6">
+            <h2 className="text-xs uppercase font-bold tracking-wider text-slate-700 mb-2 border-b border-slate-200 pb-1">
+              Por concepto de:
+            </h2>
+            <div className="text-justify text-slate-800 bg-white leading-relaxed">
+              {data.concepto ? (
+                <p className="whitespace-pre-line">{data.concepto}</p>
+              ) : (
+                <p className="text-slate-400 italic">
+                  (Indique aquí la descripción detallada de los honorarios o servicios profesionales prestados...)
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Liquidación de montos con retenciones */}
         <div className="border border-slate-300 rounded-lg overflow-hidden my-5">
           <table className="w-full text-xs md:text-sm">
@@ -107,7 +164,7 @@ export const CuentaCobroTemplate: React.FC<Props> = ({ data, styleConfig }) => {
               )}
               <tr className="bg-slate-50/80 font-bold text-slate-950 text-sm md:text-base border-t-2 border-slate-900">
                 <td className="p-3 uppercase">Total Neto a Pagar</td>
-                <td className="p-3 text-right font-mono text-blue-900">{formatearMoneda(totalNeto)}</td>
+                <td className="p-3 text-right font-mono text-indigo-950">{formatearMoneda(totalNeto)}</td>
               </tr>
             </tbody>
           </table>
@@ -116,73 +173,59 @@ export const CuentaCobroTemplate: React.FC<Props> = ({ data, styleConfig }) => {
           </div>
         </div>
 
-        {/* Concepto del servicio */}
-        <div className="my-6">
-          <h2 className="text-xs uppercase font-bold tracking-wider text-slate-700 mb-2 border-b border-slate-200 pb-1">
-            Por concepto de:
-          </h2>
-          <div className="text-justify text-slate-800 bg-white leading-relaxed">
-            {data.concepto ? (
-              <p className="whitespace-pre-line">{data.concepto}</p>
-            ) : (
-              <p className="text-slate-400 italic">
-                (Indique aquí la descripción detallada de los honorarios o servicios profesionales prestados...)
-              </p>
+        {(data.periodoPrestacion || data.numeroContrato) && (
+          <div className="my-4 pt-2 border-t border-dashed border-slate-200 flex flex-wrap gap-6 text-xs text-slate-600">
+            {data.periodoPrestacion && (
+              <div>
+                <span className="font-semibold text-slate-800">Período de prestación:</span>{' '}
+                {data.periodoPrestacion}
+              </div>
+            )}
+            {data.numeroContrato && (
+              <div>
+                <span className="font-semibold text-slate-800">N° Contrato / O.S.:</span>{' '}
+                <span className="font-mono">{data.numeroContrato}</span>
+              </div>
+            )}
+            {data.fechaVencimiento && (
+              <div>
+                <span className="font-semibold text-slate-800">Fecha oportuna de pago:</span>{' '}
+                {data.fechaVencimiento}
+              </div>
             )}
           </div>
+        )}
 
-          {(data.periodoPrestacion || data.numeroContrato) && (
-            <div className="mt-4 pt-2 border-t border-dashed border-slate-200 flex flex-wrap gap-6 text-xs text-slate-600">
-              {data.periodoPrestacion && (
-                <div>
-                  <span className="font-semibold text-slate-800">Período de prestación:</span>{' '}
-                  {data.periodoPrestacion}
-                </div>
-              )}
-              {data.numeroContrato && (
-                <div>
-                  <span className="font-semibold text-slate-800">N° Contrato / O.S.:</span>{' '}
-                  <span className="font-mono">{data.numeroContrato}</span>
-                </div>
-              )}
-              {data.fechaVencimiento && (
-                <div>
-                  <span className="font-semibold text-slate-800">Fecha oportuna de pago:</span>{' '}
-                  {data.fechaVencimiento}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Datos de transferencia bancaria */}
-        <div className="bg-slate-50 border border-slate-200 p-4 my-5 text-xs md:text-sm">
-          <h3 className="font-bold text-slate-800 uppercase tracking-wide text-xs mb-2">
-            Instrucciones para Pago o Transferencia Bancaria:
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-slate-700">
-            <div>
-              <span className="text-slate-500 block text-[11px]">Entidad Bancaria:</span>
-              <strong className="text-slate-900">{data.banco || 'Bancolombia'}</strong>
-            </div>
-            <div>
-              <span className="text-slate-500 block text-[11px]">Tipo de Cuenta:</span>
-              <span className="text-slate-800">{data.tipoCuenta || 'Ahorros'}</span>
-            </div>
-            <div>
-              <span className="text-slate-500 block text-[11px]">Número de Cuenta:</span>
-              <span className="font-mono font-semibold text-slate-900">
-                {data.numeroCuenta || 'XXXXXXXXXXXX'}
-              </span>
-            </div>
-            <div>
-              <span className="text-slate-500 block text-[11px]">Titular:</span>
-              <span className="text-slate-800">
-                {data.titularCuenta || data.nombreContratista || 'Nombre del titular'}
-              </span>
+        {/* Datos de transferencia bancaria (si está activado el switch) */}
+        {data.incluirDatosBancarios !== false && (
+          <div className="bg-slate-50 border border-slate-200 p-4 my-5 text-xs md:text-sm">
+            <h3 className="font-bold text-slate-800 uppercase tracking-wide text-xs mb-2">
+              Instrucciones para Pago o Transferencia Bancaria:
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-slate-700">
+              <div>
+                <span className="text-slate-500 block text-[11px]">Entidad Bancaria:</span>
+                <strong className="text-slate-900">{data.banco || 'Bancolombia'}</strong>
+              </div>
+              <div>
+                <span className="text-slate-500 block text-[11px]">Tipo de Cuenta:</span>
+                <span className="text-slate-800">{data.tipoCuenta || 'Ahorros'}</span>
+              </div>
+              <div>
+                <span className="text-slate-500 block text-[11px]">Número de Cuenta:</span>
+                <span className="font-mono font-semibold text-slate-900">
+                  {data.numeroCuenta || 'XXXXXXXXXXXX'}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-500 block text-[11px]">Titular:</span>
+                <span className="text-slate-800">
+                  {data.titularCuenta || data.nombreContratista || 'Nombre del titular'}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Declaraciones legales */}
         <div className="space-y-2 text-[11px] text-slate-600 text-justify border-t border-slate-200 pt-3">
@@ -204,29 +247,20 @@ export const CuentaCobroTemplate: React.FC<Props> = ({ data, styleConfig }) => {
         </div>
       </div>
 
-      {/* Bloque de firma */}
-      <div className="pt-10 mt-6 border-t border-slate-200">
-        <p className="text-xs text-slate-500 mb-8">Atentamente,</p>
-        <div className="w-72">
-          <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-          <p className="font-bold text-slate-900 uppercase text-sm">
-            {data.nombreContratista || 'NOMBRE DEL CONTRATISTA'}
-          </p>
-          <p className="text-xs text-slate-700">
-            {data.tipoDocumentoContratista}:{' '}
-            <span className="font-mono">{data.numeroDocumentoContratista || '________________'}</span>
-            {data.expedicionContratista ? ` de ${data.expedicionContratista}` : ''}
-          </p>
-          {data.telefonoContratista && (
-            <p className="text-xs text-slate-600">Tel: {data.telefonoContratista}</p>
-          )}
-          {data.correoContratista && (
-            <p className="text-xs text-slate-600">Email: {data.correoContratista}</p>
-          )}
-          {data.direccionContratista && (
-            <p className="text-xs text-slate-600">Dirección: {data.direccionContratista}</p>
-          )}
-        </div>
+      {/* Bloque de firma con soporte para Pad Digital o Tipográfico */}
+      <div className="pt-8 mt-6 border-t border-slate-200">
+        <SignatureBlock
+          signatureType={data.signatureType}
+          signatureDataUrl={data.signatureDataUrl}
+          name={data.nombreContratista || 'NOMBRE DEL CONTRATISTA'}
+          docType={data.tipoDocumentoContratista || 'C.C.'}
+          docNumber={data.numeroDocumentoContratista || '________________'}
+          expedition={data.expedicionContratista}
+          phone={data.telefonoContratista}
+          email={data.correoContratista}
+          address={data.direccionContratista}
+          label="Atentamente,"
+        />
       </div>
     </div>
   );

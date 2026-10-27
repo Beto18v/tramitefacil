@@ -443,7 +443,7 @@ Yo, ${d.nombreTitular || 'Titular'}, identificado con ${d.tipoDocTitular} N° ${
 1. HECHOS Y ANTECEDENTES:
 ${d.hechosDetallados || ''}
 Obligación objeto del reclamo: ${d.numeroObligacion || ''}
-Causal invocada: ${d.causalSolicitud.toUpperCase()}
+Causal invocada: ${d.causalSolicitud ? d.causalSolicitud.toUpperCase() : 'CADUCIDAD'}
 
 2. PRETENSIÓN:
 ${d.pretensionConcreta || ''}
@@ -460,6 +460,99 @@ Atentamente,
 _____________________________
 ${d.nombreTitular || 'FIRMA TITULAR'}
 ${d.tipoDocTitular}: ${d.numDocTitular || ''}`;
+    }
+
+    case 'acuerdo_nda': {
+      const d = state.acuerdo_nda || state.acuerdoNda;
+      return `ACUERDO DE CONFIDENCIALIDAD Y NO DIVULGACIÓN (${d.tipoNda === 'bilateral' ? 'BILATERAL' : 'UNILATERAL'})
+
+Ciudad y Fecha: ${d.ciudad || 'Ciudad'}, ${d.fecha || 'Fecha'}
+Vigencia de la reserva: ${d.duracionAnos || 3} años
+
+ENTRE:
+Parte Divulgante: ${d.nombreParteEmisora || 'Parte A'} (${d.tipoDocEmisora} N° ${d.numDocEmisora || ''})
+Domicilio: ${d.domicilioEmisora || ''}
+
+Y:
+Parte Receptora: ${d.nombreParteReceptora || 'Parte B'} (${d.tipoDocReceptora} N° ${d.numDocReceptora || ''})
+Domicilio: ${d.domicilioReceptora || ''}
+
+1. PROPÓSITO DE LA REVELACIÓN:
+${d.propositoNegociacion || ''}
+
+2. OBLIGACIONES DE CONFIDENCIALIDAD:
+La parte receptora se compromete a mantener estricta confidencialidad respecto a cualquier información técnica, operativa, comercial o de propiedad intelectual recibida.
+
+3. CLÁUSULA PENAL E INDEMNIZACIÓN:
+${d.clausulaPenalMonto > 0 ? `Cláusula penal por incumplimiento tasada en ${formatearMoneda(d.clausulaPenalMonto)} (${numeroALetras(d.clausulaPenalMonto)}).` : 'Sin penalidad pecuniaria fija.'}
+
+En constancia de lo acordado, firman:
+
+_____________________________             _____________________________
+${d.nombreParteEmisora || 'PARTE DIVULGANTE'}     ${d.nombreParteReceptora || 'PARTE RECEPTORA'}
+${d.tipoDocEmisora}: ${d.numDocEmisora || ''}             ${d.tipoDocReceptora}: ${d.numDocReceptora || ''}`;
+    }
+
+    case 'compraventa_vehiculo': {
+      const d = state.compraventa_vehiculo || state.compraventaVehiculo;
+      return `CONTRATO DE COMPRAVENTA DE VEHÍCULO AUTOMOTOR
+
+Ciudad y Fecha: ${d.ciudad || 'Ciudad'}, ${d.fecha || 'Fecha'}
+
+VENDEDOR: ${d.nombreVendedor || 'Vendedor'} (${d.tipoDocVendedor} N° ${d.numDocVendedor || ''})
+Teléfono: ${d.telefonoVendedor || ''} | Dirección: ${d.direccionVendedor || ''}
+
+COMPRADOR: ${d.nombreComprador || 'Comprador'} (${d.tipoDocComprador} N° ${d.numDocComprador || ''})
+Teléfono: ${d.telefonoComprador || ''} | Dirección: ${d.direccionComprador || ''}
+
+DESCRIPCIÓN DEL AUTOMOTOR:
+- Placa: ${d.placa || 'PENDIENTE'}
+- Clase: ${d.claseVehiculo || 'Automóvil'} | Marca: ${d.marca || ''} | Línea: ${d.linea || ''}
+- Modelo: ${d.modeloAnio || ''} | Color: ${d.color || ''}
+- N° Motor: ${d.numeroMotor || ''} | N° Chasis/VIN: ${d.numeroChasis || ''}
+
+CONDICIONES ECONÓMICAS:
+- Precio de Venta: ${formatearMoneda(d.precioVenta || 0)} (${numeroALetras(d.precioVenta || 0)})
+- Forma de Pago: ${d.formaPago || ''}
+- Gastos de Traspaso: ${d.gastosTraspasoPorcentajes || 'Por mitades iguales'}
+
+SANEAMIENTO Y PAZ Y SALVO:
+El vendedor garantiza saneamiento por evicción y entrega a paz y salvo total por multas SIMIT, gravámenes e impuestos.
+
+En constancia de lo anterior, firman:
+
+_____________________________             _____________________________
+${d.nombreVendedor || 'EL VENDEDOR'}             ${d.nombreComprador || 'EL COMPRADOR'}
+${d.tipoDocVendedor}: ${d.numDocVendedor || ''}             ${d.tipoDocComprador}: ${d.numDocComprador || ''}`;
+    }
+
+    case 'autorizacion_patios': {
+      const d = state.autorizacion_patios || state.autorizacionPatios;
+      const facultades = (d.facultadesExpresas || []).map((f: string, i: number) => `${i + 1}. ${f}`).join('\n');
+
+      return `AUTORIZACIÓN Y PODER ESPECIAL PARA RETIRO DE VEHÍCULO EN PATIOS
+
+Ciudad y Fecha: ${d.ciudad || 'Ciudad'}, ${d.fecha || 'Fecha'}
+
+Señores:
+${d.organismoTransito || 'ORGANISMO DE TRÁNSITO Y TRANSPORTE'}
+Ubicación de patios: ${d.patioUbicacion || ''}
+
+ASUNTO: Poder especial para retiro de automotor inmovilizado con placas ${d.placaVehiculo || ''}
+
+Yo, ${d.nombrePropietario || 'Propietario'}, identificado con ${d.tipoDocPropietario} N° ${d.numDocPropietario || ''}, en calidad de propietario inscrito del automotor con placas ${d.placaVehiculo || ''} (Marca/Línea: ${d.marcaModelo || ''}), confiero poder especial a:
+
+${d.nombreAutorizado || 'Apoderado'} (${d.tipoDocAutorizado} N° ${d.numDocAutorizado || ''})
+Teléfono: ${d.telefonoAutorizado || ''}
+
+FACULTADES EXPRESAS:
+${facultades}
+
+Atentamente,
+
+_____________________________             _____________________________
+${d.nombrePropietario || 'PROPIETARIO (PODERDANTE)'}    ${d.nombreAutorizado || 'APODERADO (ACEPTA)'}
+${d.tipoDocPropietario}: ${d.numDocPropietario || ''}       ${d.tipoDocAutorizado}: ${d.numDocAutorizado || ''}`;
     }
 
     default:

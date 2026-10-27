@@ -1,265 +1,196 @@
 import React, { useState, useMemo } from 'react';
 import {
   DOCUMENT_CATALOG,
-  CATEGORIES_CONFIG,
   DocumentType,
-  DocumentCategory,
+  UserProfile,
 } from '../types/documents';
+import { Hero, QuickCategoryFilter } from './Hero';
+import { DocumentCard } from './DocumentCard';
 import {
-  Search,
-  Briefcase,
-  Building2,
-  Home,
-  Scale,
-  Folder,
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  Receipt,
-  FileSpreadsheet,
-  ScrollText,
-  UserMinus,
-  Award,
-  CalendarClock,
-  KeyRound,
-  ClipboardCheck,
-  FileText,
-  Fingerprint,
-  ShieldAlert,
-} from 'lucide-react';
+  LuShieldCheck,
+  LuSparkles,
+  LuUserCheck,
+  LuUser,
+  LuLock,
+  LuFileCheck,
+} from 'react-icons/lu';
 
 interface Props {
   onSelectDoc: (id: DocumentType) => void;
+  userProfile?: UserProfile | null;
+  onOpenProfileModal?: () => void;
 }
 
-export const CatalogView: React.FC<Props> = ({ onSelectDoc }) => {
-  const [selectedCategory, setSelectedCategory] = useState<DocumentCategory | 'all'>('all');
+export const CatalogView: React.FC<Props> = ({
+  onSelectDoc,
+  userProfile,
+  onOpenProfileModal,
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<QuickCategoryFilter>('all');
 
-  // Icon mapping
-  const renderIcon = (name: string, className: string = 'w-5 h-5') => {
-    switch (name) {
-      case 'Receipt':
-        return <Receipt className={className} />;
-      case 'FileSpreadsheet':
-        return <FileSpreadsheet className={className} />;
-      case 'ScrollText':
-        return <ScrollText className={className} />;
-      case 'UserMinus':
-        return <UserMinus className={className} />;
-      case 'Award':
-        return <Award className={className} />;
-      case 'CalendarClock':
-        return <CalendarClock className={className} />;
-      case 'Home':
-        return <Home className={className} />;
-      case 'KeyRound':
-        return <KeyRound className={className} />;
-      case 'ClipboardCheck':
-        return <ClipboardCheck className={className} />;
-      case 'FileText':
-        return <FileText className={className} />;
-      case 'Fingerprint':
-        return <Fingerprint className={className} />;
-      case 'ShieldAlert':
-        return <ShieldAlert className={className} />;
-      default:
-        return <FileText className={className} />;
+  // Filtered documents by search query and category pill
+  const filteredDocuments = useMemo(() => {
+    let list = DOCUMENT_CATALOG;
+
+    // Apply category pill filter
+    if (activeFilter === 'laboral') {
+      list = list.filter((d) => d.category === 'laboral');
+    } else if (activeFilter === 'finanzas') {
+      list = list.filter((d) => d.category === 'freelance' || d.category === 'comercial');
+    } else if (activeFilter === 'inmobiliario') {
+      list = list.filter((d) => d.category === 'inmobiliario');
+    } else if (activeFilter === 'legal') {
+      list = list.filter((d) => d.category === 'legal' || d.category === 'vehiculos');
     }
-  };
 
-  const getCategoryIcon = (cat: DocumentCategory | 'all') => {
-    switch (cat) {
-      case 'freelance':
-        return <Briefcase className="w-4 h-4" />;
-      case 'laboral':
-        return <Building2 className="w-4 h-4" />;
-      case 'inmobiliario':
-        return <Home className="w-4 h-4" />;
-      case 'legal':
-        return <Scale className="w-4 h-4" />;
-      default:
-        return <Folder className="w-4 h-4" />;
-    }
-  };
-
-  // Filter documents
-  const filteredDocs = useMemo(() => {
+    // Apply text search
     const q = searchQuery.toLowerCase().trim();
-    return DOCUMENT_CATALOG.filter((doc) => {
-      const matchCategory = selectedCategory === 'all' || doc.category === selectedCategory;
-      if (!matchCategory) return false;
-      if (!q) return true;
+    if (q) {
+      list = list.filter((doc) => {
+        const inTitle = doc.title.toLowerCase().includes(q);
+        const inDesc = doc.description.toLowerCase().includes(q);
+        const inRef = doc.lawReference.toLowerCase().includes(q);
+        const inCat = doc.categoryName.toLowerCase().includes(q);
+        const inTags = doc.tags.some((t) => t.toLowerCase().includes(q));
+        return inTitle || inDesc || inRef || inCat || inTags;
+      });
+    }
 
-      const inTitle = doc.title.toLowerCase().includes(q);
-      const inDesc = doc.description.toLowerCase().includes(q);
-      const inRef = doc.lawReference.toLowerCase().includes(q);
-      const inTags = doc.tags.some((t) => t.toLowerCase().includes(q));
-      return inTitle || inDesc || inRef || inTags;
-    });
-  }, [selectedCategory, searchQuery]);
+    return list;
+  }, [searchQuery, activeFilter]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 animate-in fade-in duration-150">
-      {/* Hero Welcome banner */}
-      <div className="bg-gradient-to-br from-blue-700 via-blue-800 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
-        <div className="relative z-10 max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide text-blue-100 border border-white/20">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            100% Offline · Sin registro · Privacidad Total
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+      {/* 1. Clean White Hero Component */}
+      <Hero
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        activeFilter={activeFilter}
+        onFilterChange={setActiveFilter}
+        totalResults={filteredDocuments.length}
+      />
+
+      {/* 2. User Profile Banner (Discreet Fintech Banner) */}
+      {onOpenProfileModal && (
+        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-3">
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
+              userProfile?.nombreCompleto ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'
+            }`}>
+              {userProfile?.nombreCompleto ? (
+                <LuUserCheck className="w-5 h-5 text-emerald-600" />
+              ) : (
+                <LuUser className="w-5 h-5 text-slate-500" />
+              )}
+            </div>
+            <div>
+              <span className="font-semibold text-slate-900 block">
+                {userProfile?.nombreCompleto
+                  ? `Perfil configurado: ${userProfile.nombreCompleto}`
+                  : 'Autocompletar con tus datos'}
+              </span>
+              <span className="text-slate-500">
+                {userProfile?.nombreCompleto
+                  ? 'Tus datos fiscales y firma se inyectarán automáticamente en tus documentos.'
+                  : 'Guarda tu identificación y datos fiscales una vez para no volver a escribirlos.'}
+              </span>
+            </div>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-            Generador Instantáneo de Documentos Legales
-          </h1>
-          <p className="text-sm sm:text-base text-blue-100 font-normal leading-relaxed">
-            Elige tu trámite, completa los campos guiados y descarga al instante tu documento formal en PDF o Word (.docx) listo para imprimir y firmar.
-          </p>
+
+          <button
+            type="button"
+            onClick={onOpenProfileModal}
+            className={`min-h-[44px] px-3.5 py-1.5 rounded-xl font-semibold border transition cursor-pointer text-xs ${
+              userProfile?.nombreCompleto
+                ? 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                : 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 shadow-sm'
+            }`}
+          >
+            {userProfile?.nombreCompleto ? 'Modificar Perfil' : 'Configurar Perfil'}
+          </button>
         </div>
+      )}
 
-        {/* Decorative background glow */}
-        <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
-      </div>
-
-      {/* Search and Filters Bar */}
+      {/* 3. Catalog Grid with Structured Cards */}
       <div className="space-y-4">
-        {/* Search Input (Touch Target >= 44px) */}
-        <div className="relative w-full">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-            <Search className="w-5 h-5" />
-          </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Buscar trámite por nombre o palabra clave (ej. cuenta de cobro, renuncia, arriendo, derecho de petición)..."
-            className="w-full min-h-[48px] pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-2xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent shadow-xs transition"
-          />
-          {searchQuery && (
+        <div className="flex items-center justify-between pb-1 border-b border-slate-200">
+          <h2 className="text-base font-semibold text-slate-900 tracking-tight">
+            Plantillas Disponibles ({filteredDocuments.length})
+          </h2>
+          {(searchQuery || activeFilter !== 'all') && (
             <button
-              onClick={() => setSearchQuery('')}
-              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-xs text-slate-400 hover:text-slate-700 min-h-[44px] min-w-[44px] justify-center"
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setActiveFilter('all');
+              }}
+              className="text-xs font-semibold text-blue-600 hover:text-blue-700 cursor-pointer min-h-[44px] flex items-center"
             >
-              Borrar
+              Restablecer filtros
             </button>
           )}
         </div>
 
-        {/* Category Tabs (Touch friendly >= 44px) */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          {CATEGORIES_CONFIG.map((cat) => {
-            const isActive = selectedCategory === cat.id;
-            const count =
-              cat.id === 'all'
-                ? DOCUMENT_CATALOG.length
-                : DOCUMENT_CATALOG.filter((d) => d.category === cat.id).length;
-
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`min-h-[44px] inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                    : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-50 border border-slate-200'
-                }`}
-              >
-                {getCategoryIcon(cat.id)}
-                <span>{cat.name}</span>
-                <span
-                  className={`text-[11px] px-2 py-0.5 rounded-full font-mono ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                  }`}
-                >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        {filteredDocuments.length === 0 ? (
+          <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 space-y-3 shadow-sm">
+            <p className="text-base font-semibold text-slate-800">No se encontraron trámites</p>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+              No hay documentos que coincidan con tus criterios. Intenta con otra categoría o término de búsqueda.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setActiveFilter('all');
+              }}
+              className="mt-3 min-h-[44px] px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition"
+            >
+              Ver todas las plantillas
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredDocuments.map((doc) => (
+              <DocumentCard
+                key={doc.id}
+                document={doc}
+                onSelect={onSelectDoc}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Documents Grid */}
-      {filteredDocs.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 space-y-3">
-          <p className="text-base font-semibold text-slate-800">No se encontraron trámites</p>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            No hay documentos que coincidan con &quot;{searchQuery}&quot;. Intenta con términos generales como &quot;cobro&quot;, &quot;trabajo&quot; o &quot;contrato&quot;.
-          </p>
-          <button
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedCategory('all');
-            }}
-            className="mt-2 min-h-[44px] px-4 py-2 text-xs font-semibold text-blue-600 bg-blue-50 rounded-xl hover:bg-blue-100 transition"
-          >
-            Ver todos los documentos
-          </button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredDocs.map((doc) => (
-            <div
-              key={doc.id}
-              onClick={() => onSelectDoc(doc.id)}
-              className="group bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs hover:shadow-md hover:border-blue-500/50 transition-all duration-200 flex flex-col justify-between cursor-pointer active:scale-[0.99]"
-            >
-              <div className="space-y-3">
-                {/* Category kicker & icon */}
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    {renderIcon(doc.iconName)}
-                  </div>
-                  <span className="text-[11px] font-medium text-slate-500">
-                    {doc.categoryName}
-                  </span>
-                </div>
-
-                {/* Title */}
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                    {doc.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 mt-1.5 leading-relaxed line-clamp-2">
-                    {doc.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Footer legal reference & Action button */}
-              <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span className="text-[11px] text-slate-400 truncate max-w-[200px]" title={doc.lawReference}>
-                  {doc.lawReference}
-                </span>
-                <span className="min-h-[44px] inline-flex items-center gap-1.5 font-semibold text-blue-600 group-hover:translate-x-1 transition-transform">
-                  Crear <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Trust & Features Footer Strip */}
+      {/* 4. Trust & Security Banner */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-200 text-xs text-slate-600">
-        <div className="flex items-center gap-3 bg-white p-4 rounded-xl border border-slate-200">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+        <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0">
+            <LuLock className="w-5 h-5 text-emerald-600" />
+          </div>
           <div>
-            <strong className="block text-slate-900 font-semibold">100% en tu navegador</strong>
-            Tus datos personales nunca viajan a servidores externos.
+            <strong className="block text-slate-900 font-semibold">100% Privado en Cliente</strong>
+            Tus datos se procesan en tu navegador sin enviar nada a servidores externos.
           </div>
         </div>
-        <div className="flex items-center gap-3 bg-white p-4 rounded-xl border border-slate-200">
-          <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
+
+        <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0">
+            <LuFileCheck className="w-5 h-5 text-blue-600" />
+          </div>
           <div>
-            <strong className="block text-slate-900 font-semibold">Descarga PDF y Word (.docx)</strong>
-            Archivos nativos listos para enviar por correo o editar.
+            <strong className="block text-slate-900 font-semibold">Formato Formal PDF & Word</strong>
+            Exportación con márgenes estándar de imprenta (2.54 cm) y tipografía legal.
           </div>
         </div>
-        <div className="flex items-center gap-3 bg-white p-4 rounded-xl border border-slate-200">
-          <CheckCircle2 className="w-5 h-5 text-amber-600 shrink-0" />
+
+        <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 border border-purple-100 flex items-center justify-center shrink-0">
+            <LuShieldCheck className="w-5 h-5 text-purple-600" />
+          </div>
           <div>
-            <strong className="block text-slate-900 font-semibold">PWA Instalable</strong>
-            Accede en cualquier momento desde tu pantalla de inicio móvil.
+            <strong className="block text-slate-900 font-semibold">Validez y Normatividad</strong>
+            Redactados conforme al Código Sustantivo del Trabajo, Civil y Comercio.
           </div>
         </div>
       </div>

@@ -1,14 +1,20 @@
 import React from 'react';
 import { ContratoPrestacionData } from '../../types/documents';
 import { CollapsibleSection } from './CollapsibleSection';
-import { User, Building, ScrollText, DollarSign, Plus, Trash2, ShieldCheck } from 'lucide-react';
+import { SignaturePad } from '../SignaturePad';
+import { User, Building, ScrollText, DollarSign, Plus, Trash2, ShieldCheck, PenTool } from 'lucide-react';
 
 interface Props {
   data: ContratoPrestacionData;
   onChange: (updated: ContratoPrestacionData) => void;
+  onSaveSignatureToProfile?: (dataUrl: string) => void;
 }
 
-export const ContratoPrestacionForm: React.FC<Props> = ({ data, onChange }) => {
+export const ContratoPrestacionForm: React.FC<Props> = ({
+  data,
+  onChange,
+  onSaveSignatureToProfile,
+}) => {
   const update = <K extends keyof ContratoPrestacionData>(key: K, val: ContratoPrestacionData[K]) => {
     onChange({ ...data, [key]: val });
   };
@@ -245,17 +251,52 @@ export const ContratoPrestacionForm: React.FC<Props> = ({ data, onChange }) => {
           </div>
         </div>
 
-        <label className="flex items-center gap-3 cursor-pointer min-h-[44px] pt-2">
-          <input
-            type="checkbox"
-            checked={data.clausulaIndependencia}
-            onChange={(e) => update('clausulaIndependencia', e.target.checked)}
-            className="w-4 h-4 text-blue-600 rounded border-slate-300"
-          />
-          <span className="text-xs text-slate-700">
-            Incluir cláusula expresa de total autonomía técnica sin relación de subordinación laboral
-          </span>
-        </label>
+        <div className="space-y-2 pt-2 border-t border-slate-200">
+          <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
+            <input
+              type="checkbox"
+              checked={data.clausulaIndependencia}
+              onChange={(e) => update('clausulaIndependencia', e.target.checked)}
+              className="w-4 h-4 text-blue-600 rounded border-slate-300"
+            />
+            <span className="text-xs text-slate-700">
+              Incluir cláusula expresa de total autonomía técnica sin relación de subordinación laboral
+            </span>
+          </label>
+
+          <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
+            <input
+              type="checkbox"
+              checked={data.incluirConfidencialidad}
+              onChange={(e) => update('incluirConfidencialidad', e.target.checked)}
+              className="w-4 h-4 text-blue-600 rounded border-slate-300"
+            />
+            <span className="text-xs text-slate-700">
+              Incluir cláusula de confidencialidad y reserva estricta de información y propiedad intelectual
+            </span>
+          </label>
+        </div>
+      </CollapsibleSection>
+
+      {/* 4. Firma y Suscripción */}
+      <CollapsibleSection
+        title="Firma del Contratista"
+        subtitle="Dibuja tu firma digital en pantalla o usa la línea editorial"
+        icon={<PenTool className="w-5 h-5" />}
+        defaultOpen={true}
+      >
+        <SignaturePad
+          signatureType={data.signatureType || 'text'}
+          signatureDataUrl={data.signatureDataUrl}
+          onSignatureChange={(type, dataUrl) => {
+            onChange({
+              ...data,
+              signatureType: type,
+              signatureDataUrl: dataUrl,
+            });
+          }}
+          onSaveToProfile={onSaveSignatureToProfile}
+        />
       </CollapsibleSection>
     </div>
   );

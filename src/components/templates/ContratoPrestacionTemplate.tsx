@@ -1,6 +1,7 @@
 import React from 'react';
 import { ContratoPrestacionData, DocumentStyleConfig } from '../../types/documents';
 import { formatearMoneda, numeroALetras } from '../../utils/numberToWords';
+import { SignatureBlock } from './SignatureBlock';
 
 interface Props {
   data: ContratoPrestacionData;
@@ -114,10 +115,23 @@ export const ContratoPrestacionTemplate: React.FC<Props> = ({ data, styleConfig 
             </div>
           )}
 
+          {data.incluirConfidencialidad && (
+            <div>
+              <h2 className="font-bold text-slate-950 uppercase text-xs border-b border-slate-200 pb-0.5 mb-1">
+                SEXTA. CONFIDENCIALIDAD Y PROPIEDAD INTELECTUAL:
+              </h2>
+              <p className="leading-relaxed text-[11px] text-slate-600">
+                Toda la información técnica, comercial, operativa, bases de datos o metodologías suministradas por el CONTRATANTE
+                o generadas en desarrollo del servicio contratado tendrán carácter de estrictamente confidenciales y reservadas.
+                Los derechos patrimoniales sobre los entregables y obras derivadas pertenecerán en su totalidad al CONTRATANTE.
+              </p>
+            </div>
+          )}
+
           {data.clausulaPenalMonto > 0 && (
             <div>
               <h2 className="font-bold text-slate-950 uppercase text-xs border-b border-slate-200 pb-0.5 mb-1">
-                SEXTA. CLÁUSULA PENAL:
+                {data.incluirConfidencialidad ? 'SÉPTIMA.' : 'SEXTA.'} CLÁUSULA PENAL:
               </h2>
               <p className="leading-relaxed text-[11px] text-slate-600">
                 En caso de incumplimiento total o parcial de las obligaciones contraídas, la parte incumplida pagará a la otra a título
@@ -129,28 +143,31 @@ export const ContratoPrestacionTemplate: React.FC<Props> = ({ data, styleConfig 
       </div>
 
       {/* Firmas a doble columna */}
-      <div className="pt-8 mt-6 border-t border-slate-300">
-        <p className="text-xs text-slate-500 mb-8">
+      <div className="pt-6 mt-6 border-t border-slate-300">
+        <p className="text-xs text-slate-500 mb-6">
           En señal de conformidad y aceptación, se suscribe el presente documento en dos ejemplares del mismo tenor:
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <div>
-            <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-            <p className="font-bold text-slate-950 uppercase text-xs">
-              EL CONTRATANTE:
-            </p>
-            <p className="font-semibold text-slate-900 text-xs">{data.nombreContratante || 'Nombre Contratante'}</p>
-            <p className="text-[11px] text-slate-600">{data.tipoDocContratante}: {data.numDocContratante}</p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
+          <SignatureBlock
+            label="EL CONTRATANTE:"
+            signatureType="text"
+            name={data.nombreContratante}
+            docType={data.tipoDocContratante}
+            docNumber={data.numDocContratante}
+            address={data.domicilioContratante}
+            widthClass="w-full"
+          />
 
-          <div>
-            <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-            <p className="font-bold text-slate-950 uppercase text-xs">
-              EL CONTRATISTA:
-            </p>
-            <p className="font-semibold text-slate-900 text-xs">{data.nombreContratista || 'Nombre Contratista'}</p>
-            <p className="text-[11px] text-slate-600">{data.tipoDocContratista}: {data.numDocContratista}</p>
-          </div>
+          <SignatureBlock
+            label="EL CONTRATISTA:"
+            signatureType={data.signatureType || 'text'}
+            signatureDataUrl={data.signatureDataUrl}
+            name={data.nombreContratista}
+            docType={data.tipoDocContratista}
+            docNumber={data.numDocContratista}
+            address={data.domicilioContratista}
+            widthClass="w-full"
+          />
         </div>
       </div>
     </div>

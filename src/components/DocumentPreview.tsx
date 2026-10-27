@@ -16,7 +16,10 @@ import { ActaEntregaTemplate } from './templates/ActaEntregaTemplate';
 import { DerechoPeticionTemplate } from './templates/DerechoPeticionTemplate';
 import { PoderAutorizacionTemplate } from './templates/PoderAutorizacionTemplate';
 import { HabeasDataTemplate } from './templates/HabeasDataTemplate';
-import { ZoomIn, ZoomOut, Maximize2, Type, Printer, FileDown } from 'lucide-react';
+import { AcuerdoNdaTemplate } from './templates/AcuerdoNdaTemplate';
+import { CompraventaVehiculoTemplate } from './templates/CompraventaVehiculoTemplate';
+import { AutorizacionPatiosTemplate } from './templates/AutorizacionPatiosTemplate';
+import { LuZoomIn, LuZoomOut, LuMaximize2, LuPrinter, LuDownload } from 'react-icons/lu';
 
 interface Props {
   selectedDoc: DocumentType;
@@ -69,6 +72,12 @@ export const DocumentPreview: React.FC<Props> = ({
         return <PoderAutorizacionTemplate data={data.poderAutorizacion} styleConfig={styleConfig} />;
       case 'habeas_data':
         return <HabeasDataTemplate data={data.habeasData} styleConfig={styleConfig} />;
+      case 'acuerdo_nda':
+        return <AcuerdoNdaTemplate data={data.acuerdoNda} styleConfig={styleConfig} />;
+      case 'compraventa_vehiculo':
+        return <CompraventaVehiculoTemplate data={data.compraventaVehiculo} styleConfig={styleConfig} />;
+      case 'autorizacion_patios':
+        return <AutorizacionPatiosTemplate data={data.autorizacionPatios} styleConfig={styleConfig} />;
       default:
         return null;
     }
@@ -118,7 +127,7 @@ export const DocumentPreview: React.FC<Props> = ({
               title="Reducir zoom"
               aria-label="Reducir zoom"
             >
-              <ZoomOut className="w-3.5 h-3.5" />
+              <LuZoomOut className="w-3.5 h-3.5" />
             </button>
             <span className="px-2 font-mono text-[11px] font-semibold text-slate-700 min-w-[42px] text-center">
               {zoom}%
@@ -130,7 +139,7 @@ export const DocumentPreview: React.FC<Props> = ({
               title="Aumentar zoom"
               aria-label="Aumentar zoom"
             >
-              <ZoomIn className="w-3.5 h-3.5" />
+              <LuZoomIn className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -140,7 +149,7 @@ export const DocumentPreview: React.FC<Props> = ({
             title="Restablecer al 100%"
             aria-label="Restablecer al 100%"
           >
-            <Maximize2 className="w-3.5 h-3.5" />
+            <LuMaximize2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -154,30 +163,27 @@ export const DocumentPreview: React.FC<Props> = ({
             transformOrigin: 'top center',
             transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
-          className="print-area w-full max-w-[800px] bg-white rounded-sm shadow-xl border border-slate-300/80 my-2 select-text"
+          className="print-area w-full max-w-[800px] bg-white rounded-xs shadow-[0_15px_35px_rgba(15,23,42,0.12),_0_5px_15px_rgba(15,23,42,0.06)] border border-slate-300/80 my-2 select-text"
         >
           {renderActiveTemplate()}
         </div>
       </div>
 
-      {/* Bottom quick hints & actions */}
-      <div className="no-print bg-slate-900 text-white text-[11px] px-4 py-2 border-t border-slate-800 flex items-center justify-between">
+      {/* Bottom quick hints & actions for Desktop (on mobile, handled by thumb bottom bar) */}
+      <div className="no-print hidden sm:flex bg-slate-900 text-white text-[11px] px-4 py-2 border-t border-slate-800 items-center justify-between">
         <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
           <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
-          <span className="text-slate-300 hidden sm:inline">
-            Previsualización en tiempo real — 100% privado en tu navegador
-          </span>
-          <span className="text-slate-300 sm:hidden">
-            Listo para exportar
+          <span className="text-slate-300">
+            Previsualización en tiempo real con proporción estándar de hoja institucional
           </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {onDownloadPdf && (
             <button
               onClick={onDownloadPdf}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-white bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-medium transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-white bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold transition-colors shadow-xs"
             >
-              <FileDown className="w-3.5 h-3.5" />
+              <LuDownload className="w-3.5 h-3.5" />
               Descargar PDF
             </button>
           )}
@@ -186,8 +192,8 @@ export const DocumentPreview: React.FC<Props> = ({
               onClick={onPrint}
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-slate-200 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-medium transition-colors border border-slate-700"
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Imprimir</span>
+              <LuPrinter className="w-3.5 h-3.5" />
+              <span>Imprimir</span>
             </button>
           )}
         </div>
