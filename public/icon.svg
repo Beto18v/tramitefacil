@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+  </defs>
+  <!-- Background with squircle safe padding -->
+  <rect width="512" height="512" rx="112" fill="url(#grad)" />
+  <!-- Document paper sheet -->
+  <g transform="translate(106, 86)">
+    <!-- Sheet background -->
+    <path d="M 0 16 C 0 7.16 7.16 0 16 0 L 200 0 L 300 100 L 300 324 C 300 332.84 292.84 340 284 340 L 16 340 C 7.16 340 0 332.84 0 324 Z" fill="#ffffff" />
+    <!-- Folded corner -->
+    <path d="M 200 0 L 200 84 C 200 92.84 207.16 100 216 100 L 300 100 Z" fill="#e2e8f0" />
+    <!-- Text lines -->
+    <rect x="42" y="130" width="216" height="16" rx="8" fill="#1e293b" />
+    <rect x="42" y="170" width="168" height="14" rx="7" fill="#64748b" />
+    <rect x="42" y="204" width="216" height="14" rx="7" fill="#64748b" />
+    <rect x="42" y="238" width="140" height="14" rx="7" fill="#64748b" />
+    <!-- Golden seal stamp -->
+    <circle cx="230" cy="285" r="34" fill="#f59e0b" stroke="#ffffff" stroke-width="4" />
+    <!-- Checkmark inside seal -->
+    <path d="M 218 285 L 226 293 L 244 275" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
