@@ -33,8 +33,8 @@
 /* Print optimizations */
 @media print {
   @page {
-    size: letter portrait;
-    margin: 15mm 18mm 18mm 18mm;
+    size: auto;
+    margin: 12mm 15mm 15mm 15mm;
   }
 
   body {
