@@ -253,8 +253,9 @@ export function injectProfileIntoDocument(
     };
     const key = docKeyMap[docType];
     if (key && updated[key]) {
-      (updated[key] as any).signatureType = 'draw';
-      (updated[key] as any).signatureDataUrl = profile.signatureDataUrl;
+      const docWithSig = updated[key] as { signatureType?: 'text' | 'draw'; signatureDataUrl?: string };
+      docWithSig.signatureType = 'draw';
+      docWithSig.signatureDataUrl = profile.signatureDataUrl;
     }
   }
 

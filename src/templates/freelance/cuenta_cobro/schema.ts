@@ -1,0 +1,151 @@
+import { CuentaCobroData } from '../../../types/documents';
+import { DocumentMetaInfo } from '../../types';
+
+export const meta: DocumentMetaInfo = {
+  id: 'cuenta_cobro',
+  title: 'Cuenta de Cobro con Retenciones',
+  shortTitle: 'Cuenta de Cobro',
+  category: 'freelance',
+  categoryName: 'Finanzas, Freelance & Honorarios',
+  categoryIcon: 'Briefcase',
+  description:
+    'Documento equivalente para cobro de honorarios profesionales y servicios independientes. Soporte multilínea de conceptos, cálculo automático de retención en la fuente (ReteFuente) y ReteICA paramétrico, datos bancarios y constancias de aportes a seguridad social.',
+  iconName: 'Receipt',
+  lawReference: 'Art. 1.6.1.4.12 D.U.R. 1625/2016 y Art. 437 E.T.',
+  tags: [
+    'Honorarios',
+    'Servicios Profesionales',
+    'ReteFuente',
+    'ReteICA',
+    'Freelance',
+    'Seguridad Social',
+  ],
+  estimatedMinutes: '3 min',
+  featuredTags: ['Más Utilizado', 'Cálculo ReteFuente', 'Multilínea'],
+  subfilter: 'Cuentas de Cobro',
+};
+
+const TODAY = new Date().toISOString().split('T')[0];
+
+export const defaultData: CuentaCobroData = {
+  numeroConsecutivo: '001',
+  fechaEmision: TODAY,
+  fechaVencimiento: '',
+  ciudad: 'Bogotá D.C.',
+  nombreContratista: '',
+  tipoDocumentoContratista: 'Cédula de Ciudadanía',
+  numeroDocumentoContratista: '',
+  expedicionContratista: '',
+  telefonoContratista: '',
+  correoContratista: '',
+  direccionContratista: '',
+  nombreCliente: '',
+  tipoDocumentoCliente: 'NIT',
+  numeroDocumentoCliente: '',
+  direccionCliente: '',
+  ciudadCliente: '',
+  representanteCliente: '',
+  concepto: '',
+  conceptos: [
+    {
+      id: 'item-1',
+      descripcion: 'Honorarios profesionales por servicios técnicos y consultoría especializada',
+      cantidad: 1,
+      valorUnitario: 0,
+    },
+  ],
+  usarConceptosMultiples: false,
+  periodoPrestacion: '',
+  numeroContrato: '',
+  valorSubtotal: 0,
+  aplicaReteFuente: false,
+  porcentajeReteFuente: 10,
+  aplicaReteICA: false,
+  porcentajeReteICA: 0.966,
+  moneda: 'PESOS M/CTE.',
+  incluirDatosBancarios: true,
+  banco: '',
+  tipoCuenta: 'Ahorros',
+  numeroCuenta: '',
+  titularCuenta: '',
+  declaraSeguridadSocial: true,
+  declaraNoResponsableIVA: true,
+  signatureType: 'text',
+};
+
+export const sampleData: CuentaCobroData = {
+  numeroConsecutivo: 'CC-2026-014',
+  fechaEmision: TODAY,
+  fechaVencimiento: '2026-11-15',
+  ciudad: 'Bogotá D.C.',
+  nombreContratista: 'Camila Andrea Ospina Morales',
+  tipoDocumentoContratista: 'Cédula de Ciudadanía',
+  numeroDocumentoContratista: '1.020.458.789',
+  expedicionContratista: 'Bogotá D.C.',
+  telefonoContratista: '+57 312 458 9621',
+  correoContratista: 'camila.ospina.dev@ejemplo.com',
+  direccionContratista: 'Calle 127 # 19-45, Apto 502',
+  nombreCliente: 'INVERSIONES TECNOLÓGICAS ANDINAS S.A.S.',
+  tipoDocumentoCliente: 'NIT',
+  numeroDocumentoCliente: '901.345.678-2',
+  direccionCliente: 'Carrera 7 # 71-21, Torre B, Piso 8',
+  ciudadCliente: 'Bogotá D.C.',
+  representanteCliente: 'Dpto. de Contabilidad y Tesorería',
+  concepto:
+    'Servicios profesionales especializados en desarrollo frontend React 19, arquitectura PWA y consultoría técnica.',
+  conceptos: [
+    {
+      id: 'item-1',
+      descripcion: 'Desarrollo de módulos frontend en React 19 y arquitectura PWA offline-first',
+      cantidad: 1,
+      valorUnitario: 3500000,
+    },
+    {
+      id: 'item-2',
+      descripcion: 'Consultoría en optimización de rendimiento y pruebas de integración',
+      cantidad: 1,
+      valorUnitario: 1000000,
+    },
+  ],
+  usarConceptosMultiples: true,
+  periodoPrestacion: '01 de Octubre de 2026 al 31 de Octubre de 2026',
+  numeroContrato: 'CTO-SERV-2026-089',
+  valorSubtotal: 4500000,
+  aplicaReteFuente: true,
+  porcentajeReteFuente: 10,
+  aplicaReteICA: true,
+  porcentajeReteICA: 0.966,
+  moneda: 'PESOS M/CTE.',
+  incluirDatosBancarios: true,
+  banco: 'Bancolombia',
+  tipoCuenta: 'Ahorros',
+  numeroCuenta: '458-963258-12',
+  titularCuenta: 'Camila Andrea Ospina Morales',
+  declaraSeguridadSocial: true,
+  declaraNoResponsableIVA: true,
+  signatureType: 'text',
+};
+
+export const quickConceptTemplates = [
+  {
+    label: 'Desarrollo de Software',
+    text: 'Desarrollo de módulos web en React, arquitectura cloud serverless y pruebas unitarias de software.',
+    suggestedPrice: 3500000,
+  },
+  {
+    label: 'Diseño UI/UX & Branding',
+    text: 'Diseño de interfaz de usuario en Figma, sistema de diseño, prototipado interactivo y manual de identidad.',
+    suggestedPrice: 2200000,
+  },
+  {
+    label: 'Asesoría Contable & Tributaria',
+    text: 'Cierre contable mensual, liquidación de nómina, elaboración de declaraciones tributarias y conciliaciones bancarias.',
+    suggestedPrice: 1800000,
+  },
+  {
+    label: 'Marketing Digital & Pauta',
+    text: 'Planificación de campañas de tráfico pago, optimización de conversiones, analítica web y reporte de rendimiento.',
+    suggestedPrice: 1600000,
+  },
+];
+

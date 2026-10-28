@@ -11,7 +11,7 @@ import {
   BorderStyle,
 } from 'docx';
 import { saveAs } from 'file-saver';
-import { DocumentType } from '../types/documents';
+import { DocumentType, AllDocumentsData } from '../types/documents';
 import { generarTextoPlano } from './plainTextGenerator';
 
 interface PartySignatureInfo {
@@ -23,9 +23,13 @@ interface PartySignatureInfo {
   note?: string;
 }
 
-function extractSignaturesForDoc(docType: DocumentType, state: any): { left: PartySignatureInfo; right: PartySignatureInfo } {
+function extractSignaturesForDoc(
+  docType: DocumentType,
+  state: AllDocumentsData
+): { left: PartySignatureInfo; right: PartySignatureInfo } {
   // Helper to extract nested doc object
-  const getDoc = (keyCamel: string, keySnake: string) => state[keyCamel] || state[keySnake] || {};
+  const getDoc = (keyCamel: keyof AllDocumentsData, _keySnake?: string) =>
+    (state[keyCamel] || {}) as unknown as Record<string, string | undefined>;
 
   switch (docType) {
     case 'cuenta_cobro': {
@@ -443,7 +447,7 @@ function buildSignatureCell(info: PartySignatureInfo): TableCell {
 
 export async function exportDocx(
   docType: DocumentType,
-  state: any,
+  state: AllDocumentsData,
   title: string,
   filename: string
 ): Promise<void> {

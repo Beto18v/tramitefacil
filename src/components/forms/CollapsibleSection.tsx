@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LuChevronDown } from 'react-icons/lu';
+import { ChevronDown } from 'lucide-react';
 
 interface Props {
   title: string;
@@ -52,7 +52,7 @@ export const CollapsibleSection: React.FC<Props> = ({
             isOpen ? 'rotate-180' : ''
           }`}
         >
-          <LuChevronDown className="w-4 h-4" />
+          <ChevronDown className="w-4 h-4" />
         </div>
       </button>
 
