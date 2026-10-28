@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { LuRotateCcw, LuPenTool, LuType, LuCheck, LuSparkles } from 'react-icons/lu';
+import { RotateCcw, PenTool, Type, Check, Sparkles } from 'lucide-react';
 
 interface Props {
   signatureType: 'text' | 'draw';
@@ -144,7 +144,7 @@ export const SignaturePad: React.FC<Props> = ({
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <LuType className="w-3.5 h-3.5" />
+            <Type className="w-3.5 h-3.5" />
             <span>Tipográfica Formal</span>
           </button>
           <button
@@ -156,7 +156,7 @@ export const SignaturePad: React.FC<Props> = ({
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <LuPenTool className="w-3.5 h-3.5" />
+            <PenTool className="w-3.5 h-3.5" />
             <span>Dibujar Firma Digital</span>
           </button>
         </div>
@@ -165,7 +165,7 @@ export const SignaturePad: React.FC<Props> = ({
       {signatureType === 'text' ? (
         <div className="bg-white rounded-xl border border-slate-200 p-3.5 text-xs text-slate-600 flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
-            <LuType className="w-4 h-4" />
+            <Type className="w-4 h-4" />
           </div>
           <div>
             <strong className="block text-slate-900 font-semibold">Pie de firma formal impreso</strong>
@@ -203,7 +203,7 @@ export const SignaturePad: React.FC<Props> = ({
               onClick={handleClear}
               className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 text-slate-600 hover:text-rose-600 bg-white hover:bg-rose-50 border border-slate-200 rounded-xl transition cursor-pointer font-medium"
             >
-              <LuRotateCcw className="w-3.5 h-3.5" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Limpiar trazo</span>
             </button>
 
@@ -216,12 +216,12 @@ export const SignaturePad: React.FC<Props> = ({
               >
                 {savedToProfileSuccess ? (
                   <>
-                    <LuCheck className="w-4 h-4 text-emerald-600" />
+                    <Check className="w-4 h-4 text-emerald-600" />
                     <span className="text-emerald-700 font-semibold">¡Guardada en tu perfil!</span>
                   </>
                 ) : (
                   <>
-                    <LuSparkles className="w-3.5 h-3.5 text-blue-600" />
+                    <Sparkles className="w-3.5 h-3.5 text-blue-600" />
                     <span>Guardar firma en mi perfil</span>
                   </>
                 )}

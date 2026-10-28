@@ -9,38 +9,21 @@ import {
 import { DocumentPreview } from './DocumentPreview';
 import { exportElementToPdf } from '../utils/exportPdf';
 import { exportDocx } from '../utils/exportDocx';
-import { generarTextoPlano } from '../utils/plainTextGenerator';
-
-// Forms
-import { CuentaCobroForm } from './forms/CuentaCobroForm';
-import { PropuestaServiciosForm } from './forms/PropuestaServiciosForm';
-import { ContratoPrestacionForm } from './forms/ContratoPrestacionForm';
-import { CartaRenunciaForm } from './forms/CartaRenunciaForm';
-import { CertificadoLaboralForm } from './forms/CertificadoLaboralForm';
-import { PermisoLaboralForm } from './forms/PermisoLaboralForm';
-import { NoRenovacionArriendoForm } from './forms/NoRenovacionArriendoForm';
-import { ContratoArrendamientoForm } from './forms/ContratoArrendamientoForm';
-import { ActaEntregaForm } from './forms/ActaEntregaForm';
-import { DerechoPeticionForm } from './forms/DerechoPeticionForm';
-import { PoderAutorizacionForm } from './forms/PoderAutorizacionForm';
-import { HabeasDataForm } from './forms/HabeasDataForm';
-import { AcuerdoNdaForm } from './forms/AcuerdoNdaForm';
-import { CompraventaVehiculoForm } from './forms/CompraventaVehiculoForm';
-import { AutorizacionPatiosForm } from './forms/AutorizacionPatiosForm';
+import { getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from '../templates';
 
 import {
-  LuArrowLeft,
-  LuSparkles,
-  LuRotateCcw,
-  LuCopy,
-  LuCheck,
-  LuDownload,
-  LuFileText,
-  LuPrinter,
-  LuLoaderCircle,
-  LuUserCheck,
-  LuUserCog,
-} from 'react-icons/lu';
+  ArrowLeft,
+  Sparkles,
+  RotateCcw,
+  Copy,
+  Check,
+  Download,
+  FileText,
+  Printer,
+  Loader2,
+  UserCheck,
+  UserCog,
+} from 'lucide-react';
 
 interface Props {
   selectedDoc: DocumentType;
@@ -57,75 +40,6 @@ interface Props {
   onApplyProfile: () => void;
   onSaveSignatureToProfile?: (dataUrl: string) => void;
 }
-
-const calculateDocCompletion = (docType: DocumentType, allData: AllDocumentsData): number => {
-  let docObj: Record<string, any> = {};
-  switch (docType) {
-    case 'cuenta_cobro':
-      docObj = allData.cuentaCobro;
-      break;
-    case 'propuesta_servicios':
-      docObj = allData.propuestaServicios;
-      break;
-    case 'contrato_prestacion':
-      docObj = allData.contratoPrestacion;
-      break;
-    case 'carta_renuncia':
-      docObj = allData.cartaRenuncia;
-      break;
-    case 'certificado_laboral':
-      docObj = allData.certificadoLaboral;
-      break;
-    case 'permiso_laboral':
-      docObj = allData.permisoLaboral;
-      break;
-    case 'no_renovacion_arriendo':
-      docObj = allData.noRenovacionArriendo;
-      break;
-    case 'contrato_arrendamiento':
-      docObj = allData.contratoArrendamiento;
-      break;
-    case 'acta_entrega':
-      docObj = allData.actaEntrega;
-      break;
-    case 'derecho_peticion':
-      docObj = allData.derechoPeticion;
-      break;
-    case 'poder_autorizacion':
-      docObj = allData.poderAutorizacion;
-      break;
-    case 'habeas_data':
-      docObj = allData.habeasData;
-      break;
-    case 'acuerdo_nda':
-      docObj = allData.acuerdoNda;
-      break;
-    case 'compraventa_vehiculo':
-      docObj = allData.compraventaVehiculo;
-      break;
-    case 'autorizacion_patios':
-      docObj = allData.autorizacionPatios;
-      break;
-  }
-
-  const entries = Object.entries(docObj);
-  if (entries.length === 0) return 0;
-
-  let filled = 0;
-  for (const [, val] of entries) {
-    if (typeof val === 'string' && val.trim().length > 0) {
-      filled++;
-    } else if (typeof val === 'number' && val > 0) {
-      filled++;
-    } else if (typeof val === 'boolean' && val === true) {
-      filled++;
-    } else if (Array.isArray(val) && val.length > 0) {
-      filled++;
-    }
-  }
-
-  return Math.min(100, Math.max(10, Math.round((filled / entries.length) * 100)));
-};
 
 export const EditorView: React.FC<Props> = ({
   selectedDoc,
@@ -148,11 +62,16 @@ export const EditorView: React.FC<Props> = ({
   const [hasCopied, setHasCopied] = useState(false);
 
   const sheetRef = useRef<HTMLDivElement>(null);
-  const docMeta = DOCUMENT_CATALOG.find((d) => d.id === selectedDoc) || DOCUMENT_CATALOG[0];
+  const exportSheetRef = useRef<HTMLDivElement>(null);
+
+  const definition = useMemo(() => getDocumentDefinition(selectedDoc), [selectedDoc]);
+  const dataKey = DOC_TYPE_TO_DATA_KEY[selectedDoc];
+  const currentDocData = data[dataKey];
+  const docMeta = DOCUMENT_CATALOG.find((d) => d.id === selectedDoc) || definition.meta;
 
   const completionPercentage = useMemo(() => {
-    return calculateDocCompletion(selectedDoc, data);
-  }, [selectedDoc, data]);
+    return definition.calculateCompletion(currentDocData);
+  }, [definition, currentDocData]);
 
   const getDynamicFilename = (ext: 'pdf' | 'docx') => {
     const today = new Date().toISOString().split('T')[0];
@@ -212,7 +131,9 @@ export const EditorView: React.FC<Props> = ({
   };
 
   const handleDownloadPdf = async () => {
-    if (!sheetRef.current) {
+    // Phase 4 fix: use off-screen fixed 794px canvas container to prevent mobile crash when preview tab is hidden
+    const targetElement = exportSheetRef.current || sheetRef.current;
+    if (!targetElement) {
       onTriggerToast('No se encontró el documento para exportar.', 'error');
       return;
     }
@@ -221,7 +142,7 @@ export const EditorView: React.FC<Props> = ({
       setIsExportingPdf(true);
       onTriggerToast('Generando documento PDF institucional...', 'info');
       const filename = getDynamicFilename('pdf');
-      await exportElementToPdf(sheetRef.current, filename, 'a4');
+      await exportElementToPdf(targetElement, filename, 'a4');
       onTriggerToast(`¡PDF descargado con éxito: ${filename}!`, 'success');
     } catch (err) {
       console.error(err);
@@ -249,7 +170,7 @@ export const EditorView: React.FC<Props> = ({
 
   const handleCopyText = async () => {
     try {
-      const text = generarTextoPlano(selectedDoc, data);
+      const text = definition.toPlainText(currentDocData);
       await navigator.clipboard.writeText(text);
       setHasCopied(true);
       onTriggerToast('Texto legal copiado al portapapeles.', 'success');
@@ -264,132 +185,11 @@ export const EditorView: React.FC<Props> = ({
     window.print();
   };
 
-  // Form Renderer
-  const renderCurrentForm = () => {
-    switch (selectedDoc) {
-      case 'cuenta_cobro':
-        return (
-          <CuentaCobroForm
-            data={data.cuentaCobro}
-            onChange={(updated) => onUpdateData('cuentaCobro', updated)}
-            onSaveSignatureToProfile={onSaveSignatureToProfile}
-          />
-        );
-      case 'propuesta_servicios':
-        return (
-          <PropuestaServiciosForm
-            data={data.propuestaServicios}
-            onChange={(updated) => onUpdateData('propuestaServicios', updated)}
-          />
-        );
-      case 'contrato_prestacion':
-        return (
-          <ContratoPrestacionForm
-            data={data.contratoPrestacion}
-            onChange={(updated) => onUpdateData('contratoPrestacion', updated)}
-            onSaveSignatureToProfile={onSaveSignatureToProfile}
-          />
-        );
-      case 'carta_renuncia':
-        return (
-          <CartaRenunciaForm
-            data={data.cartaRenuncia}
-            onChange={(updated) => onUpdateData('cartaRenuncia', updated)}
-            onSaveSignatureToProfile={onSaveSignatureToProfile}
-          />
-        );
-      case 'certificado_laboral':
-        return (
-          <CertificadoLaboralForm
-            data={data.certificadoLaboral}
-            onChange={(updated) => onUpdateData('certificadoLaboral', updated)}
-          />
-        );
-      case 'permiso_laboral':
-        return (
-          <PermisoLaboralForm
-            data={data.permisoLaboral}
-            onChange={(updated) => onUpdateData('permisoLaboral', updated)}
-          />
-        );
-      case 'no_renovacion_arriendo':
-        return (
-          <NoRenovacionArriendoForm
-            data={data.noRenovacionArriendo}
-            onChange={(updated) => onUpdateData('noRenovacionArriendo', updated)}
-          />
-        );
-      case 'contrato_arrendamiento':
-        return (
-          <ContratoArrendamientoForm
-            data={data.contratoArrendamiento}
-            onChange={(updated) => onUpdateData('contratoArrendamiento', updated)}
-            onSaveSignatureToProfile={onSaveSignatureToProfile}
-          />
-        );
-      case 'acta_entrega':
-        return (
-          <ActaEntregaForm
-            data={data.actaEntrega}
-            onChange={(updated) => onUpdateData('actaEntrega', updated)}
-          />
-        );
-      case 'derecho_peticion':
-        return (
-          <DerechoPeticionForm
-            data={data.derechoPeticion}
-            onChange={(updated) => onUpdateData('derechoPeticion', updated)}
-            onSaveSignatureToProfile={onSaveSignatureToProfile}
-          />
-        );
-      case 'poder_autorizacion':
-        return (
-          <PoderAutorizacionForm
-            data={data.poderAutorizacion}
-            onChange={(updated) => onUpdateData('poderAutorizacion', updated)}
-          />
-        );
-      case 'habeas_data':
-        return (
-          <HabeasDataForm
-            data={data.habeasData}
-            onChange={(updated) => onUpdateData('habeasData', updated)}
-          />
-        );
-      case 'acuerdo_nda':
-        return (
-          <AcuerdoNdaForm
-            data={data.acuerdoNda}
-            onChange={(updated) => onUpdateData('acuerdoNda', updated)}
-            onSaveSignatureToProfile={onSaveSignatureToProfile}
-          />
-        );
-      case 'compraventa_vehiculo':
-        return (
-          <CompraventaVehiculoForm
-            data={data.compraventaVehiculo}
-            onChange={(updated) => onUpdateData('compraventaVehiculo', updated)}
-            onSaveSignatureToProfile={onSaveSignatureToProfile}
-          />
-        );
-      case 'autorizacion_patios':
-        return (
-          <AutorizacionPatiosForm
-            data={data.autorizacionPatios}
-            onChange={(updated) => onUpdateData('autorizacionPatios', updated)}
-            onSaveSignatureToProfile={onSaveSignatureToProfile}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="flex flex-col h-[calc(100vh-57px)] w-full overflow-hidden bg-[#F8FAFC]">
-      {/* 1. Top action & navigation bar (Clean Corporate Bar) */}
-      <div className="no-print bg-white border-b border-slate-200 px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-2xs z-20">
-        {/* Left: Botón de retroceso + Nombre del documento actual */}
+    <div className="flex flex-col h-[calc(100vh-57px)] w-full overflow-hidden bg-slate-50">
+      {/* 1. Top action & navigation bar (Slate Fintech Bar) */}
+      <div className="no-print bg-white border-b border-slate-200/80 px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-2xs z-20">
+        {/* Left: Volver + Document Header */}
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -397,12 +197,12 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 text-slate-700 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold transition cursor-pointer border border-slate-200"
             title="Volver al catálogo"
           >
-            <LuArrowLeft className="w-4 h-4 text-slate-600" />
-            <span>← Volver al catálogo</span>
+            <ArrowLeft className="w-4 h-4 text-slate-600" />
+            <span>← Catálogo</span>
           </button>
 
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-slate-900 leading-tight">
+            <span className="text-sm font-bold text-slate-900 leading-tight">
               {docMeta.title}
             </span>
             <div className="flex items-center gap-2 mt-0.5">
@@ -410,9 +210,17 @@ export const EditorView: React.FC<Props> = ({
                 {docMeta.lawReference}
               </span>
               <span className="text-slate-300 hidden sm:inline">·</span>
-              <span className="font-mono text-[11px] text-slate-600">
-                {completionPercentage}% completado
-              </span>
+              <div className="flex items-center gap-1.5">
+                <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-blue-600 transition-all duration-300"
+                    style={{ width: `${completionPercentage}%` }}
+                  ></div>
+                </div>
+                <span className="font-mono text-[11px] font-semibold text-slate-700">
+                  {completionPercentage}%
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -429,7 +237,7 @@ export const EditorView: React.FC<Props> = ({
             }`}
           >
             <span>📝</span>
-            <span>Llenar Formulario</span>
+            <span>Formulario</span>
           </button>
           <button
             type="button"
@@ -441,13 +249,13 @@ export const EditorView: React.FC<Props> = ({
             }`}
           >
             <span>📄</span>
-            <span>Ver Documento A4</span>
+            <span>Vista A4</span>
           </button>
         </div>
 
-        {/* Right Desktop Actions: Llenar prueba, Limpiar, Copiar, Word, PDF */}
+        {/* Right Desktop Actions */}
         <div className="hidden lg:flex items-center flex-wrap gap-2 text-xs">
-          {/* Botón de acción rápida: Llenar con datos de prueba */}
+          {/* Llenar con datos de prueba */}
           <button
             type="button"
             onClick={() => {
@@ -457,8 +265,8 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl shadow-2xs transition cursor-pointer"
             title="Llenar con datos de prueba realistas"
           >
-            <LuSparkles className="w-4 h-4 text-blue-600" />
-            <span>🪄 Llenar con datos de prueba</span>
+            <Sparkles className="w-4 h-4 text-blue-600" />
+            <span>Ejemplo</span>
           </button>
 
           {/* Autocompletar con perfil */}
@@ -468,7 +276,7 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 font-medium text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl shadow-2xs transition cursor-pointer"
             title="Autocompletar con datos de tu perfil"
           >
-            <LuUserCheck className="w-4 h-4 text-emerald-600" />
+            <UserCheck className="w-4 h-4 text-emerald-600" />
             <span>{userProfile?.nombreCompleto ? 'Mi Perfil' : 'Perfil'}</span>
           </button>
 
@@ -482,7 +290,7 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-2.5 py-2 font-medium text-slate-500 hover:text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition cursor-pointer"
             title="Limpiar formulario"
           >
-            <LuRotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5" />
             <span className="hidden xl:inline">Limpiar</span>
           </button>
 
@@ -495,12 +303,12 @@ export const EditorView: React.FC<Props> = ({
           >
             {hasCopied ? (
               <>
-                <LuCheck className="w-4 h-4 text-emerald-600" />
+                <Check className="w-4 h-4 text-emerald-600" />
                 <span className="text-emerald-700 font-semibold">¡Copiado!</span>
               </>
             ) : (
               <>
-                <LuCopy className="w-4 h-4 text-slate-500" />
+                <Copy className="w-4 h-4 text-slate-500" />
                 <span>Copiar</span>
               </>
             )}
@@ -515,11 +323,11 @@ export const EditorView: React.FC<Props> = ({
             title="Descargar documento Word (.docx)"
           >
             {isExportingDocx ? (
-              <LuLoaderCircle className="w-4 h-4 text-slate-600 animate-spin" />
+              <Loader2 className="w-4 h-4 text-slate-600 animate-spin" />
             ) : (
-              <LuFileText className="w-4 h-4 text-slate-700" />
+              <FileText className="w-4 h-4 text-slate-700" />
             )}
-            <span className="font-semibold">Word (.docx)</span>
+            <span className="font-semibold">Word</span>
           </button>
 
           {/* Descargar PDF (Azul Corporativo) */}
@@ -531,9 +339,9 @@ export const EditorView: React.FC<Props> = ({
             title="Descargar documento en PDF"
           >
             {isExportingPdf ? (
-              <LuLoaderCircle className="w-4 h-4 text-white animate-spin" />
+              <Loader2 className="w-4 h-4 text-white animate-spin" />
             ) : (
-              <LuDownload className="w-4 h-4 text-white" />
+              <Download className="w-4 h-4 text-white" />
             )}
             <span>Descargar PDF</span>
           </button>
@@ -545,7 +353,7 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-2.5 py-2 font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition cursor-pointer"
             title="Imprimir directamente"
           >
-            <LuPrinter className="w-4 h-4 text-slate-600" />
+            <Printer className="w-4 h-4 text-slate-600" />
           </button>
         </div>
       </div>
@@ -554,16 +362,16 @@ export const EditorView: React.FC<Props> = ({
       <div className="flex-1 flex overflow-hidden w-full relative">
         {/* Left Panel: Form */}
         <div
-          className={`no-print w-full lg:w-1/2 lg:block h-full overflow-y-auto bg-[#F8FAFC] border-r border-slate-200 p-4 sm:p-6 transition-all pb-24 lg:pb-8 ${
+          className={`no-print w-full lg:w-1/2 lg:block h-full overflow-y-auto bg-slate-50/50 border-r border-slate-200/80 p-4 sm:p-6 transition-all pb-24 lg:pb-8 ${
             activeMobileTab === 'form' ? 'block' : 'hidden'
           }`}
         >
           <div className="max-w-2xl mx-auto space-y-4">
             {/* Quick Profile helper card */}
-            <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-sm flex flex-wrap items-center justify-between gap-3 border border-slate-200">
+            <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-2xs flex flex-wrap items-center justify-between gap-3 border border-slate-200">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
-                  <LuUserCheck className="w-4 h-4" />
+                  <UserCheck className="w-4 h-4" />
                 </div>
                 <div>
                   <span className="text-xs font-semibold text-slate-900 block">
@@ -574,7 +382,7 @@ export const EditorView: React.FC<Props> = ({
                   <span className="text-[11px] text-slate-500 block">
                     {userProfile?.nombreCompleto
                       ? 'Inyecta tu identificación y firma con 1 clic'
-                      : 'Configura tus datos para no tener que repetirlos'}
+                      : 'Configura tus datos para autocompletar formularios'}
                   </span>
                 </div>
               </div>
@@ -585,7 +393,7 @@ export const EditorView: React.FC<Props> = ({
                   onClick={onApplyProfile}
                   className="min-h-[44px] px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition cursor-pointer shadow-xs"
                 >
-                  {userProfile?.nombreCompleto ? '⚡ Aplicar Perfil' : 'Configurar'}
+                  {userProfile?.nombreCompleto ? '⚡ Aplicar' : 'Configurar'}
                 </button>
                 <button
                   type="button"
@@ -593,7 +401,7 @@ export const EditorView: React.FC<Props> = ({
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-medium transition cursor-pointer"
                   title="Editar perfil guardado"
                 >
-                  <LuUserCog className="w-4 h-4" />
+                  <UserCog className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -611,27 +419,33 @@ export const EditorView: React.FC<Props> = ({
                 }}
                 className="min-h-[44px] px-3 py-1.5 text-xs font-semibold bg-blue-600 text-white rounded-lg shadow-xs flex items-center gap-1.5 cursor-pointer"
               >
-                <LuSparkles className="w-3.5 h-3.5" />
-                <span>🪄 Llenar datos</span>
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>🪄 Datos de prueba</span>
               </button>
             </div>
 
             {/* Form Section Header with Auto-save indicator */}
             <div className="pb-2 border-b border-slate-200 flex items-center justify-between">
               <div>
-                <h2 className="text-base font-semibold text-slate-900 tracking-tight">
+                <h2 className="text-base font-bold text-slate-900 tracking-tight">
                   Formulario Guiado
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Diligencia los campos requeridos para estructurar el documento.
+                  Diligencia los campos requeridos para estructurar el documento oficial.
                 </p>
               </div>
-              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                Guardado automático
+              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                Autoguardado
               </span>
             </div>
 
-            {renderCurrentForm()}
+            {/* Dynamic Modular Form Resolution */}
+            {definition.renderForm({
+              data: currentDocData,
+              onChange: (updated) => onUpdateData(dataKey, updated),
+              onSaveSignatureToProfile,
+            })}
           </div>
         </div>
 
@@ -653,10 +467,10 @@ export const EditorView: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* 3. Barra inferior de descarga fija (Bottom Sheet Bar) */}
+      {/* 3. Barra inferior de descarga fija para móviles (Bottom Sheet Bar) */}
       <div className="lg:hidden no-print fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 py-2.5 shadow-2xl safe-area-bottom">
         <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
-          {/* Botón 1: Descargar PDF (Azul Corporativo con LuDownload) */}
+          {/* Botón 1: Descargar PDF */}
           <button
             type="button"
             onClick={handleDownloadPdf}
@@ -664,14 +478,14 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] flex flex-col items-center justify-center p-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-[11px] font-semibold shadow-sm transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             {isExportingPdf ? (
-              <LuLoaderCircle className="w-4 h-4 text-white animate-spin mb-0.5" />
+              <Loader2 className="w-4 h-4 text-white animate-spin mb-0.5" />
             ) : (
-              <LuDownload className="w-4 h-4 text-white mb-0.5" />
+              <Download className="w-4 h-4 text-white mb-0.5" />
             )}
             <span className="truncate">Descargar PDF</span>
           </button>
 
-          {/* Botón 2: Descargar Word (.docx) (Estilo secundario con LuFileText) */}
+          {/* Botón 2: Descargar Word (.docx) */}
           <button
             type="button"
             onClick={handleDownloadDocx}
@@ -679,14 +493,14 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] flex flex-col items-center justify-center p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-[11px] font-semibold transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             {isExportingDocx ? (
-              <LuLoaderCircle className="w-4 h-4 text-slate-600 animate-spin mb-0.5" />
+              <Loader2 className="w-4 h-4 text-slate-600 animate-spin mb-0.5" />
             ) : (
-              <LuFileText className="w-4 h-4 text-slate-700 mb-0.5" />
+              <FileText className="w-4 h-4 text-slate-700 mb-0.5" />
             )}
             <span className="truncate">Word (.docx)</span>
           </button>
 
-          {/* Botón 3: Copiar Texto (con feedback visual de copiado) */}
+          {/* Botón 3: Copiar Texto */}
           <button
             type="button"
             onClick={handleCopyText}
@@ -694,17 +508,36 @@ export const EditorView: React.FC<Props> = ({
           >
             {hasCopied ? (
               <>
-                <LuCheck className="w-4 h-4 text-emerald-600 mb-0.5" />
+                <Check className="w-4 h-4 text-emerald-600 mb-0.5" />
                 <span className="text-emerald-700 font-bold truncate">¡Copiado!</span>
               </>
             ) : (
               <>
-                <LuCopy className="w-4 h-4 text-slate-600 mb-0.5" />
+                <Copy className="w-4 h-4 text-slate-600 mb-0.5" />
                 <span className="truncate">Copiar Texto</span>
               </>
             )}
           </button>
         </div>
+      </div>
+
+      {/* Phase 4: Off-screen fixed 794px width container for reliable PDF generation on all devices */}
+      <div
+        ref={exportSheetRef}
+        style={{
+          position: 'fixed',
+          left: '-9999px',
+          top: 0,
+          width: '794px',
+          backgroundColor: '#ffffff',
+          zIndex: -1,
+        }}
+        aria-hidden="true"
+      >
+        {definition.renderView({
+          data: currentDocData,
+          styleConfig,
+        })}
       </div>
     </div>
   );

@@ -45,7 +45,8 @@ import { CatalogView } from './components/CatalogView';
 import { EditorView } from './components/EditorView';
 import { UserProfileModal } from './components/UserProfileModal';
 import { loadUserProfile, saveUserProfile, injectProfileIntoDocument } from './utils/profileInjector';
-import { LuCircleCheck, LuCircleAlert, LuInfo, LuX } from 'react-icons/lu';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 
 const STORAGE_KEY = 'tramite_facil_state_v1';
 
@@ -56,12 +57,37 @@ interface ToastState {
 }
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'catalog' | 'editor'>('catalog');
-  const [selectedDocId, setSelectedDocId] = useState<DocumentType>('cuenta_cobro');
-  const [styleConfig, setStyleConfig] = useState<DocumentStyleConfig>(defaultStyleConfig);
-  const [documentsData, setDocumentsData] = useState<AllDocumentsData>(() => {
-    return getInitialFullStorageState().documents;
-  });
+  const [appState, setAppState] = useLocalStorage<AppStorageState>(
+    STORAGE_KEY,
+    getInitialFullStorageState,
+    { debounceMs: 350 }
+  );
+
+  const currentView = appState.currentView;
+  const selectedDocId: DocumentType = appState.selectedDocId || 'cuenta_cobro';
+  const styleConfig = appState.styleConfig;
+  const documentsData = appState.documents;
+
+  const setCurrentView = (view: 'catalog' | 'editor') => {
+    setAppState((prev) => ({ ...prev, currentView: view }));
+  };
+
+  const setSelectedDocId = (docId: DocumentType) => {
+    setAppState((prev) => ({ ...prev, selectedDocId: docId }));
+  };
+
+  const setStyleConfig = (config: DocumentStyleConfig) => {
+    setAppState((prev) => ({ ...prev, styleConfig: config }));
+  };
+
+  const setDocumentsData = (
+    docs: AllDocumentsData | ((prev: AllDocumentsData) => AllDocumentsData)
+  ) => {
+    setAppState((prev) => ({
+      ...prev,
+      documents: typeof docs === 'function' ? docs(prev.documents) : docs,
+    }));
+  };
 
   // User Profile state (tramitefacil_profile_v1)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(() => {
@@ -74,50 +100,6 @@ export default function App() {
     message: '',
     type: 'info',
   });
-
-  // 1. Load initial document state from LocalStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed: AppStorageState = JSON.parse(saved);
-        if (parsed.currentView) {
-          setCurrentView(parsed.currentView);
-        }
-        if (parsed.selectedDocId) {
-          setSelectedDocId(parsed.selectedDocId);
-        }
-        if (parsed.styleConfig) {
-          setStyleConfig(parsed.styleConfig);
-        }
-        if (parsed.documents) {
-          const initial = getInitialFullStorageState().documents;
-          setDocumentsData({
-            ...initial,
-            ...parsed.documents,
-          });
-        }
-      }
-    } catch (e) {
-      console.warn('Error loading tramite_facil_state_v1 from LocalStorage:', e);
-    }
-  }, []);
-
-  // 2. Persist document state to LocalStorage
-  useEffect(() => {
-    try {
-      const stateToPersist: AppStorageState = {
-        version: '1.0.0',
-        selectedDocId,
-        currentView,
-        styleConfig,
-        documents: documentsData,
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToPersist));
-    } catch (e) {
-      console.warn('Error persisting to tramite_facil_state_v1:', e);
-    }
-  }, [selectedDocId, currentView, styleConfig, documentsData]);
 
   // Toast helper
   const showToast = (message: string, type: 'success' | 'info' | 'error' = 'info') => {
@@ -355,9 +337,9 @@ export default function App() {
           aria-live="polite"
           className="no-print fixed bottom-20 lg:bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-800 animate-in slide-in-from-bottom-4 duration-200 max-w-sm sm:max-w-md"
         >
-          {toast.type === 'success' && <LuCircleCheck className="w-5 h-5 text-emerald-400 shrink-0" />}
-          {toast.type === 'error' && <LuCircleAlert className="w-5 h-5 text-rose-400 shrink-0" />}
-          {toast.type === 'info' && <LuInfo className="w-5 h-5 text-blue-400 shrink-0" />}
+          {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
+          {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />}
+          {toast.type === 'info' && <Info className="w-5 h-5 text-blue-400 shrink-0" />}
 
           <span className="text-xs font-medium leading-snug flex-1">
             {toast.message}
@@ -368,7 +350,7 @@ export default function App() {
             className="p-1 text-slate-400 hover:text-white rounded-xl transition min-h-[32px] min-w-[32px] flex items-center justify-center cursor-pointer"
             aria-label="Cerrar notificación"
           >
-            <LuX className="w-4 h-4" />
+            <X className="w-4 h-4" />
           </button>
         </aside>
       )}

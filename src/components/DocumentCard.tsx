@@ -1,17 +1,17 @@
 import React from 'react';
 import { DocumentMeta, DocumentType } from '../types/documents';
 import {
-  LuReceipt,
-  LuDollarSign,
-  LuBriefcase,
-  LuUserCheck,
-  LuHouse as LuHome,
-  LuKey,
-  LuScale,
-  LuFileText,
-  LuArrowRight,
-  LuZap,
-} from 'react-icons/lu';
+  Receipt,
+  DollarSign,
+  Briefcase,
+  UserCheck,
+  Home,
+  Key,
+  Scale,
+  FileText,
+  ArrowRight,
+  Zap,
+} from 'lucide-react';
 
 interface Props {
   document: DocumentMeta;
@@ -23,37 +23,37 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
   const renderIcon = () => {
     switch (document.id) {
       case 'cuenta_cobro':
-        return <LuReceipt className="w-5 h-5 text-slate-700" />;
+        return <Receipt className="w-5 h-5 text-slate-700" />;
       case 'propuesta_servicios':
-        return <LuDollarSign className="w-5 h-5 text-slate-700" />;
+        return <DollarSign className="w-5 h-5 text-slate-700" />;
       case 'contrato_prestacion':
-        return <LuFileText className="w-5 h-5 text-slate-700" />;
+        return <FileText className="w-5 h-5 text-slate-700" />;
       case 'carta_renuncia':
-        return <LuBriefcase className="w-5 h-5 text-slate-700" />;
+        return <Briefcase className="w-5 h-5 text-slate-700" />;
       case 'certificado_laboral':
-        return <LuUserCheck className="w-5 h-5 text-slate-700" />;
+        return <UserCheck className="w-5 h-5 text-slate-700" />;
       case 'permiso_laboral':
-        return <LuBriefcase className="w-5 h-5 text-slate-700" />;
+        return <Briefcase className="w-5 h-5 text-slate-700" />;
       case 'contrato_arrendamiento':
-        return <LuHome className="w-5 h-5 text-slate-700" />;
+        return <Home className="w-5 h-5 text-slate-700" />;
       case 'no_renovacion_arriendo':
-        return <LuKey className="w-5 h-5 text-slate-700" />;
+        return <Key className="w-5 h-5 text-slate-700" />;
       case 'acta_entrega':
-        return <LuHome className="w-5 h-5 text-slate-700" />;
+        return <Home className="w-5 h-5 text-slate-700" />;
       case 'derecho_peticion':
-        return <LuScale className="w-5 h-5 text-slate-700" />;
+        return <Scale className="w-5 h-5 text-slate-700" />;
       case 'poder_autorizacion':
-        return <LuFileText className="w-5 h-5 text-slate-700" />;
+        return <FileText className="w-5 h-5 text-slate-700" />;
       case 'habeas_data':
-        return <LuScale className="w-5 h-5 text-slate-700" />;
+        return <Scale className="w-5 h-5 text-slate-700" />;
       case 'acuerdo_nda':
-        return <LuFileText className="w-5 h-5 text-slate-700" />;
+        return <FileText className="w-5 h-5 text-slate-700" />;
       case 'compraventa_vehiculo':
-        return <LuFileText className="w-5 h-5 text-slate-700" />;
+        return <FileText className="w-5 h-5 text-slate-700" />;
       case 'autorizacion_patios':
-        return <LuKey className="w-5 h-5 text-slate-700" />;
+        return <Key className="w-5 h-5 text-slate-700" />;
       default:
-        return <LuFileText className="w-5 h-5 text-slate-700" />;
+        return <FileText className="w-5 h-5 text-slate-700" />;
     }
   };
 
@@ -69,7 +69,7 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
             {renderIcon()}
           </div>
           <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-full">
-            <LuZap className="w-3 h-3 text-amber-500" />
+            <Zap className="w-3 h-3 text-amber-500" />
             <span>{document.estimatedMinutes || '⚡ 2 min'}</span>
           </span>
         </div>
@@ -106,7 +106,7 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
           className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 group-hover:text-blue-700 transition-colors cursor-pointer"
         >
           <span>Redactar documento</span>
-          <LuArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
     </div>

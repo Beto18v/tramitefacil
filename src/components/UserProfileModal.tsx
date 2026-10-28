@@ -2,17 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { UserProfile } from '../types/documents';
 import { defaultUserProfile, saveUserProfile } from '../utils/profileInjector';
 import {
-  LuUser,
-  LuCreditCard,
-  LuBuilding,
-  LuMail,
-  LuPhone,
-  LuMapPin,
-  LuCheck,
-  LuX,
-  LuShieldCheck,
-  LuSparkles,
-} from 'react-icons/lu';
+  ShieldCheck,
+  X,
+  Sparkles,
+  CreditCard,
+  Check,
+} from 'lucide-react';
 
 interface Props {
   isOpen: boolean;
@@ -80,7 +75,7 @@ export const UserProfileModal: React.FC<Props> = ({
         <div className="bg-white text-slate-900 p-5 sm:p-6 flex items-start justify-between border-b border-slate-200/90">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold border border-blue-200/70">
-              <LuShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
               Almacenamiento 100% Local (tramitefacil_profile_v1)
             </div>
             <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900">
@@ -97,7 +92,7 @@ export const UserProfileModal: React.FC<Props> = ({
             className="text-slate-400 hover:text-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl hover:bg-slate-100 transition cursor-pointer"
             aria-label="Cerrar modal"
           >
-            <LuX className="w-5 h-5" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -111,7 +106,7 @@ export const UserProfileModal: React.FC<Props> = ({
               onClick={handleLoadDemoProfile}
               className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-medium py-1 px-2 rounded-lg hover:bg-blue-50 transition min-h-[36px]"
             >
-              <LuSparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5" />
               Rellenar con datos de prueba
             </button>
           </div>
@@ -252,7 +247,7 @@ export const UserProfileModal: React.FC<Props> = ({
           {/* Datos Bancarios (opcional para cuentas de cobro y propuestas) */}
           <div className="pt-2 border-t border-slate-100">
             <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wide mb-2.5 flex items-center gap-1.5">
-              <LuCreditCard className="w-3.5 h-3.5 text-blue-600" />
+              <CreditCard className="w-3.5 h-3.5 text-blue-600" />
               Datos Bancarios (Opcional - para cuentas de cobro)
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
@@ -330,7 +325,7 @@ export const UserProfileModal: React.FC<Props> = ({
               >
                 {savedSuccess ? (
                   <>
-                    <LuCheck className="w-4 h-4 text-emerald-300" />
+                    <Check className="w-4 h-4 text-emerald-300" />
                     <span>¡Guardado!</span>
                   </>
                 ) : (

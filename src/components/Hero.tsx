@@ -1,5 +1,5 @@
 import React from 'react';
-import { LuSearch, LuBriefcase, LuDollarSign, LuHouse as LuHome, LuScale, LuSlidersHorizontal } from 'react-icons/lu';
+import { Search, Briefcase, DollarSign, Home, Scale, SlidersHorizontal } from 'lucide-react';
 
 export type QuickCategoryFilter = 'all' | 'laboral' | 'finanzas' | 'inmobiliario' | 'legal';
 
@@ -19,11 +19,11 @@ export const Hero: React.FC<Props> = ({
   totalResults,
 }) => {
   const categoryPills: { id: QuickCategoryFilter; label: string; icon: React.ReactNode }[] = [
-    { id: 'all', label: 'Todos', icon: <LuSlidersHorizontal className="w-3.5 h-3.5" /> },
-    { id: 'laboral', label: 'Laboral', icon: <LuBriefcase className="w-3.5 h-3.5 text-blue-600" /> },
-    { id: 'finanzas', label: 'Finanzas & Honorarios', icon: <LuDollarSign className="w-3.5 h-3.5 text-emerald-600" /> },
-    { id: 'inmobiliario', label: 'Inmobiliario', icon: <LuHome className="w-3.5 h-3.5 text-amber-600" /> },
-    { id: 'legal', label: 'Legal & Peticiones', icon: <LuScale className="w-3.5 h-3.5 text-purple-600" /> },
+    { id: 'all', label: 'Todos', icon: <SlidersHorizontal className="w-3.5 h-3.5" /> },
+    { id: 'laboral', label: 'Laboral', icon: <Briefcase className="w-3.5 h-3.5 text-blue-600" /> },
+    { id: 'finanzas', label: 'Finanzas & Honorarios', icon: <DollarSign className="w-3.5 h-3.5 text-emerald-600" /> },
+    { id: 'inmobiliario', label: 'Inmobiliario', icon: <Home className="w-3.5 h-3.5 text-amber-600" /> },
+    { id: 'legal', label: 'Legal & Peticiones', icon: <Scale className="w-3.5 h-3.5 text-purple-600" /> },
   ];
 
   return (
@@ -41,7 +41,7 @@ export const Hero: React.FC<Props> = ({
       {/* Prominent Universal Search Bar */}
       <div className="relative w-full max-w-3xl">
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-          <LuSearch className="w-5 h-5" />
+          <Search className="w-5 h-5" />
         </div>
         <input
           type="text"

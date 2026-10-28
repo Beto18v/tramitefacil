@@ -1,7 +1,7 @@
 import React from 'react';
 import { DOCUMENT_CATALOG, DocumentType, UserProfile } from '../types/documents';
 import { PWAInstallButton } from './PWAInstallButton';
-import { LuFileText, LuLayoutGrid, LuUserCheck, LuUser } from 'react-icons/lu';
+import { FileText, LayoutGrid, UserCheck, User } from 'lucide-react';
 
 interface Props {
   currentView: 'catalog' | 'editor';
@@ -31,7 +31,7 @@ export const Header: React.FC<Props> = ({
           title="Ir al Catálogo de Trámites"
         >
           <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs group-hover:bg-blue-700 transition">
-            <LuFileText className="w-4 h-4" />
+            <FileText className="w-4 h-4" />
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-bold tracking-tight text-slate-900 leading-tight flex items-center gap-1">
@@ -50,7 +50,7 @@ export const Header: React.FC<Props> = ({
             onClick={onGoToCatalog}
             className="min-h-[44px] hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-50 border border-slate-200 rounded-xl transition ml-2 cursor-pointer"
           >
-            <LuLayoutGrid className="w-3.5 h-3.5 text-slate-500" />
+            <LayoutGrid className="w-3.5 h-3.5 text-slate-500" />
             <span>Ver Catálogo</span>
           </button>
         )}
@@ -91,9 +91,9 @@ export const Header: React.FC<Props> = ({
           title="Configurar perfil emisor para autocompletar trámites"
         >
           {userProfile?.nombreCompleto ? (
-            <LuUserCheck className="w-4 h-4 text-emerald-600" />
+            <UserCheck className="w-4 h-4 text-emerald-600" />
           ) : (
-            <LuUser className="w-4 h-4 text-slate-500" />
+            <User className="w-4 h-4 text-slate-500" />
           )}
           <span className="hidden sm:inline">
             {userProfile?.nombreCompleto ? 'Mi Perfil' : 'Guardar Perfil'}

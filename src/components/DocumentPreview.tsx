@@ -4,22 +4,8 @@ import {
   AllDocumentsData,
   DocumentStyleConfig,
 } from '../types/documents';
-import { CuentaCobroTemplate } from './templates/CuentaCobroTemplate';
-import { PropuestaServiciosTemplate } from './templates/PropuestaServiciosTemplate';
-import { ContratoPrestacionTemplate } from './templates/ContratoPrestacionTemplate';
-import { CartaRenunciaTemplate } from './templates/CartaRenunciaTemplate';
-import { CertificadoLaboralTemplate } from './templates/CertificadoLaboralTemplate';
-import { PermisoLaboralTemplate } from './templates/PermisoLaboralTemplate';
-import { NoRenovacionArriendoTemplate } from './templates/NoRenovacionArriendoTemplate';
-import { ContratoArrendamientoTemplate } from './templates/ContratoArrendamientoTemplate';
-import { ActaEntregaTemplate } from './templates/ActaEntregaTemplate';
-import { DerechoPeticionTemplate } from './templates/DerechoPeticionTemplate';
-import { PoderAutorizacionTemplate } from './templates/PoderAutorizacionTemplate';
-import { HabeasDataTemplate } from './templates/HabeasDataTemplate';
-import { AcuerdoNdaTemplate } from './templates/AcuerdoNdaTemplate';
-import { CompraventaVehiculoTemplate } from './templates/CompraventaVehiculoTemplate';
-import { AutorizacionPatiosTemplate } from './templates/AutorizacionPatiosTemplate';
-import { LuZoomIn, LuZoomOut, LuMaximize2, LuPrinter, LuDownload } from 'react-icons/lu';
+import { getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from '../templates';
+import { ZoomIn, ZoomOut, Maximize2, Printer, Download, Sparkles } from 'lucide-react';
 
 interface Props {
   selectedDoc: DocumentType;
@@ -46,55 +32,25 @@ export const DocumentPreview: React.FC<Props> = ({
     setZoom((prev) => Math.min(130, Math.max(65, prev + delta)));
   };
 
-  const renderActiveTemplate = () => {
-    switch (selectedDoc) {
-      case 'cuenta_cobro':
-        return <CuentaCobroTemplate data={data.cuentaCobro} styleConfig={styleConfig} />;
-      case 'propuesta_servicios':
-        return <PropuestaServiciosTemplate data={data.propuestaServicios} styleConfig={styleConfig} />;
-      case 'contrato_prestacion':
-        return <ContratoPrestacionTemplate data={data.contratoPrestacion} styleConfig={styleConfig} />;
-      case 'carta_renuncia':
-        return <CartaRenunciaTemplate data={data.cartaRenuncia} styleConfig={styleConfig} />;
-      case 'certificado_laboral':
-        return <CertificadoLaboralTemplate data={data.certificadoLaboral} styleConfig={styleConfig} />;
-      case 'permiso_laboral':
-        return <PermisoLaboralTemplate data={data.permisoLaboral} styleConfig={styleConfig} />;
-      case 'no_renovacion_arriendo':
-        return <NoRenovacionArriendoTemplate data={data.noRenovacionArriendo} styleConfig={styleConfig} />;
-      case 'contrato_arrendamiento':
-        return <ContratoArrendamientoTemplate data={data.contratoArrendamiento} styleConfig={styleConfig} />;
-      case 'acta_entrega':
-        return <ActaEntregaTemplate data={data.actaEntrega} styleConfig={styleConfig} />;
-      case 'derecho_peticion':
-        return <DerechoPeticionTemplate data={data.derechoPeticion} styleConfig={styleConfig} />;
-      case 'poder_autorizacion':
-        return <PoderAutorizacionTemplate data={data.poderAutorizacion} styleConfig={styleConfig} />;
-      case 'habeas_data':
-        return <HabeasDataTemplate data={data.habeasData} styleConfig={styleConfig} />;
-      case 'acuerdo_nda':
-        return <AcuerdoNdaTemplate data={data.acuerdoNda} styleConfig={styleConfig} />;
-      case 'compraventa_vehiculo':
-        return <CompraventaVehiculoTemplate data={data.compraventaVehiculo} styleConfig={styleConfig} />;
-      case 'autorizacion_patios':
-        return <AutorizacionPatiosTemplate data={data.autorizacionPatios} styleConfig={styleConfig} />;
-      default:
-        return null;
-    }
-  };
+  const definition = getDocumentDefinition(selectedDoc);
+  const dataKey = DOC_TYPE_TO_DATA_KEY[selectedDoc];
+  const currentDocData = data[dataKey];
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-200/70 overflow-hidden relative">
+    <div className="flex-1 flex flex-col h-full bg-slate-100/80 overflow-hidden relative">
       {/* Top preview toolbar: Zoom + Typography styling controls */}
-      <div className="no-print bg-white/95 backdrop-blur-xs border-b border-slate-200 px-3 sm:px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 shrink-0">
+      <div className="no-print bg-white/95 backdrop-blur-xs border-b border-slate-200 px-3 sm:px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 shrink-0 shadow-2xs">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-slate-800">Formato Estándar Carta / A4</span>
+          <span className="font-semibold text-slate-800 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Vista A4 Institucional
+          </span>
           <span className="text-slate-300">|</span>
           {/* Typography toggle */}
           <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
             <button
               onClick={() => onUpdateStyle({ ...styleConfig, fontFamily: 'serif' })}
-              className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+              className={`px-2 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer ${
                 styleConfig.fontFamily === 'serif'
                   ? 'bg-white text-slate-900 shadow-xs font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -105,7 +61,7 @@ export const DocumentPreview: React.FC<Props> = ({
             </button>
             <button
               onClick={() => onUpdateStyle({ ...styleConfig, fontFamily: 'sans' })}
-              className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+              className={`px-2 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer ${
                 styleConfig.fontFamily === 'sans'
                   ? 'bg-white text-slate-900 shadow-xs font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -123,11 +79,11 @@ export const DocumentPreview: React.FC<Props> = ({
             <button
               onClick={() => handleZoomChange(-10)}
               disabled={zoom <= 65}
-              className="p-1.5 text-slate-600 hover:text-slate-900 disabled:opacity-30 transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 disabled:opacity-30 transition-colors cursor-pointer"
               title="Reducir zoom"
               aria-label="Reducir zoom"
             >
-              <LuZoomOut className="w-3.5 h-3.5" />
+              <ZoomOut className="w-3.5 h-3.5" />
             </button>
             <span className="px-2 font-mono text-[11px] font-semibold text-slate-700 min-w-[42px] text-center">
               {zoom}%
@@ -135,21 +91,21 @@ export const DocumentPreview: React.FC<Props> = ({
             <button
               onClick={() => handleZoomChange(10)}
               disabled={zoom >= 130}
-              className="p-1.5 text-slate-600 hover:text-slate-900 disabled:opacity-30 transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 disabled:opacity-30 transition-colors cursor-pointer"
               title="Aumentar zoom"
               aria-label="Aumentar zoom"
             >
-              <LuZoomIn className="w-3.5 h-3.5" />
+              <ZoomIn className="w-3.5 h-3.5" />
             </button>
           </div>
 
           <button
             onClick={() => setZoom(100)}
-            className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200"
+            className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200 cursor-pointer"
             title="Restablecer al 100%"
             aria-label="Restablecer al 100%"
           >
-            <LuMaximize2 className="w-3.5 h-3.5" />
+            <Maximize2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -165,34 +121,37 @@ export const DocumentPreview: React.FC<Props> = ({
           }}
           className="print-area w-full max-w-[800px] bg-white rounded-xs shadow-[0_15px_35px_rgba(15,23,42,0.12),_0_5px_15px_rgba(15,23,42,0.06)] border border-slate-300/80 my-2 select-text"
         >
-          {renderActiveTemplate()}
+          {definition.renderView({
+            data: currentDocData,
+            styleConfig,
+          })}
         </div>
       </div>
 
-      {/* Bottom quick hints & actions for Desktop (on mobile, handled by thumb bottom bar) */}
+      {/* Bottom quick hints & actions for Desktop */}
       <div className="no-print hidden sm:flex bg-slate-900 text-white text-[11px] px-4 py-2 border-t border-slate-800 items-center justify-between">
         <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
           <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
           <span className="text-slate-300">
-            Previsualización en tiempo real con proporción estándar de hoja institucional
+            Previsualización en vivo conforme a estándares jurídicos y comerciales colombianos
           </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {onDownloadPdf && (
             <button
               onClick={onDownloadPdf}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-white bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-white bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer"
             >
-              <LuDownload className="w-3.5 h-3.5" />
+              <Download className="w-3.5 h-3.5" />
               Descargar PDF
             </button>
           )}
           {onPrint && (
             <button
               onClick={onPrint}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-slate-200 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-medium transition-colors border border-slate-700"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-slate-200 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-medium transition-colors border border-slate-700 cursor-pointer"
             >
-              <LuPrinter className="w-3.5 h-3.5" />
+              <Printer className="w-3.5 h-3.5" />
               <span>Imprimir</span>
             </button>
           )}
