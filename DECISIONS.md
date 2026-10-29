@@ -18,7 +18,8 @@ Este documento recopila las decisiones de ingeniería, diseño de producto y est
 | **ADR-008** | Desaturación Visual, Minimalismo Ejecutivo e Iconografía Lucide (`lucide-react`) | ✅ Implementado | 2026-10-29 |
 | **ADR-009** | Onboarding Inmediato y Unificación de Autocompletado en un Solo Formato | ✅ Implementado | 2026-10-29 |
 | **ADR-010** | Modo Claro / Oscuro con Paleta Personalizada (Elegancia Grafito / Obsidiana) | ✅ Implementado | 2026-10-29 |
-| **ADR-011** | Evaluación de Arquitectura: Vite SPA vs Next.js para TrámiteFácil Hub | 🎯 Aprobado (Estrategia por Fases) | 2026-10-29 |
+| **ADR-011** | Retención de React + Vite SPA (Descarte de Next.js y Cero Backend/Pagos por ahora) | ✅ Aprobado | 2026-10-29 |
+| **ADR-012** | Integración de IA con API de Costo Ultrabajo (Tokens Mínimos & Esquemas Compactos) | 🎯 Priorizado | 2026-10-29 |
 
 ---
 
@@ -102,7 +103,7 @@ Este documento recopila las decisiones de ingeniería, diseño de producto y est
 ---
 
 ### ADR-009: Onboarding Inmediato y Unificación de Autocompletado en un Solo Formato
-- **Contexto:** Actualmente había banners e indicaciones de autocompletado dispersos en múltiples lugares que saturaban la vista y daban sensación de plantilla genérica de IA. Además, el usuario novato necesita entender qué hace la app en 3 segundos.
+- **Contexto:** Actualmente había banners e indicaciones de autocompletado dispersos en múltiples lugares que saturan la vista y dan sensación de plantilla genérica de IA. Además, el usuario novato necesita entender qué hace la app en 3 segundos.
 - **Decisión:**
   1. **Claridad Inmediata al Ingresar (Value Proposition en 3 Pasos en `Hero.tsx`):**
      - Al entrar a la app, un bloque visual limpio y rápido que explica el flujo sin rodeos:
@@ -123,20 +124,30 @@ Este documento recopila las decisiones de ingeniería, diseño de producto y est
 
 ---
 
-### ADR-011: Evaluación de Arquitectura: Vite SPA vs Next.js para TrámiteFácil Hub
-- **Contexto:** Se evaluó si convenía migrar de Vite SPA (React 19 + Tailwind v4) a Next.js (App Router).
-- **Análisis Comparativo:**
-  - **Ventajas actuales de Vite:**
-    1. **100% Offline-First PWA:** Operación local completa con service worker precacheado en Android/iOS/PC sin depender de conectividad.
-    2. **Costo de Hosting $0 en Vercel:** Entrega estática ultraeficiente por Edge CDN con cero costo de invocaciones serverless.
-    3. **Generación directa de Canvas/PDF:** `html2canvas` y `jspdf` requieren APIs del DOM (`window`, `HTMLCanvasElement`) sin fricciones de Server-Side Rendering (SSR).
-  - **Ventajas de Next.js (Disparadores de Migración Futura):**
-    1. **SEO Masivo por Trámite:** Generación de páginas estáticas indexables en Google para búsquedas de alta intención (ej. `/tramite/cuenta-de-cobro-colombia`, `/tramite/derecho-de-peticion-salud`).
-    2. **Rutas de Backend / API Keys Seguras:** Ocultamiento de credenciales de IA (Gemini/OpenAI) sin exponerlas al cliente.
-    3. **Monetización y Webhooks de Pago:** Integración de pasarelas de pago colombianas (Wompi, Bold, PSE, MercadoPago) mediante Server Actions y webhooks seguros.
-- **Estrategia Acordada:**
-  - **Fase Actual:** Consolidar la app sobre Vite SPA garantizando la modularización limpia en `src/templates/*` y `src/utils/*`. Gracias a este desacoplamiento, el 85% de la base de código es agnóstico del framework.
-  - **Fase de Escala (Futuro):** Si se decide priorizar adquisición de tráfico orgánico en Google o pasarelas de pago, se ejecutará una migración directa a Next.js en una fase dedicada (ej. *Fase 4: Motor de SEO y Rutas Next.js*).
+### ADR-011: Retención de React + Vite SPA (Descarte de Next.js y Cero Backend/Pagos)
+- **Contexto:** Se evaluó formalmente si convenía migrar de Vite SPA a Next.js (App Router).
+- **Decisión:**
+  1. **Permanecer en React 19 + Vite SPA:** Mantener el stack actual sin migrar a Next.js.
+  2. **Fundamentos:**
+     - Garantiza funcionamiento 100% Offline PWA con Service Workers locales.
+     - Costo de infraestructura $0 absoluto (alojamiento estático en Vercel Edge CDN).
+     - Cero problemas de SSR con librerías DOM/Canvas (`html2canvas`, `jspdf`, `docx`).
+  3. **Alcance:** Por ahora se descartan servidores dedicados de backend, bases de datos remotas y pasarelas de pago. La aplicación opera en el cliente con máxima velocidad y privacidad.
+
+---
+
+### ADR-012: Integración de IA con API de Costo Ultrabajo
+- **Contexto:** El usuario desea habilitar asistencia inteligente (sugerencia de trámites y autollenado) utilizando su propia API key, pero con costo ultrabajo e insignificante.
+- **Decisión:**
+  1. **Modelo de Consumo:** Emplear modelos ultraeconómicos optimizados para texto estructurado:
+     - **Gemini Flash (`gemini-1.5-flash` o `gemini-2.0-flash`):** Nivel gratuito masivo (hasta 15 RPM sin costo) y tokens a centavos por millón.
+     - Opcionalmente `gpt-4o-mini` / Groq Llama 3.3.
+  2. **Optimización de Tokenomics:**
+     - Prompts comprimidos al mínimo (system prompt < 300 tokens).
+     - Salida JSON estructurada estricta sin divagaciones ni prosa explicativa innecesaria.
+     - Costo estimado: menos de $0.00005 USD por consulta de sugerencia.
+  3. **Resiliencia Offline:** Siempre mantener activo el motor heurístico local de búsqueda difusa (*fuzzy matcher*) como fallback cuando no haya internet o no se disponga de API key.
+
 
 
 
