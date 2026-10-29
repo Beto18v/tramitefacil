@@ -4,7 +4,7 @@ import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
 import { InputField, SelectField, CurrencyField, TextareaField, SwitchField } from '../../../components/ui';
-import { Calendar, DollarSign, ShieldCheck, Sparkles, Users } from 'lucide-react';
+import { PiCalendarBlank, PiCurrencyDollar, PiShieldCheck, PiSparkle, PiUsers } from 'react-icons/pi';
 
 const quickProposals = [
   {
@@ -48,7 +48,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
         step="Paso 01"
         title="Modalidad y Lugar"
         subtitle="Tipo de confidencialidad, ciudad y fecha de suscripción"
-        icon={<ShieldCheck className="w-5 h-5 text-indigo-600" />}
+        icon={<PiShieldCheck className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -94,7 +94,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
         step="Paso 02"
         title="Partes Intervinientes"
         subtitle="Identificación de la parte emisora y de la parte receptora"
-        icon={<Users className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUsers className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
@@ -191,14 +191,14 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
         step="Paso 03"
         title="Propósito y Penalidad"
         subtitle="Finalidad autorizada y cláusula penal de indemnización"
-        icon={<Calendar className="w-5 h-5 text-indigo-600" />}
+        icon={<PiCalendarBlank className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
           {/* Quick Picker */}
           <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 space-y-1.5">
             <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-              <Sparkles className="w-4 h-4 text-indigo-600" />
+              <PiSparkle className="w-4 h-4 text-indigo-600" />
               <span>Plantillas Rápidas de Propósito (1 toque):</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -244,7 +244,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
         step="Paso 04"
         title="Firma del Acuerdo"
         subtitle="Firma manuscrita en pantalla o pie notarial formal"
-        icon={<DollarSign className="w-5 h-5 text-indigo-600" />}
+        icon={<PiCurrencyDollar className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <SignaturePad

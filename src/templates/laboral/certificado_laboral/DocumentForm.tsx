@@ -3,7 +3,7 @@ import { CertificadoLaboralData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, SwitchField } from '../../../components/ui';
-import { Award, Building, User } from 'lucide-react';
+import { PiCertificate, PiBuildings, PiUser } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> = ({
   data,
@@ -26,7 +26,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 01"
         title="Empresa y Área Destinataria"
         subtitle="Entidad a la que se solicita la constancia"
-        icon={<Building className="w-5 h-5 text-indigo-600" />}
+        icon={<PiBuildings className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -71,7 +71,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 02"
         title="Tus Datos y Cargo Laborado"
         subtitle="Nombre, documento y tiempo de servicios"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -123,7 +123,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 03"
         title="Opciones y Destino del Certificado"
         subtitle="Salario, funciones y correo para recepción"
-        icon={<Award className="w-5 h-5 text-indigo-600" />}
+        icon={<PiCertificate className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">

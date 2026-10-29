@@ -1,0 +1,240 @@
+import React, { useState } from 'react';
+import {
+  PiFileText,
+  PiScales,
+  PiShieldCheck,
+  PiLockKey,
+  PiX,
+  PiInfo,
+  PiBookOpen,
+} from 'react-icons/pi';
+
+export const Footer: React.FC = () => {
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+
+  const currentYear = new Date().getFullYear();
+
+  const legalFrameworks = [
+    { code: 'Ley 1755 de 2015', name: 'Derecho de Petición' },
+    { code: 'Ley 820 de 2003', name: 'Arrendamiento Urbano' },
+    { code: 'Código Sustantivo del Trabajo', name: 'Laboral & Renuncias' },
+    { code: 'Código de Comercio', name: 'Prestación de Servicios & NDA' },
+    { code: 'Código Civil', name: 'Compraventa & Poderes' },
+    { code: 'Leyes 1266/2008 & 2157/2021', name: 'Habeas Data Financiero' },
+    { code: 'Ley 1581 de 2012', name: 'Protección de Datos' },
+    { code: 'Ley 769 de 2002', name: 'Tránsito y Transporte' },
+  ];
+
+  return (
+    <footer className="no-print mt-12 bg-white border-t border-slate-200/80 text-slate-600 text-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        {/* Row 1: Brand & Core Mission */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          <div className="space-y-2 md:col-span-2">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center">
+                <PiFileText className="w-3.5 h-3.5" />
+              </div>
+              <span className="font-bold text-slate-900 text-sm tracking-tight">
+                TrámiteFácil Hub · Documentos Legales Instantáneos para Colombia
+              </span>
+            </div>
+            <p className="text-slate-500 text-xs leading-relaxed max-w-2xl">
+              Plataforma tecnológica orientada a la democratización y eficiencia en la redacción de contratos, cartas y trámites ciudadanos en el marco del ordenamiento jurídico colombiano.
+            </p>
+          </div>
+
+          {/* Privacy statement badge */}
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
+            <div className="flex items-center gap-1.5 text-emerald-700 font-semibold text-xs">
+              <PiLockKey className="w-4 h-4 text-emerald-600" />
+              <span>Privacidad y Habeas Data</span>
+            </div>
+            <p className="text-[11px] text-slate-600 leading-snug">
+              Procesamiento 100% privado en tu navegador (Ley 1581 de 2012). Tus datos nunca se almacenan ni transmiten a servidores externos.
+            </p>
+          </div>
+        </div>
+
+        {/* Row 2: Colombian Legal References */}
+        <div className="space-y-2.5 pt-4 border-t border-slate-100">
+          <div className="flex items-center gap-1.5 text-slate-700 font-semibold text-xs">
+            <PiScales className="w-4 h-4 text-blue-600" />
+            <span>Fundamentos de la Normatividad Colombiana</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {legalFrameworks.map((law) => (
+              <span
+                key={law.code}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 text-slate-700 border border-slate-200/70 text-[11px]"
+              >
+                <span className="font-semibold text-slate-900">{law.code}:</span>
+                <span className="text-slate-500">{law.name}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Row 3: Legal Disclaimer Notice Box */}
+        <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 text-[11px] leading-relaxed text-slate-600 space-y-1">
+          <div className="flex items-center gap-1.5 text-slate-800 font-semibold">
+            <PiInfo className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <span>Exención de Responsabilidad Legal (Legal Disclaimer)</span>
+          </div>
+          <p>
+            TrámiteFácil Hub es una plataforma tecnológica de redacción y automatización documental estándar. No constituye asesoría jurídica profesional, concepto legal ni relación abogado-cliente. Para casos litigiosos o de alta complejidad, consulte a un profesional del derecho colegiado.
+          </p>
+        </div>
+
+        {/* Row 4: Bottom bar with copyright and modal links */}
+        <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
+          <div>
+            © {currentYear} TrámiteFácil Hub. Desarrollado con rigor técnico para Colombia.
+          </div>
+          <div className="flex items-center gap-4 font-medium">
+            <button
+              type="button"
+              onClick={() => setShowTermsModal(true)}
+              className="text-slate-600 hover:text-blue-600 transition cursor-pointer min-h-[36px] flex items-center"
+            >
+              Términos de Uso
+            </button>
+            <span className="text-slate-300">•</span>
+            <button
+              type="button"
+              onClick={() => setShowPrivacyModal(true)}
+              className="text-slate-600 hover:text-blue-600 transition cursor-pointer min-h-[36px] flex items-center"
+            >
+              Política de Privacidad
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal 1: Términos de Uso */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95 my-8">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
+                <PiBookOpen className="w-5 h-5 text-blue-600" />
+                <h3>Términos y Condiciones de Uso</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(false)}
+                className="p-2 text-slate-400 hover:text-slate-700 rounded-xl min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                aria-label="Cerrar modal"
+              >
+                <PiX className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs text-slate-700 max-h-[60vh] overflow-y-auto pr-2 leading-relaxed">
+              <section className="space-y-1.5">
+                <h4 className="font-semibold text-slate-900 text-sm">1. Naturaleza Tecnológica de la Plataforma</h4>
+                <p>
+                  TrámiteFácil Hub es una herramienta de software autónoma diseñada para la automatización, formateo y estandarización tipográfica de minutas y documentos usuales en el tráfico civil, comercial y laboral de la República de Colombia.
+                </p>
+              </section>
+
+              <section className="space-y-1.5">
+                <h4 className="font-semibold text-slate-900 text-sm">2. Ausencia de Asesoría Jurídica y Relación Abogado-Cliente</h4>
+                <p>
+                  El uso de las plantillas y del asistente de redacción no configura asesoría profesional de un profesional del derecho, dictamen pericial ni representación jurídica. Si su situación particular involucra controversia judicial, sumas complejas o incertidumbre legal, debe consultar con un abogado titulado y con tarjeta profesional vigente ante el Consejo Superior de la Judicatura.
+                </p>
+              </section>
+
+              <section className="space-y-1.5">
+                <h4 className="font-semibold text-slate-900 text-sm">3. Responsabilidad del Usuario</h4>
+                <p>
+                  El usuario asume la total responsabilidad sobre la veracidad, licitud y exactitud de los datos consignados en cada formulario, así como sobre la pertinencia del documento elegido para su situación jurídica particular.
+                </p>
+              </section>
+
+              <section className="space-y-1.5">
+                <h4 className="font-semibold text-slate-900 text-sm">4. Validez y Firma Digital</h4>
+                <p>
+                  Conforme a la Ley 527 de 1999 y el Decreto 2364 de 2012, las firmas electrónicas y manuscritas digitalizadas incorporadas en el documento gozan de valor probatorio cuando son reconocibles y atribuibles a las partes signatarias.
+                </p>
+              </section>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(false)}
+                className="min-h-[44px] px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold transition cursor-pointer"
+              >
+                Comprendido y Aceptado
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 2: Política de Privacidad y Habeas Data */}
+      {showPrivacyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95 my-8">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
+                <PiShieldCheck className="w-5 h-5 text-emerald-600" />
+                <h3>Política de Privacidad y Habeas Data (Ley 1581 de 2012)</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPrivacyModal(false)}
+                className="p-2 text-slate-400 hover:text-slate-700 rounded-xl min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                aria-label="Cerrar modal"
+              >
+                <PiX className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs text-slate-700 max-h-[60vh] overflow-y-auto pr-2 leading-relaxed">
+              <section className="space-y-1.5">
+                <h4 className="font-semibold text-slate-900 text-sm">1. Principio de Cero Servidor (Local-First Architecture)</h4>
+                <p>
+                  TrámiteFácil Hub implementa una arquitectura estrictamente del lado del cliente. Ninguno de los datos ingresados (nombres, cédulas, teléfonos, cuentas bancarias, direcciones o firmas manuscritas) es enviado a servidores remotos, bases de datos en la nube ni servicios de telemetría de terceros.
+                </p>
+              </section>
+
+              <section className="space-y-1.5">
+                <h4 className="font-semibold text-slate-900 text-sm">2. Almacenamiento Local (LocalStorage)</h4>
+                <p>
+                  Los datos del perfil emisor y los borradores de documentos se guardan exclusivamente en el almacenamiento local (<code className="bg-slate-100 px-1 py-0.5 rounded text-[11px]">localStorage</code>) de su navegador web. El usuario tiene el control absoluto y puede eliminar sus datos en cualquier momento limpiando el caché o usando la opción de restablecer.
+                </p>
+              </section>
+
+              <section className="space-y-1.5">
+                <h4 className="font-semibold text-slate-900 text-sm">3. Cumplimiento Estatutario (Ley 1581 de 2012)</h4>
+                <p>
+                  En cumplimiento del régimen de Protección de Datos Personales de Colombia, se garantiza el principio de libertad, veracidad, transparencia y acceso y circulación restringida. Dado que TrámiteFácil Hub no actúa como Responsable ni Encargado de bases de datos centralizadas, el titular de la información mantiene la posesión directa e indelegable de sus datos en su dispositivo.
+                </p>
+              </section>
+
+              <section className="space-y-1.5">
+                <h4 className="font-semibold text-slate-900 text-sm">4. Generación Segura de PDF y Word</h4>
+                <p>
+                  La conversión a PDF (<code className="bg-slate-100 px-1 py-0.5 rounded text-[11px]">html2pdf.js</code>) y Word (<code className="bg-slate-100 px-1 py-0.5 rounded text-[11px]">docx</code>) se ejecuta íntegramente en la memoria RAM del navegador, descargando el archivo resultante directamente a la carpeta de descargas del usuario sin intermediación de servidores externos.
+                </p>
+              </section>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowPrivacyModal(false)}
+                className="min-h-[44px] px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition cursor-pointer"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </footer>
+  );
+};

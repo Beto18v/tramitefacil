@@ -1,5 +1,5 @@
 import React, { SelectHTMLAttributes, ReactNode } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { PiCaretDown } from 'react-icons/pi';
 
 export interface SelectOption {
   label: string;
@@ -71,7 +71,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
         </select>
 
         <div className="absolute right-3 text-slate-400 pointer-events-none flex items-center justify-center">
-          <ChevronDown className="w-4 h-4" />
+          <PiCaretDown className="w-4 h-4" />
         </div>
       </div>
 

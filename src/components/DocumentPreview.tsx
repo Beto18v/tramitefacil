@@ -5,7 +5,7 @@ import {
   DocumentStyleConfig,
 } from '../types/documents';
 import { getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from '../templates';
-import { ZoomIn, ZoomOut, Maximize2, Printer, Download, Sparkles } from 'lucide-react';
+import { PiMagnifyingGlassPlus, PiMagnifyingGlassMinus, PiArrowsOut, PiPrinter, PiDownloadSimple, PiSparkle } from 'react-icons/pi';
 
 interface Props {
   selectedDoc: DocumentType;
@@ -83,7 +83,7 @@ export const DocumentPreview: React.FC<Props> = ({
               title="Reducir zoom"
               aria-label="Reducir zoom"
             >
-              <ZoomOut className="w-3.5 h-3.5" />
+              <PiMagnifyingGlassMinus className="w-3.5 h-3.5" />
             </button>
             <span className="px-2 font-mono text-[11px] font-semibold text-slate-700 min-w-[42px] text-center">
               {zoom}%
@@ -95,7 +95,7 @@ export const DocumentPreview: React.FC<Props> = ({
               title="Aumentar zoom"
               aria-label="Aumentar zoom"
             >
-              <ZoomIn className="w-3.5 h-3.5" />
+              <PiMagnifyingGlassPlus className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -105,7 +105,7 @@ export const DocumentPreview: React.FC<Props> = ({
             title="Restablecer al 100%"
             aria-label="Restablecer al 100%"
           >
-            <Maximize2 className="w-3.5 h-3.5" />
+            <PiArrowsOut className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -142,7 +142,7 @@ export const DocumentPreview: React.FC<Props> = ({
               onClick={onDownloadPdf}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-white bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5" />
+              <PiDownloadSimple className="w-3.5 h-3.5" />
               Descargar PDF
             </button>
           )}
@@ -151,7 +151,7 @@ export const DocumentPreview: React.FC<Props> = ({
               onClick={onPrint}
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-slate-200 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-medium transition-colors border border-slate-700 cursor-pointer"
             >
-              <Printer className="w-3.5 h-3.5" />
+              <PiPrinter className="w-3.5 h-3.5" />
               <span>Imprimir</span>
             </button>
           )}

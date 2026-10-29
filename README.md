@@ -52,7 +52,7 @@ La plataforma incluye **15 plantillas estandarizadas** distribuidas en 6 áreas 
 - **Core:** [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
 - **Bundler & Tooling:** [Vite 8](https://vitejs.dev/)
 - **Estilos:** [Tailwind CSS v4](https://tailwindcss.com/) con `@tailwindcss/vite`
-- **Iconografía:** [Lucide Icons](https://lucide.dev/) (`lucide-react`)
+- **Iconografía:** [Phosphor Icons](https://phosphoricons.com/) (`react-icons/pi`)
 - **PWA & Cache:** [`vite-plugin-pwa`](https://vite-pwa-org.netlify.app/)
 - **Generación de Documentos:**
   - [`docx`](https://docx.js.org/) para documentos Word enriquecidos

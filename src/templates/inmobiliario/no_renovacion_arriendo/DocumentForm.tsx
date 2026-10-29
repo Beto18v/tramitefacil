@@ -3,7 +3,7 @@ import { NoRenovacionArriendoData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, TextareaField, SwitchField } from '../../../components/ui';
-import { AlertCircle, Home, Key, User } from 'lucide-react';
+import { PiWarningCircle, PiHouse, PiKey, PiUser } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>> = ({
   data,
@@ -59,7 +59,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
     <div className="space-y-4 pb-8">
       {/* Aviso legal ley 820 */}
       <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl text-xs text-amber-900 flex items-start gap-3">
-        <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+        <PiWarningCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
           <strong>Preaviso Legal Obligatorio (Ley 820 de 2003):</strong> Para vivienda urbana, la comunicación
           debe remitirse con al menos <strong>3 meses de antelación</strong> a la fecha de vencimiento
@@ -72,7 +72,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 01"
         title="Rol y Partes del Arrendamiento"
         subtitle="Identificación del Remitente y Destinatario"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div>
@@ -162,7 +162,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 02"
         title="Inmueble y Fechas Contractuales"
         subtitle="Dirección del predio y fecha de restitución de llaves"
-        icon={<Home className="w-5 h-5 text-indigo-600" />}
+        icon={<PiHouse className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -220,7 +220,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 03"
         title="Causal Legal e Inspección Conjunta"
         subtitle="Motivación de no prórroga e instrucciones para inventario"
-        icon={<Key className="w-5 h-5 text-indigo-600" />}
+        icon={<PiKey className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">

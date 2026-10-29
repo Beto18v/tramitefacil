@@ -4,7 +4,7 @@ import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
 import { InputField, SelectField, TextareaField } from '../../../components/ui';
-import { Building, Plus, Scale, Sparkles, Trash2, User } from 'lucide-react';
+import { PiBuildings, PiPlus, PiScales, PiSparkle, PiTrash, PiUser } from 'react-icons/pi';
 
 const quickClaimTemplates = [
   {
@@ -151,7 +151,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
     <div className="space-y-4 pb-8">
       {/* Tip legal */}
       <div className="p-4 bg-indigo-50/80 border border-indigo-200/80 rounded-2xl text-xs text-indigo-950 flex items-start gap-3">
-        <Scale className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+        <PiScales className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
           <strong>Garantía Constitucional (Art. 23 C.P. & Ley 1755 de 2015):</strong> Las entidades públicas,
           EPS, bancos y prestadoras de servicios públicos tienen por regla general{' '}
@@ -162,7 +162,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
       {/* Quick Claim Templates */}
       <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 space-y-2">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-          <Sparkles className="w-4 h-4 text-indigo-600" />
+          <PiSparkle className="w-4 h-4 text-indigo-600" />
           <span>Plantillas de Reclamación Preconfiguradas (1 toque):</span>
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -184,7 +184,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
         step="Paso 01"
         title="Entidad o Autoridad Destinataria"
         subtitle="Institución pública, EPS o empresa a la que se dirige"
-        icon={<Building className="w-5 h-5 text-indigo-600" />}
+        icon={<PiBuildings className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -261,7 +261,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
         step="Paso 02"
         title="Asunto y Hechos Cronológicos"
         subtitle="Motivo principal y narración de lo ocurrido"
-        icon={<Scale className="w-5 h-5 text-indigo-600" />}
+        icon={<PiScales className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -290,7 +290,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                 onClick={handleAddHecho}
                 className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5" /> Agregar hecho
+                <PiPlus className="w-3.5 h-3.5" /> Agregar hecho
               </button>
             </div>
             {(data.hechos || []).map((hecho, idx) => (
@@ -308,7 +308,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                   onClick={() => handleRemoveHecho(idx)}
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer mt-1"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <PiTrash className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -321,7 +321,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
         step="Paso 03"
         title="Pretensiones y Documentos Anexos"
         subtitle="Lo que se solicita concretamente a la entidad"
-        icon={<Scale className="w-5 h-5 text-indigo-600" />}
+        icon={<PiScales className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
@@ -334,7 +334,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                 onClick={handleAddPretension}
                 className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5" /> Agregar pretensión
+                <PiPlus className="w-3.5 h-3.5" /> Agregar pretensión
               </button>
             </div>
             {(data.pretensiones || []).map((pret, idx) => (
@@ -352,7 +352,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                   onClick={() => handleRemovePretension(idx)}
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer mt-1"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <PiTrash className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -374,7 +374,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                 onClick={handleAddAnexo}
                 className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5" /> Agregar anexo
+                <PiPlus className="w-3.5 h-3.5" /> Agregar anexo
               </button>
             </div>
             {(data.anexos || []).map((anexo, idx) => (
@@ -391,7 +391,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                   onClick={() => handleRemoveAnexo(idx)}
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <PiTrash className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -404,7 +404,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
         step="Paso 04"
         title="Tus Datos y Notificación"
         subtitle="Nombre, documento, correo electrónico y firma"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">

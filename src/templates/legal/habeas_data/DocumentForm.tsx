@@ -3,7 +3,7 @@ import { HabeasDataData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, TextareaField } from '../../../components/ui';
-import { Building, Plus, ShieldAlert, Trash2, User } from 'lucide-react';
+import { PiBuildings, PiPlus, PiShieldWarning, PiTrash, PiUser } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
   data,
@@ -51,7 +51,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 01"
         title="Central de Riesgo y Fuente"
         subtitle="DataCrédito, TransUnion/CIFIN o Procrédito"
-        icon={<Building className="w-5 h-5 text-indigo-600" />}
+        icon={<PiBuildings className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -113,7 +113,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 02"
         title="Causal Legal de Habeas Data y Hechos"
         subtitle="Caducidad, suplantación, pago o inexistencia"
-        icon={<ShieldAlert className="w-5 h-5 text-indigo-600" />}
+        icon={<PiShieldWarning className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -162,7 +162,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
                 onClick={handleAddAnexo}
                 className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800"
               >
-                <Plus className="w-3.5 h-3.5" /> Agregar anexo
+                <PiPlus className="w-3.5 h-3.5" /> Agregar anexo
               </button>
             </div>
             {(data.anexosDocumentales || []).map((anexo, idx) => (
@@ -180,7 +180,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600"
                   aria-label={`Eliminar anexo ${idx + 1}`}
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <PiTrash className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -193,7 +193,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 03"
         title="Datos del Titular y Notificaciones"
         subtitle="Nombre, documento y canal para recibir la respuesta"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={false}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

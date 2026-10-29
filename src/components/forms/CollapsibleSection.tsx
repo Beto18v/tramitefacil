@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { PiCaretDown } from 'react-icons/pi';
 
 interface Props {
   title: string;
@@ -52,7 +52,7 @@ export const CollapsibleSection: React.FC<Props> = ({
             isOpen ? 'rotate-180' : ''
           }`}
         >
-          <ChevronDown className="w-4 h-4" />
+          <PiCaretDown className="w-4 h-4" />
         </div>
       </button>
 

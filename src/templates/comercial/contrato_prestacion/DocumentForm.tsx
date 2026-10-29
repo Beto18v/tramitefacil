@@ -4,7 +4,7 @@ import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
 import { InputField, SelectField, CurrencyField, TextareaField, SwitchField } from '../../../components/ui';
-import { DollarSign, PenTool, Plus, ScrollText, Trash2, User } from 'lucide-react';
+import { PiCurrencyDollar, PiPenNib, PiPlus, PiScroll, PiTrash, PiUser } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> = ({
   data,
@@ -56,7 +56,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
         step="Paso 01"
         title="Partes del Contrato"
         subtitle="Identificación del Contratante y Contratista"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -149,7 +149,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
         step="Paso 02"
         title="Objeto del Contrato y Obligaciones"
         subtitle="Descripción de los servicios a prestar"
-        icon={<ScrollText className="w-5 h-5 text-indigo-600" />}
+        icon={<PiScroll className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -170,7 +170,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
                 onClick={handleAddObligacion}
                 className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5" /> Agregar obligación
+                <PiPlus className="w-3.5 h-3.5" /> Agregar obligación
               </button>
             </div>
             {(data.obligacionesContratista || []).map((ob, idx) => (
@@ -187,7 +187,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
                   onClick={() => handleRemoveObligacion(idx)}
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <PiTrash className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -200,7 +200,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
         step="Paso 03"
         title="Valor, Pagos y Plazos"
         subtitle="Monto total pactado, fechas y lugar de ejecución"
-        icon={<DollarSign className="w-5 h-5 text-indigo-600" />}
+        icon={<PiCurrencyDollar className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -278,7 +278,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
         step="Paso 04"
         title="Firma del Contratista"
         subtitle="Dibuja tu firma digital en pantalla o usa la línea editorial"
-        icon={<PenTool className="w-5 h-5 text-indigo-600" />}
+        icon={<PiPenNib className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <SignaturePad

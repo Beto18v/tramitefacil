@@ -9,7 +9,7 @@ import {
   SwitchField,
 } from '../../../components/ui';
 import { SignaturePad } from '../../../components/SignaturePad';
-import { Car, DollarSign, FileCheck, Users } from 'lucide-react';
+import { PiCar, PiCurrencyDollar, PiFileDoc, PiUsers } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> = ({
   data,
@@ -45,7 +45,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 01"
         title="Vendedor y Comprador"
         subtitle="Identificación y contacto de las partes contratantes"
-        icon={<Users className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUsers className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
@@ -167,7 +167,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 02"
         title="Datos del Vehículo"
         subtitle="Placa, marca, modelo, motor, chasis y clase de automotor"
-        icon={<Car className="w-5 h-5 text-indigo-600" />}
+        icon={<PiCar className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -262,7 +262,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 03"
         title="Precio, Pago y Traspaso"
         subtitle="Valor convenido, división de gastos de traspaso e impuestos"
-        icon={<DollarSign className="w-5 h-5 text-indigo-600" />}
+        icon={<PiCurrencyDollar className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -309,7 +309,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 04"
         title="Firma del Vendedor"
         subtitle="Dibuja tu firma en pantalla o imprímela con línea formal"
-        icon={<FileCheck className="w-5 h-5 text-indigo-600" />}
+        icon={<PiFileDoc className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <SignaturePad

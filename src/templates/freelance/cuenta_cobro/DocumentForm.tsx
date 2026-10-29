@@ -9,16 +9,7 @@ import {
 } from '../../../components/ui';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
-import {
-  DollarSign,
-  User,
-  Building,
-  CreditCard,
-  ShieldCheck,
-  Plus,
-  Trash2,
-  Sparkles,
-} from 'lucide-react';
+import { PiCurrencyDollar, PiUser, PiBuildings, PiCreditCard, PiShieldCheck, PiPlus, PiTrash, PiSparkle } from 'react-icons/pi';
 import { calcularSubtotalConceptos } from './calculations';
 import { quickConceptTemplates } from './schema';
 
@@ -109,7 +100,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 1. Datos Generales de Emisión */}
       <CollapsibleSection
         title="1. Emisión y Numeración"
-        icon={<DollarSign className="w-4 h-4 text-blue-600" />}
+        icon={<PiCurrencyDollar className="w-4 h-4 text-blue-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -140,7 +131,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 2. Datos del Contratista (Emisor) */}
       <CollapsibleSection
         title="2. Tus Datos (Contratista / Emisor)"
-        icon={<User className="w-4 h-4 text-blue-600" />}
+        icon={<PiUser className="w-4 h-4 text-blue-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -202,7 +193,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 3. Datos del Cliente / Empresa Pagadora */}
       <CollapsibleSection
         title="3. Datos del Cliente o Empresa"
-        icon={<Building className="w-4 h-4 text-blue-600" />}
+        icon={<PiBuildings className="w-4 h-4 text-blue-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -252,13 +243,13 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 4. Conceptos y Liquidación Económica */}
       <CollapsibleSection
         title="4. Servicios y Liquidación de Honorarios"
-        icon={<DollarSign className="w-4 h-4 text-blue-600" />}
+        icon={<PiCurrencyDollar className="w-4 h-4 text-blue-600" />}
         defaultOpen={true}
       >
         {/* Plantillas rápidas sugeridas */}
         <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-xl mb-4">
           <p className="text-xs font-semibold text-blue-900 flex items-center gap-1.5 mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            <PiSparkle className="w-3.5 h-3.5 text-blue-600" />
             Sugerencias Rápidas de Concepto:
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -302,7 +293,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
                       onClick={() => handleRemoveConcepto(index)}
                       className="text-rose-600 hover:text-rose-800 p-1 rounded-md text-xs inline-flex items-center gap-1 cursor-pointer"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <PiTrash className="w-3.5 h-3.5" />
                       <span>Eliminar</span>
                     </button>
                   )}
@@ -348,7 +339,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
               onClick={handleAddConcepto}
               className="w-full py-2.5 border-2 border-dashed border-blue-300 hover:border-blue-500 bg-blue-50/50 hover:bg-blue-50 text-blue-700 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
-              <Plus className="w-4 h-4" />
+              <PiPlus className="w-4 h-4" />
               <span>Añadir Otro Concepto o Servicio</span>
             </button>
           </div>
@@ -424,7 +415,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 5. Datos Bancarios */}
       <CollapsibleSection
         title="5. Datos Bancarios para Transferencia"
-        icon={<CreditCard className="w-4 h-4 text-blue-600" />}
+        icon={<PiCreditCard className="w-4 h-4 text-blue-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -458,7 +449,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 6. Declaraciones Legales y Firma */}
       <CollapsibleSection
         title="6. Declaraciones Juramentadas y Firma"
-        icon={<ShieldCheck className="w-4 h-4 text-blue-600" />}
+        icon={<PiShieldCheck className="w-4 h-4 text-blue-600" />}
         defaultOpen={true}
       >
         <div className="space-y-2 mb-4">

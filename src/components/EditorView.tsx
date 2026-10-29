@@ -11,19 +11,7 @@ import { exportElementToPdf } from '../utils/exportPdf';
 import { exportDocx } from '../utils/exportDocx';
 import { getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from '../templates';
 
-import {
-  ArrowLeft,
-  Sparkles,
-  RotateCcw,
-  Copy,
-  Check,
-  Download,
-  FileText,
-  Printer,
-  Loader2,
-  UserCheck,
-  UserCog,
-} from 'lucide-react';
+import { PiArrowLeft, PiSparkle, PiArrowCounterClockwise, PiCopy, PiCheck, PiDownloadSimple, PiFileText, PiPrinter, PiSpinner, PiUserCheck, PiUserGear } from 'react-icons/pi';
 
 interface Props {
   selectedDoc: DocumentType;
@@ -197,7 +185,7 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 text-slate-700 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-semibold transition cursor-pointer border border-slate-200"
             title="Volver al catálogo"
           >
-            <ArrowLeft className="w-4 h-4 text-slate-600" />
+            <PiArrowLeft className="w-4 h-4 text-slate-600" />
             <span>← Catálogo</span>
           </button>
 
@@ -265,7 +253,7 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl shadow-2xs transition cursor-pointer"
             title="Llenar con datos de prueba realistas"
           >
-            <Sparkles className="w-4 h-4 text-blue-600" />
+            <PiSparkle className="w-4 h-4 text-blue-600" />
             <span>Ejemplo</span>
           </button>
 
@@ -276,7 +264,7 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 font-medium text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl shadow-2xs transition cursor-pointer"
             title="Autocompletar con datos de tu perfil"
           >
-            <UserCheck className="w-4 h-4 text-emerald-600" />
+            <PiUserCheck className="w-4 h-4 text-emerald-600" />
             <span>{userProfile?.nombreCompleto ? 'Mi Perfil' : 'Perfil'}</span>
           </button>
 
@@ -290,7 +278,7 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-2.5 py-2 font-medium text-slate-500 hover:text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition cursor-pointer"
             title="Limpiar formulario"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <PiArrowCounterClockwise className="w-3.5 h-3.5" />
             <span className="hidden xl:inline">Limpiar</span>
           </button>
 
@@ -303,12 +291,12 @@ export const EditorView: React.FC<Props> = ({
           >
             {hasCopied ? (
               <>
-                <Check className="w-4 h-4 text-emerald-600" />
+                <PiCheck className="w-4 h-4 text-emerald-600" />
                 <span className="text-emerald-700 font-semibold">¡Copiado!</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 text-slate-500" />
+                <PiCopy className="w-4 h-4 text-slate-500" />
                 <span>Copiar</span>
               </>
             )}
@@ -323,9 +311,9 @@ export const EditorView: React.FC<Props> = ({
             title="Descargar documento Word (.docx)"
           >
             {isExportingDocx ? (
-              <Loader2 className="w-4 h-4 text-slate-600 animate-spin" />
+              <PiSpinner className="w-4 h-4 text-slate-600 animate-spin" />
             ) : (
-              <FileText className="w-4 h-4 text-slate-700" />
+              <PiFileText className="w-4 h-4 text-slate-700" />
             )}
             <span className="font-semibold">Word</span>
           </button>
@@ -339,9 +327,9 @@ export const EditorView: React.FC<Props> = ({
             title="Descargar documento en PDF"
           >
             {isExportingPdf ? (
-              <Loader2 className="w-4 h-4 text-white animate-spin" />
+              <PiSpinner className="w-4 h-4 text-white animate-spin" />
             ) : (
-              <Download className="w-4 h-4 text-white" />
+              <PiDownloadSimple className="w-4 h-4 text-white" />
             )}
             <span>Descargar PDF</span>
           </button>
@@ -353,7 +341,7 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] inline-flex items-center gap-1.5 px-2.5 py-2 font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition cursor-pointer"
             title="Imprimir directamente"
           >
-            <Printer className="w-4 h-4 text-slate-600" />
+            <PiPrinter className="w-4 h-4 text-slate-600" />
           </button>
         </div>
       </div>
@@ -371,7 +359,7 @@ export const EditorView: React.FC<Props> = ({
             <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-2xs flex flex-wrap items-center justify-between gap-3 border border-slate-200">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
-                  <UserCheck className="w-4 h-4" />
+                  <PiUserCheck className="w-4 h-4" />
                 </div>
                 <div>
                   <span className="text-xs font-semibold text-slate-900 block">
@@ -401,7 +389,7 @@ export const EditorView: React.FC<Props> = ({
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-medium transition cursor-pointer"
                   title="Editar perfil guardado"
                 >
-                  <UserCog className="w-4 h-4" />
+                  <PiUserGear className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -419,7 +407,7 @@ export const EditorView: React.FC<Props> = ({
                 }}
                 className="min-h-[44px] px-3 py-1.5 text-xs font-semibold bg-blue-600 text-white rounded-lg shadow-xs flex items-center gap-1.5 cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5" />
+                <PiSparkle className="w-3.5 h-3.5" />
                 <span>🪄 Datos de prueba</span>
               </button>
             </div>
@@ -478,9 +466,9 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] flex flex-col items-center justify-center p-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-[11px] font-semibold shadow-sm transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             {isExportingPdf ? (
-              <Loader2 className="w-4 h-4 text-white animate-spin mb-0.5" />
+              <PiSpinner className="w-4 h-4 text-white animate-spin mb-0.5" />
             ) : (
-              <Download className="w-4 h-4 text-white mb-0.5" />
+              <PiDownloadSimple className="w-4 h-4 text-white mb-0.5" />
             )}
             <span className="truncate">Descargar PDF</span>
           </button>
@@ -493,9 +481,9 @@ export const EditorView: React.FC<Props> = ({
             className="min-h-[44px] flex flex-col items-center justify-center p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-[11px] font-semibold transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             {isExportingDocx ? (
-              <Loader2 className="w-4 h-4 text-slate-600 animate-spin mb-0.5" />
+              <PiSpinner className="w-4 h-4 text-slate-600 animate-spin mb-0.5" />
             ) : (
-              <FileText className="w-4 h-4 text-slate-700 mb-0.5" />
+              <PiFileText className="w-4 h-4 text-slate-700 mb-0.5" />
             )}
             <span className="truncate">Word (.docx)</span>
           </button>
@@ -508,12 +496,12 @@ export const EditorView: React.FC<Props> = ({
           >
             {hasCopied ? (
               <>
-                <Check className="w-4 h-4 text-emerald-600 mb-0.5" />
+                <PiCheck className="w-4 h-4 text-emerald-600 mb-0.5" />
                 <span className="text-emerald-700 font-bold truncate">¡Copiado!</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 text-slate-600 mb-0.5" />
+                <PiCopy className="w-4 h-4 text-slate-600 mb-0.5" />
                 <span className="truncate">Copiar Texto</span>
               </>
             )}

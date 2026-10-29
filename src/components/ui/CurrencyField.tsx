@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
-import { DollarSign } from 'lucide-react';
+import { PiCurrencyDollar } from 'react-icons/pi';
 import { formatearMoneda } from '../../utils/numberToWords';
 
 export interface CurrencyFieldProps {
@@ -55,7 +55,7 @@ export const CurrencyField: React.FC<CurrencyFieldProps> = ({
 
       <div className="relative flex items-center">
         <div className="absolute left-3 text-slate-500 pointer-events-none flex items-center justify-center font-bold text-xs">
-          <DollarSign className="w-4 h-4 text-blue-600" />
+          <PiCurrencyDollar className="w-4 h-4 text-blue-600" />
         </div>
 
         <input

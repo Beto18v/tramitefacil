@@ -48,9 +48,9 @@ Este documento clasifica de forma rigurosa los defectos técnicos, riesgos de es
 - **Estado:** ✅ **Completado.**
 - **Solución Aplicada:** `"strict": true` activado en `tsconfig.json`. Cero `any` implícitos. `tsc --noEmit` pasa limpio con 0 errores en los 15 dominios.
 
-### P1-3: [RESUELTO] Paquetes duplicados de iconos (`lucide-react` vs `react-icons`)
+### P1-3: [RESUELTO] Unificación de iconos en Phosphor Icons (`react-icons/pi`)
 - **Estado:** ✅ **Completado.**
-- **Solución Aplicada:** Se eliminó `react-icons` de `package.json` y se unificó el 100% de la iconografía de la aplicación bajo `lucide-react`.
+- **Solución Aplicada:** Se desinstaló `lucide-react` y se migró el 100% de la iconografía de la aplicación al ecosistema de alta fidelidad Phosphor Icons (`react-icons/pi`), eliminando dependencias redundantes y adoptando un diseño estético fintech desaturado y minimalista.
 
 ### P1-4: [RESUELTO] Dependencias residuales y muertas en el stack de producción
 - **Estado:** ✅ **Completado.**

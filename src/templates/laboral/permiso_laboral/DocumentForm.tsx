@@ -4,7 +4,7 @@ import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
 import { InputField, SelectField, TextareaField, SwitchField } from '../../../components/ui';
-import { Building, CalendarClock, User } from 'lucide-react';
+import { PiBuildings, PiCalendarBlank, PiUser } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<PermisoLaboralData>> = ({
   data,
@@ -30,7 +30,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PermisoLaboralData>> = ({
         step="Paso 01"
         title="Empresa y Jefatura Inmediata"
         subtitle="Destinatario responsable de la aprobación"
-        icon={<Building className="w-5 h-5 text-indigo-600" />}
+        icon={<PiBuildings className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -83,7 +83,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PermisoLaboralData>> = ({
         step="Paso 02"
         title="Tus Datos y Cargo"
         subtitle="Nombre completo e identificación del solicitante"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -120,7 +120,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PermisoLaboralData>> = ({
         step="Paso 03"
         title="Modalidad, Fechas y Justificación"
         subtitle="Tipo de permiso, duración y motivo de ausencia"
-        icon={<CalendarClock className="w-5 h-5 text-indigo-600" />}
+        icon={<PiCalendarBlank className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -189,7 +189,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PermisoLaboralData>> = ({
         step="Paso 04"
         title="Firma del Solicitante"
         subtitle="Firma manuscrita en pantalla o pie notarial impreso"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <SignaturePad

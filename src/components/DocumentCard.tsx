@@ -1,17 +1,17 @@
 import React from 'react';
 import { DocumentMeta, DocumentType } from '../types/documents';
 import {
-  Receipt,
-  DollarSign,
-  Briefcase,
-  UserCheck,
-  Home,
-  Key,
-  Scale,
-  FileText,
-  ArrowRight,
-  Zap,
-} from 'lucide-react';
+  PiReceipt,
+  PiCurrencyDollar,
+  PiBriefcase,
+  PiUserCheck,
+  PiHouse,
+  PiKey,
+  PiScales,
+  PiFileText,
+  PiArrowRight,
+  PiLightning,
+} from 'react-icons/pi';
 
 interface Props {
   document: DocumentMeta;
@@ -23,44 +23,44 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
   const renderIcon = () => {
     switch (document.id) {
       case 'cuenta_cobro':
-        return <Receipt className="w-5 h-5 text-slate-700" />;
+        return <PiReceipt className="w-5 h-5 text-slate-700" />;
       case 'propuesta_servicios':
-        return <DollarSign className="w-5 h-5 text-slate-700" />;
+        return <PiCurrencyDollar className="w-5 h-5 text-slate-700" />;
       case 'contrato_prestacion':
-        return <FileText className="w-5 h-5 text-slate-700" />;
+        return <PiFileText className="w-5 h-5 text-slate-700" />;
       case 'carta_renuncia':
-        return <Briefcase className="w-5 h-5 text-slate-700" />;
+        return <PiBriefcase className="w-5 h-5 text-slate-700" />;
       case 'certificado_laboral':
-        return <UserCheck className="w-5 h-5 text-slate-700" />;
+        return <PiUserCheck className="w-5 h-5 text-slate-700" />;
       case 'permiso_laboral':
-        return <Briefcase className="w-5 h-5 text-slate-700" />;
+        return <PiBriefcase className="w-5 h-5 text-slate-700" />;
       case 'contrato_arrendamiento':
-        return <Home className="w-5 h-5 text-slate-700" />;
+        return <PiHouse className="w-5 h-5 text-slate-700" />;
       case 'no_renovacion_arriendo':
-        return <Key className="w-5 h-5 text-slate-700" />;
+        return <PiKey className="w-5 h-5 text-slate-700" />;
       case 'acta_entrega':
-        return <Home className="w-5 h-5 text-slate-700" />;
+        return <PiHouse className="w-5 h-5 text-slate-700" />;
       case 'derecho_peticion':
-        return <Scale className="w-5 h-5 text-slate-700" />;
+        return <PiScales className="w-5 h-5 text-slate-700" />;
       case 'poder_autorizacion':
-        return <FileText className="w-5 h-5 text-slate-700" />;
+        return <PiFileText className="w-5 h-5 text-slate-700" />;
       case 'habeas_data':
-        return <Scale className="w-5 h-5 text-slate-700" />;
+        return <PiScales className="w-5 h-5 text-slate-700" />;
       case 'acuerdo_nda':
-        return <FileText className="w-5 h-5 text-slate-700" />;
+        return <PiFileText className="w-5 h-5 text-slate-700" />;
       case 'compraventa_vehiculo':
-        return <FileText className="w-5 h-5 text-slate-700" />;
+        return <PiFileText className="w-5 h-5 text-slate-700" />;
       case 'autorizacion_patios':
-        return <Key className="w-5 h-5 text-slate-700" />;
+        return <PiKey className="w-5 h-5 text-slate-700" />;
       default:
-        return <FileText className="w-5 h-5 text-slate-700" />;
+        return <PiFileText className="w-5 h-5 text-slate-700" />;
     }
   };
 
   return (
     <div
       onClick={() => onSelect(document.id)}
-      className="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200 flex flex-col justify-between cursor-pointer"
+      className="group bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs hover:shadow-sm hover:border-slate-300 transition-all duration-200 flex flex-col justify-between cursor-pointer"
     >
       <div className="space-y-4">
         {/* Top bar: Circular icon + Time badge */}
@@ -69,7 +69,7 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
             {renderIcon()}
           </div>
           <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-full">
-            <Zap className="w-3 h-3 text-amber-500" />
+            <PiLightning className="w-3 h-3 text-amber-500" />
             <span>{document.estimatedMinutes || '⚡ 2 min'}</span>
           </span>
         </div>
@@ -106,7 +106,7 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
           className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 group-hover:text-blue-700 transition-colors cursor-pointer"
         >
           <span>Redactar documento</span>
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <PiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
     </div>

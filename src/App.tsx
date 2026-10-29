@@ -46,7 +46,8 @@ import { EditorView } from './components/EditorView';
 import { UserProfileModal } from './components/UserProfileModal';
 import { loadUserProfile, saveUserProfile, injectProfileIntoDocument } from './utils/profileInjector';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
+import { Footer } from './components/Footer';
+import { PiCheckCircle, PiWarningCircle, PiInfo, PiX } from 'react-icons/pi';
 
 const STORAGE_KEY = 'tramite_facil_state_v1';
 
@@ -322,7 +323,10 @@ export default function App() {
         )}
       </main>
 
-      {/* 3. User Profile Modal (tramitefacil_profile_v1) */}
+      {/* 3. Institutional Footer */}
+      <Footer />
+
+      {/* 4. User Profile Modal (tramitefacil_profile_v1) */}
       <UserProfileModal
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
@@ -331,15 +335,15 @@ export default function App() {
         onApplyToCurrentDoc={currentView === 'editor' ? handleApplyProfile : undefined}
       />
 
-      {/* 4. Floating Toast Feedback */}
+      {/* 5. Floating Toast Feedback */}
       {toast.show && (
         <aside
           aria-live="polite"
           className="no-print fixed bottom-20 lg:bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-800 animate-in slide-in-from-bottom-4 duration-200 max-w-sm sm:max-w-md"
         >
-          {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
-          {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />}
-          {toast.type === 'info' && <Info className="w-5 h-5 text-blue-400 shrink-0" />}
+          {toast.type === 'success' && <PiCheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />}
+          {toast.type === 'error' && <PiWarningCircle className="w-5 h-5 text-rose-400 shrink-0" />}
+          {toast.type === 'info' && <PiInfo className="w-5 h-5 text-blue-400 shrink-0" />}
 
           <span className="text-xs font-medium leading-snug flex-1">
             {toast.message}
@@ -350,7 +354,7 @@ export default function App() {
             className="p-1 text-slate-400 hover:text-white rounded-xl transition min-h-[32px] min-w-[32px] flex items-center justify-center cursor-pointer"
             aria-label="Cerrar notificación"
           >
-            <X className="w-4 h-4" />
+            <PiX className="w-4 h-4" />
           </button>
         </aside>
       )}

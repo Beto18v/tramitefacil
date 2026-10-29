@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { PiPlus, PiTrash } from 'react-icons/pi';
 
 export interface RepeaterFieldProps {
   label: string;
@@ -64,7 +64,7 @@ export const RepeaterField: React.FC<RepeaterFieldProps> = ({
                 title="Eliminar elemento"
                 aria-label={`Eliminar elemento ${index + 1}`}
               >
-                <Trash2 className="w-4 h-4" />
+                <PiTrash className="w-4 h-4" />
               </button>
             )}
           </div>
@@ -75,7 +75,7 @@ export const RepeaterField: React.FC<RepeaterFieldProps> = ({
           onClick={onAdd}
           className="w-full py-2 border-2 border-dashed border-slate-300 hover:border-blue-400 bg-slate-50/50 hover:bg-blue-50/50 text-slate-700 hover:text-blue-700 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
         >
-          <Plus className="w-3.5 h-3.5" />
+          <PiPlus className="w-3.5 h-3.5" />
           <span>{addButtonText}</span>
         </button>
       </div>

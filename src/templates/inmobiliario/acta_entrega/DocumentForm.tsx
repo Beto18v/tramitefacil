@@ -3,7 +3,7 @@ import { ActaEntregaData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, TextareaField } from '../../../components/ui';
-import { ClipboardCheck, Home, Plus, Trash2, User } from 'lucide-react';
+import { PiClipboardText, PiHouse, PiPlus, PiTrash, PiUser } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
   data,
@@ -47,7 +47,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
         step="Paso 01"
         title="Partes de la Entrega"
         subtitle="Quién entrega y quién recibe el inmueble"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -122,7 +122,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
         step="Paso 02"
         title="Inmueble, Fecha y Llaves"
         subtitle="Ubicación y juegos de llaves entregados"
-        icon={<Home className="w-5 h-5 text-indigo-600" />}
+        icon={<PiHouse className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -175,7 +175,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
         step="Paso 03"
         title="Lecturas de Medidores y Paz y Salvos"
         subtitle="Contadores de acueducto, energía, gas e inventario"
-        icon={<ClipboardCheck className="w-5 h-5 text-indigo-600" />}
+        icon={<PiClipboardText className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -219,7 +219,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
                 onClick={handleAddPaz}
                 className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5" /> Agregar paz y salvo
+                <PiPlus className="w-3.5 h-3.5" /> Agregar paz y salvo
               </button>
             </div>
             {(data.pazSalvosPresentados || []).map((paz, idx) => (
@@ -236,7 +236,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
                   onClick={() => handleRemovePaz(idx)}
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <PiTrash className="w-4 h-4" />
                 </button>
               </div>
             ))}

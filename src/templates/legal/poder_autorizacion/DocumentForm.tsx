@@ -3,7 +3,7 @@ import { PoderAutorizacionData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, TextareaField, SwitchField } from '../../../components/ui';
-import { Plus, Shield, Trash2, User, UserCheck } from 'lucide-react';
+import { PiPlus, PiShield, PiTrash, PiUser, PiUserCheck } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = ({
   data,
@@ -43,7 +43,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
         step="Paso 01"
         title="Datos del Otorgante (Poderdante)"
         subtitle="Quién confiere la autorización legal"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -93,7 +93,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
         step="Paso 02"
         title="Datos del Apoderado (Autorizado)"
         subtitle="Persona que realizará el trámite en tu representación"
-        icon={<UserCheck className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUserCheck className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -136,7 +136,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
         step="Paso 03"
         title="Trámite y Facultades Concedidas"
         subtitle="Gestión específica autorizada y límite temporal"
-        icon={<Shield className="w-5 h-5 text-indigo-600" />}
+        icon={<PiShield className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -166,7 +166,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
                 onClick={handleAddFacultad}
                 className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5" /> Agregar facultad
+                <PiPlus className="w-3.5 h-3.5" /> Agregar facultad
               </button>
             </div>
             {(data.facultadesEspecificas || []).map((fac, idx) => (
@@ -183,7 +183,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
                   onClick={() => handleRemoveFacultad(idx)}
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <PiTrash className="w-4 h-4" />
                 </button>
               </div>
             ))}

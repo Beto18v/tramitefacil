@@ -4,7 +4,7 @@ import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
 import { InputField, SelectField, CurrencyField, SwitchField } from '../../../components/ui';
-import { DollarSign, Home, User } from 'lucide-react';
+import { PiCurrencyDollar, PiHouse, PiUser } from 'react-icons/pi';
 
 export const DocumentForm: React.FC<DocumentFormProps<ContratoArrendamientoData>> = ({
   data,
@@ -32,7 +32,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoArrendamientoData>
         step="Paso 01"
         title="Partes del Arrendamiento"
         subtitle="Identificación del Arrendador (Propietario) y Arrendatario (Inquilino)"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -170,7 +170,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoArrendamientoData>
         step="Paso 02"
         title="Inmueble y Ubicación"
         subtitle="Dirección y matrícula inmobiliaria"
-        icon={<Home className="w-5 h-5 text-indigo-600" />}
+        icon={<PiHouse className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -206,7 +206,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoArrendamientoData>
         step="Paso 03"
         title="Canon, Pagos y Duración"
         subtitle="Valor mensual, día límite de pago y vigencia"
-        icon={<DollarSign className="w-5 h-5 text-indigo-600" />}
+        icon={<PiCurrencyDollar className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -273,7 +273,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoArrendamientoData>
         step="Paso 04"
         title="Firma del Arrendatario"
         subtitle="Dibuja tu firma digital en pantalla o usa pie notarial impreso"
-        icon={<User className="w-5 h-5 text-indigo-600" />}
+        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
         defaultOpen={true}
       >
         <SignaturePad
