@@ -61,16 +61,16 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
   return (
     <div
       onClick={() => onSelect(document.id)}
-      className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-2xs hover:shadow-sm hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 flex flex-col justify-between cursor-pointer"
+      className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-2xs hover:shadow-sm hover:border-indigo-300 dark:hover:border-indigo-700 transition-all duration-200 flex flex-col justify-between cursor-pointer"
     >
       <div className="space-y-4">
         {/* Top bar: Circular icon + Time badge */}
         <div className="flex items-center justify-between gap-2">
-          <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-slate-200/70 dark:group-hover:bg-slate-700 transition-colors">
+          <div className="w-11 h-11 rounded-full bg-indigo-50/70 dark:bg-slate-800 text-indigo-700 dark:text-slate-300 flex items-center justify-center group-hover:bg-indigo-100 dark:group-hover:bg-slate-700 transition-colors">
             {renderIcon()}
           </div>
           <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 px-2.5 py-1 rounded-full">
-            <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+            <Clock className="w-3 h-3 text-indigo-500 dark:text-slate-400" />
             <span>{document.estimatedMinutes || '2 min'}</span>
           </span>
         </div>
@@ -104,7 +104,7 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
             e.stopPropagation();
             onSelect(document.id);
           }}
-          className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-slate-900 dark:text-indigo-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors cursor-pointer"
+          className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors cursor-pointer"
         >
           <span>Redactar documento</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

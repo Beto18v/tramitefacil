@@ -29,14 +29,14 @@ export const CollapsibleSection: React.FC<Props> = ({
       >
         <div className="flex items-center gap-3">
           {icon && (
-            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center shrink-0 border border-slate-200/80 dark:border-slate-700/80">
+            <div className="w-8 h-8 rounded-lg bg-indigo-50/70 dark:bg-slate-800 text-indigo-700 dark:text-slate-300 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-slate-700/80">
               {icon}
             </div>
           )}
           <div>
             <div className="flex items-center gap-2">
               {step && (
-                <span className="text-[11px] font-mono font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                <span className="text-[11px] font-mono font-medium text-indigo-700 dark:text-slate-300 bg-indigo-50 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-indigo-200/80 dark:border-slate-700">
                   {step}
                 </span>
               )}

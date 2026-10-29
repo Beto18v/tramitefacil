@@ -294,6 +294,8 @@ export default function App() {
         selectedDocId={selectedDocId}
         onGoToCatalog={handleGoToCatalog}
         onSelectDoc={(id) => setSelectedDocId(id)}
+        userProfile={userProfile}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
         theme={theme}
         onToggleTheme={toggleTheme}
       />
@@ -323,11 +325,8 @@ export default function App() {
         )}
       </main>
 
-      {/* 3. Institutional Footer with Local Autocomplete Profile */}
-      <Footer
-        userProfile={userProfile}
-        onOpenProfileModal={() => setIsProfileModalOpen(true)}
-      />
+      {/* 3. Institutional Footer */}
+      <Footer />
 
       {/* 4. User Profile Modal (tramitefacil_profile_v1) */}
       <UserProfileModal
