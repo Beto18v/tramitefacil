@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'CalendarClock',
   lawReference: 'Art. 57 Numeral 6 del Código Sustantivo del Trabajo',
   tags: ['permiso', 'licencia', 'ausencia', 'calamidad', 'vacaciones', 'estudio'],
-  estimatedMinutes: '⚡ 2 min',
+  estimatedMinutes: '2 min',
   featuredTags: ['Calamidad / Citas', 'Remunerada o no', 'CST'],
   subfilter: 'Permisos',
 };

@@ -8,7 +8,7 @@ import { Building2, Plus, Scale, Sparkles, Trash2, User } from 'lucide-react';
 
 const quickClaimTemplates = [
   {
-    label: '💊 Medicamentos / Citas EPS',
+    label: 'Medicamentos / Citas EPS',
     asunto:
       'DERECHO DE PETICIÓN URGENTE - AUTORIZACIÓN Y ENTREGA EFECTIVA DE MEDICAMENTOS VITALES Y ASIGNACIÓN DE CITA ESPECIALIZADA',
     tipoEntidad: 'Salud / EPS' as const,
@@ -24,7 +24,7 @@ const quickClaimTemplates = [
     ],
   },
   {
-    label: '⚡ Servicios Públicos / Facturación',
+    label: 'Servicios Públicos / Facturación',
     asunto:
       'DERECHO DE PETICIÓN - RECLAMO POR FACTURACIÓN INEXACTA Y COBROS NO AUTORIZADOS EN SERVICIO DOMICILIARIO',
     tipoEntidad: 'Servicios Públicos' as const,
@@ -40,7 +40,7 @@ const quickClaimTemplates = [
     ],
   },
   {
-    label: '🏦 Bancos / Cargos no autorizados',
+    label: 'Bancos / Cargos no autorizados',
     asunto:
       'DERECHO DE PETICIÓN - RECLAMO POR DÉBITOS AUTOMÁTICOS O SEGUROS NO AUTORIZADOS EN CUENTA BANCARIA',
     tipoEntidad: 'Entidad Financiera / Banco' as const,

@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'ShieldCheck',
   lawReference: 'Decisión 486 CAN y Código de Comercio',
   tags: ['nda', 'confidencialidad', 'secreto', 'comercial', 'propiedad', 'negocios'],
-  estimatedMinutes: '⚡ 3 min',
+  estimatedMinutes: '3 min',
   featuredTags: ['Protección de IP', 'Cláusula penal', 'Bilateral / Unilateral'],
   subfilter: 'Confidencialidad (NDA)',
 };

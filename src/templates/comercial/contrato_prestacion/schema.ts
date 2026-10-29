@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'ScrollText',
   lawReference: 'Código Civil (Art. 1495) y Código de Comercio',
   tags: ['contrato', 'servicios', 'independiente', 'prestación', 'honorarios', 'autonomía', 'nda'],
-  estimatedMinutes: '⚡ 4 min',
+  estimatedMinutes: '4 min',
   featuredTags: ['Sin subordinación', 'Cláusula penal', 'Confidencialidad'],
   subfilter: 'Contratos',
 };

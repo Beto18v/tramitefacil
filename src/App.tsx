@@ -287,15 +287,13 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-950 selection:text-blue-900 dark:selection:text-blue-200 overflow-x-hidden transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans selection:bg-slate-200 dark:selection:bg-slate-800 selection:text-slate-900 dark:selection:text-slate-100 overflow-x-hidden transition-colors">
       {/* 1. Global Navigation Header */}
       <Header
         currentView={currentView}
         selectedDocId={selectedDocId}
         onGoToCatalog={handleGoToCatalog}
         onSelectDoc={(id) => setSelectedDocId(id)}
-        userProfile={userProfile}
-        onOpenProfileModal={() => setIsProfileModalOpen(true)}
         theme={theme}
         onToggleTheme={toggleTheme}
       />
@@ -305,8 +303,6 @@ export default function App() {
         {currentView === 'catalog' ? (
           <CatalogView
             onSelectDoc={handleSelectDocFromCatalog}
-            userProfile={userProfile}
-            onOpenProfileModal={() => setIsProfileModalOpen(true)}
           />
         ) : (
           <EditorView
@@ -327,8 +323,11 @@ export default function App() {
         )}
       </main>
 
-      {/* 3. Institutional Footer */}
-      <Footer />
+      {/* 3. Institutional Footer with Local Autocomplete Profile */}
+      <Footer
+        userProfile={userProfile}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
+      />
 
       {/* 4. User Profile Modal (tramitefacil_profile_v1) */}
       <UserProfileModal
@@ -347,7 +346,7 @@ export default function App() {
         >
           {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
           {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />}
-          {toast.type === 'info' && <Info className="w-5 h-5 text-blue-400 shrink-0" />}
+          {toast.type === 'info' && <Info className="w-5 h-5 text-indigo-400 shrink-0" />}
 
           <span className="text-xs font-medium leading-snug flex-1">
             {toast.message}

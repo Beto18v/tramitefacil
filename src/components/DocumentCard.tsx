@@ -10,7 +10,7 @@ import {
   Scale,
   FileText,
   ArrowRight,
-  Zap,
+  Clock,
   Car,
 } from 'lucide-react';
 
@@ -69,9 +69,9 @@ export const DocumentCard: React.FC<Props> = ({ document, onSelect }) => {
           <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-slate-200/70 dark:group-hover:bg-slate-700 transition-colors">
             {renderIcon()}
           </div>
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 px-2.5 py-1 rounded-full">
-            <Zap className="w-3 h-3 text-amber-500" />
-            <span>{document.estimatedMinutes || '⚡ 2 min'}</span>
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 px-2.5 py-1 rounded-full">
+            <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+            <span>{document.estimatedMinutes || '2 min'}</span>
           </span>
         </div>
 

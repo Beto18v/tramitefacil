@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'FileText',
   lawReference: 'Artículo 23 Constitución Política y Ley 1755 de 2015',
   tags: ['petición', 'reclamo', 'eps', 'banco', 'salud', 'pqrs', 'ley 1755', 'hechos'],
-  estimatedMinutes: '⚡ 3 min',
+  estimatedMinutes: '3 min',
   featuredTags: ['Hechos dinámicos', 'Término 15 días', 'Art. 23 C.P.'],
   subfilter: 'Peticiones',
 };

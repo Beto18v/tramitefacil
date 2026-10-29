@@ -24,7 +24,7 @@ export const meta: DocumentMeta = {
     'desinmovilización',
     'vehículo',
   ],
-  estimatedMinutes: '⚡ 2 min',
+  estimatedMinutes: '2 min',
   featuredTags: ['Desinmovilización', 'Poder Notarial / Patios', 'Ley 769 de 2002'],
   subfilter: 'Vehículos',
 };

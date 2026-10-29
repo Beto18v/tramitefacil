@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'UserMinus',
   lawReference: 'Código Sustantivo del Trabajo (C.S.T.)',
   tags: ['renuncia', 'retiro', 'trabajo', 'empleo', 'preaviso', 'liquidación', 'cst'],
-  estimatedMinutes: '⚡ 1 min',
+  estimatedMinutes: '1 min',
   featuredTags: ['Exoneración preaviso', 'Liquidación de ley', 'CST'],
   subfilter: 'Renuncias',
 };

@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'Fingerprint',
   lawReference: 'Art. 2142 y ss. Código Civil y C.G.P.',
   tags: ['poder', 'autorización', 'trámite', 'tercero', 'huella', 'diligencia'],
-  estimatedMinutes: '⚡ 2 min',
+  estimatedMinutes: '2 min',
   featuredTags: ['Facultades expresas', 'Huella dactilar', 'Código Civil'],
   subfilter: 'Poderes',
 };

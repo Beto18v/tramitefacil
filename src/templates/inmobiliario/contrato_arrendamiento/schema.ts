@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'KeyRound',
   lawReference: 'Ley 820 de 2003 y Código Civil',
   tags: ['contrato', 'arrendamiento', 'alquiler', 'canon', 'arrendador', 'inquilino', 'codeudor'],
-  estimatedMinutes: '⚡ 5 min',
+  estimatedMinutes: '5 min',
   featuredTags: ['Con Fiador/Codeudor', 'Ley 820', 'Inventario'],
   subfilter: 'Arrendamiento',
 };

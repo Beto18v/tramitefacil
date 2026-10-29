@@ -19,7 +19,10 @@ import {
   RotateCcw,
   CheckCircle2,
   Info,
-  Zap,
+  ShoppingCart,
+  CreditCard,
+  Lock,
+  type LucideIcon,
 } from 'lucide-react';
 import { DocumentType } from '../types/documents';
 import {
@@ -34,39 +37,39 @@ interface Props {
 
 interface ExampleCase {
   label: string;
-  icon: string;
+  icon: LucideIcon;
   text: string;
 }
 
 const QUICK_EXAMPLES: ExampleCase[] = [
   {
     label: 'Garantía de producto',
-    icon: '🛒',
+    icon: ShoppingCart,
     text: 'Compré una nevera hace 2 semanas, falló y en el almacén no me quieren devolver el dinero ni dar garantía...',
   },
   {
     label: 'Renuncia de trabajo',
-    icon: '💼',
+    icon: Briefcase,
     text: 'Voy a cambiarme de trabajo y necesito presentar mi renuncia formal pidiendo que me exoneren del preaviso y me paguen la liquidación.',
   },
   {
     label: 'Cobro de honorarios',
-    icon: '💰',
+    icon: DollarSign,
     text: 'Terminé un proyecto freelance de diseño y necesito presentar mi cuenta de cobro con retención en la fuente e ICA.',
   },
   {
     label: 'Retiro de patios',
-    icon: '🚗',
+    icon: Car,
     text: 'Inmovilizaron mi moto en los patios de tránsito y necesito autorizar a un familiar con poder especial para que la retire.',
   },
   {
     label: 'No renovar arriendo',
-    icon: '🏠',
+    icon: Home,
     text: 'Soy arrendador y quiero notificar a mi inquilino con 3 meses de anticipación que no prorrogaré el contrato de arrendamiento.',
   },
   {
     label: 'Reporte Datacrédito',
-    icon: '💳',
+    icon: CreditCard,
     text: 'Pagué una deuda hace más de un año y todavía aparezco con reporte negativo en Datacrédito, necesito que lo eliminen por borrón y cuenta nueva.',
   },
 ];
@@ -154,7 +157,7 @@ export const AiDocumentSuggester: React.FC<Props> = ({
             </label>
           </div>
           <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full flex items-center gap-1">
-            <Zap className="w-3 h-3 text-amber-500" />
+            <Lock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
             Análisis 100% privado en tu navegador
           </span>
         </div>
@@ -187,21 +190,25 @@ export const AiDocumentSuggester: React.FC<Props> = ({
             <span>Ejemplos rápidos para probar en un clic:</span>
           </div>
           <div className="flex flex-wrap gap-2">
-            {QUICK_EXAMPLES.map((ex) => (
-              <button
-                key={ex.label}
-                type="button"
-                onClick={() => handleSelectExample(ex.text)}
-                className={`min-h-[44px] text-xs font-medium px-3 py-1.5 rounded-xl border transition-all cursor-pointer inline-flex items-center gap-1.5 ${
-                  caseDescription === ex.text
-                    ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700 shadow-2xs font-semibold'
-                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100/80 dark:hover:bg-slate-700/80 hover:border-slate-300 dark:hover:border-slate-600'
-                }`}
-              >
-                <span>{ex.icon}</span>
-                <span>{ex.label}</span>
-              </button>
-            ))}
+            {QUICK_EXAMPLES.map((ex) => {
+              const IconComp = ex.icon;
+              const isSelected = caseDescription === ex.text;
+              return (
+                <button
+                  key={ex.label}
+                  type="button"
+                  onClick={() => handleSelectExample(ex.text)}
+                  className={`min-h-[44px] text-xs font-medium px-3 py-1.5 rounded-xl border transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                    isSelected
+                      ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white shadow-2xs font-semibold'
+                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100/80 dark:hover:bg-slate-700/80 hover:border-slate-300 dark:hover:border-slate-600'
+                  }`}
+                >
+                  <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'text-white dark:text-slate-900' : 'text-slate-500 dark:text-slate-400'}`} />
+                  <span>{ex.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -239,7 +246,7 @@ export const AiDocumentSuggester: React.FC<Props> = ({
                     </span>
                     <span className="text-slate-300 dark:text-slate-700">•</span>
                     <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
-                      {analysisResult.bestMatch.document.estimatedMinutes || '⚡ 2 min'}
+                      {analysisResult.bestMatch.document.estimatedMinutes || '2 min'}
                     </span>
                   </div>
                 </div>
@@ -250,7 +257,7 @@ export const AiDocumentSuggester: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => onSelectDoc(analysisResult.bestMatch!.document.id)}
-                  className="min-h-[44px] px-5 py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-all shadow-sm hover:shadow flex items-center justify-center gap-2 cursor-pointer shrink-0"
+                  className="min-h-[44px] px-5 py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 text-sm font-semibold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer shrink-0"
                 >
                   <span>Empezar este trámite</span>
                   <ArrowRight className="w-4 h-4" />
@@ -397,7 +404,7 @@ export const AiDocumentSuggester: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => onSelectDoc('derecho_peticion')}
-                className="min-h-[44px] px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white font-semibold rounded-lg transition cursor-pointer flex items-center gap-1.5"
+                className="min-h-[44px] px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold rounded-lg transition cursor-pointer flex items-center gap-1.5 shadow-xs"
               >
                 <span>Redactar Derecho de Petición</span>
                 <ArrowRight className="w-3.5 h-3.5" />

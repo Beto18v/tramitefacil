@@ -8,8 +8,8 @@ import {
   SlidersHorizontal,
   Sparkles,
   ArrowRight,
-  Zap,
   CheckCircle2,
+  PenTool,
 } from 'lucide-react';
 import { DocumentType } from '../types/documents';
 import { AiDocumentSuggester } from './AiDocumentSuggester';
@@ -57,7 +57,7 @@ export const Hero: React.FC<Props> = ({
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-6 transition-colors">
+    <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-6 transition-colors">
       {/* Title & Subtitle */}
       <div className="max-w-3xl space-y-2">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
@@ -71,7 +71,7 @@ export const Hero: React.FC<Props> = ({
       {/* 3-Step Value Onboarding Banner */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-3.5 bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 rounded-2xl">
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-7 h-7 rounded-xl bg-slate-900 dark:bg-indigo-600 text-white flex items-center justify-center font-mono text-xs font-bold shrink-0">
+          <div className="w-7 h-7 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center font-mono text-xs font-bold shrink-0">
             1
           </div>
           <div>
@@ -84,35 +84,35 @@ export const Hero: React.FC<Props> = ({
         </div>
 
         <div className="flex items-center gap-3 px-3 py-2 border-t md:border-t-0 md:border-l border-slate-200/60 dark:border-slate-800">
-          <div className="w-7 h-7 rounded-xl bg-slate-900 dark:bg-indigo-600 text-white flex items-center justify-center font-mono text-xs font-bold shrink-0">
+          <div className="w-7 h-7 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center font-mono text-xs font-bold shrink-0">
             2
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
               <span>Completa o autollena</span>
-              <Zap className="w-3 h-3 text-amber-500 hidden lg:inline" />
+              <PenTool className="w-3 h-3 text-slate-400 dark:text-slate-500 hidden lg:inline" />
             </p>
             <p className="text-[11px] text-slate-500 dark:text-slate-400">Autocompleta con 1 clic tus datos</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 px-3 py-2 border-t md:border-t-0 md:border-l border-slate-200/60 dark:border-slate-800">
-          <div className="w-7 h-7 rounded-xl bg-slate-900 dark:bg-indigo-600 text-white flex items-center justify-center font-mono text-xs font-bold shrink-0">
+          <div className="w-7 h-7 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center font-mono text-xs font-bold shrink-0">
             3
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
               <span>Descarga PDF o Word</span>
-              <CheckCircle2 className="w-3 h-3 text-emerald-500 hidden lg:inline" />
+              <CheckCircle2 className="w-3 h-3 text-slate-400 dark:text-slate-500 hidden lg:inline" />
             </p>
             <p className="text-[11px] text-slate-500 dark:text-slate-400">Listo para imprimir o firmar</p>
           </div>
         </div>
       </div>
 
-      {/* Mode Selector Tabs: [ 🔍 Buscar por nombre ] vs [ ✨ Describir mi caso con IA ] */}
+      {/* Mode Selector Tabs: [ Buscar por nombre ] vs [ Describir mi caso con IA ] */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
-        <div className="inline-flex p-1 bg-slate-100/90 dark:bg-slate-800/80 rounded-2xl border border-slate-200/80 dark:border-slate-700">
+        <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/80 dark:border-slate-700">
           <button
             type="button"
             onClick={() => setSearchMode('standard')}
@@ -130,13 +130,19 @@ export const Hero: React.FC<Props> = ({
             onClick={() => setSearchMode('assistant')}
             className={`min-h-[44px] px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
               searchMode === 'assistant'
-                ? 'bg-slate-900 dark:bg-indigo-600 text-white shadow-xs font-semibold'
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs font-semibold'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-amber-300" />
+            <Sparkles className="w-4 h-4 text-slate-400 dark:text-slate-600" />
             <span>Describir mi caso con IA</span>
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider bg-slate-800 dark:bg-indigo-700 text-white ml-1">
+            <span
+              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider ml-1 ${
+                searchMode === 'assistant'
+                  ? 'bg-slate-800 dark:bg-slate-200 text-slate-200 dark:text-slate-800'
+                  : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+              }`}
+            >
               Asistente
             </span>
           </button>
@@ -162,7 +168,7 @@ export const Hero: React.FC<Props> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Buscar por trámite o palabra clave (ej. 'renuncia', 'arriendo', 'retención', 'nda')..."
-              className="w-full min-h-[48px] pl-11 pr-12 py-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-900/10 dark:focus:ring-indigo-500/20 focus:border-slate-700 dark:focus:border-indigo-500 transition shadow-2xs"
+              className="w-full min-h-[48px] pl-11 pr-12 py-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-400 focus:border-transparent transition shadow-2xs"
             />
             {searchQuery && (
               <button
@@ -189,11 +195,13 @@ export const Hero: React.FC<Props> = ({
                   onClick={() => onFilterChange(pill.id)}
                   className={`min-h-[44px] inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer border ${
                     isActive
-                      ? 'bg-slate-900 dark:bg-indigo-600 text-white border-slate-900 dark:border-indigo-600 shadow-xs font-semibold'
+                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs font-semibold border-slate-900 dark:border-white'
                       : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border-slate-200/80 dark:border-slate-700'
                   }`}
                 >
-                  <span className={isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400'}>{pill.icon}</span>
+                  <span className={isActive ? 'text-white dark:text-slate-900' : 'text-slate-500 dark:text-slate-400'}>
+                    {pill.icon}
+                  </span>
                   <span>{pill.label}</span>
                 </button>
               );

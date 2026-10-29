@@ -25,7 +25,7 @@ export const meta: DocumentMeta = {
     'simit',
     'automotor',
   ],
-  estimatedMinutes: '⚡ 4 min',
+  estimatedMinutes: '4 min',
   featuredTags: ['RUNT y SIMIT', 'Ley 769 de 2002', 'Carros y Motos'],
   subfilter: 'Vehículos',
 };

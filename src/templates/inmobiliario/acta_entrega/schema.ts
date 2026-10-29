@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'ClipboardCheck',
   lawReference: 'Ley 820 de 2003 y Acta Notarial / Civil',
   tags: ['acta', 'entrega', 'llaves', 'inventario', 'paz y salvo', 'restitución'],
-  estimatedMinutes: '⚡ 3 min',
+  estimatedMinutes: '3 min',
   featuredTags: ['Paz y salvo', 'Lectura de servicios', 'Inventario'],
   subfilter: 'Inventario',
 };

@@ -7,9 +7,23 @@ import {
   X,
   Info,
   BookOpen,
+  UserCheck,
+  UserCog,
+  Check,
 } from 'lucide-react';
+import { UserProfile } from '../types/documents';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  userProfile?: UserProfile | null;
+  onOpenProfileModal?: () => void;
+}
+
+const getAbbreviatedDoc = (tipo?: string, num?: string): string => {
+  if (!num) return tipo || 'Sin documento';
+  return `${tipo || 'DOC'}: ${num}`;
+};
+
+export const Footer: React.FC<FooterProps> = ({ userProfile, onOpenProfileModal }) => {
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
@@ -29,11 +43,82 @@ export const Footer: React.FC = () => {
   return (
     <footer className="no-print mt-12 bg-white dark:bg-slate-950 border-t border-slate-200/80 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-xs transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        {/* Executive Section: Datos del Emisor y Autocompletado Local */}
+        {onOpenProfileModal && (
+          <div className="bg-slate-50/90 dark:bg-slate-900/80 rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-2xs space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-start gap-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center shrink-0 shadow-2xs">
+                  {userProfile?.nombreCompleto ? (
+                    <UserCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  ) : (
+                    <ShieldCheck className="w-5 h-5 text-slate-700 dark:text-slate-300" />
+                  )}
+                </div>
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm tracking-tight">
+                      Datos del Emisor y Autocompletado Local (100% Privado en tu Navegador)
+                    </h3>
+                    <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300/60 dark:border-slate-700">
+                      Ley 1581 de 2012
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-2xl">
+                    Tus datos fiscales, de contacto y firma se guardan exclusivamente en el almacenamiento local de tu navegador. Nunca se transmiten a servidores externos ni intermediarios.
+                  </p>
+
+                  {userProfile?.nombreCompleto ? (
+                    <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1.5 font-semibold text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-xl shadow-2xs">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        {userProfile.nombreCompleto}
+                      </span>
+                      <span className="text-slate-500 dark:text-slate-400 font-mono text-[11px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-xl shadow-2xs">
+                        {getAbbreviatedDoc(userProfile.tipoDocumento, userProfile.numeroDocumento)}
+                      </span>
+                      {userProfile.signatureDataUrl && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 px-2 py-1 rounded-xl shadow-2xs">
+                          <Check className="w-3.5 h-3.5" />
+                          Firma lista
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 pt-0.5">
+                      Configura tus datos fiscales y firma manuscrita una sola vez para autollenar cualquier contrato o minuta en 1 clic.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="shrink-0 pt-2 md:pt-0">
+                <button
+                  type="button"
+                  onClick={onOpenProfileModal}
+                  className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center gap-2 shadow-xs ${
+                    userProfile?.nombreCompleto
+                      ? 'bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700'
+                      : 'bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900'
+                  }`}
+                >
+                  <UserCog className="w-4 h-4" />
+                  <span>
+                    {userProfile?.nombreCompleto
+                      ? 'Editar Datos y Firma'
+                      : 'Configurar Perfil para Autollenar'}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Row 1: Brand & Core Mission */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
           <div className="space-y-2 md:col-span-2">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-slate-900 dark:bg-indigo-600 text-white flex items-center justify-center">
+              <div className="w-6 h-6 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center">
                 <FileText className="w-3.5 h-3.5" />
               </div>
               <span className="font-bold text-slate-900 dark:text-slate-100 text-sm tracking-tight">
@@ -60,7 +145,7 @@ export const Footer: React.FC = () => {
         {/* Row 2: Colombian Legal References */}
         <div className="space-y-2.5 pt-4 border-t border-slate-100 dark:border-slate-800/80">
           <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-semibold text-xs">
-            <Scale className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <Scale className="w-4 h-4 text-slate-700 dark:text-slate-300" />
             <span>Fundamentos de la Normatividad Colombiana</span>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -79,7 +164,7 @@ export const Footer: React.FC = () => {
         {/* Row 3: Legal Disclaimer Notice Box */}
         <div className="p-4 rounded-2xl bg-slate-50/70 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 text-[11px] leading-relaxed text-slate-600 dark:text-slate-400 space-y-1">
           <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-semibold">
-            <Info className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+            <Info className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400 shrink-0" />
             <span>Exención de Responsabilidad Legal (Legal Disclaimer)</span>
           </div>
           <p>
@@ -96,7 +181,7 @@ export const Footer: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowTermsModal(true)}
-              className="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition cursor-pointer min-h-[36px] flex items-center"
+              className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition cursor-pointer min-h-[36px] flex items-center"
             >
               Términos de Uso
             </button>
@@ -104,7 +189,7 @@ export const Footer: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowPrivacyModal(true)}
-              className="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition cursor-pointer min-h-[36px] flex items-center"
+              className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition cursor-pointer min-h-[36px] flex items-center"
             >
               Política de Privacidad
             </button>
@@ -118,7 +203,7 @@ export const Footer: React.FC = () => {
           <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-5 animate-in fade-in zoom-in-95 my-8">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-bold text-base">
-                <BookOpen className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <BookOpen className="w-5 h-5 text-slate-700 dark:text-slate-300" />
                 <h3>Términos y Condiciones de Uso</h3>
               </div>
               <button
@@ -165,7 +250,7 @@ export const Footer: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowTermsModal(false)}
-                className="min-h-[44px] px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition cursor-pointer"
+                className="min-h-[44px] px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-xl text-xs font-semibold transition cursor-pointer shadow-xs"
               >
                 Comprendido y Aceptado
               </button>
@@ -204,7 +289,7 @@ export const Footer: React.FC = () => {
               <section className="space-y-1.5">
                 <h4 className="font-semibold text-slate-900 dark:text-slate-100 text-sm">2. Almacenamiento Local (LocalStorage)</h4>
                 <p>
-                  Los datos del perfil emisor y los borradores de documentos se guardan exclusivamente en el almacenamiento local (<code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-[11px] dark:text-slate-200">localStorage</code>) de su navegador web. El usuario tiene el control absoluto y puede eliminar sus datos en cualquier momento limpiando el caché o usando la opción de restablecer.
+                  Los datos del perfil emisor y los borradores de documentos se guardan exclusivamente en el almacenamiento local de su navegador web. El usuario tiene el control absoluto y puede eliminar sus datos en cualquier momento limpiando el caché o usando la opción de restablecer.
                 </p>
               </section>
 
@@ -218,7 +303,7 @@ export const Footer: React.FC = () => {
               <section className="space-y-1.5">
                 <h4 className="font-semibold text-slate-900 dark:text-slate-100 text-sm">4. Generación Segura de PDF y Word</h4>
                 <p>
-                  La conversión a PDF (<code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-[11px] dark:text-slate-200">html2pdf.js</code>) y Word (<code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-[11px] dark:text-slate-200">docx</code>) se ejecuta íntegramente en la memoria RAM del navegador, descargando el archivo resultante directamente a la carpeta de descargas del usuario sin intermediación de servidores externos.
+                  La conversión a PDF y Word se ejecuta íntegramente en la memoria RAM del navegador, descargando el archivo resultante directamente a la carpeta de descargas del usuario sin intermediación de servidores externos.
                 </p>
               </section>
             </div>
@@ -227,7 +312,7 @@ export const Footer: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPrivacyModal(false)}
-                className="min-h-[44px] px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition cursor-pointer"
+                className="min-h-[44px] px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-xl text-xs font-semibold transition cursor-pointer shadow-xs"
               >
                 Entendido
               </button>

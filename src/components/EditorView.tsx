@@ -23,6 +23,7 @@ import {
   Loader2,
   UserCheck,
   UserCog,
+  PenTool,
 } from 'lucide-react';
 
 interface Props {
@@ -197,7 +198,7 @@ export const EditorView: React.FC<Props> = ({
             title="Volver al catálogo"
           >
             <ArrowLeft className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-            <span>← Catálogo</span>
+            <span>Catálogo</span>
           </button>
 
           <div className="flex flex-col">
@@ -224,7 +225,7 @@ export const EditorView: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Center Mobile Selector: [ 📝 Llenar Formulario ] | [ 📄 Ver Documento A4 ] */}
+        {/* Center Mobile Selector: [ Formulario ] | [ Vista A4 ] */}
         <div className="lg:hidden flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700">
           <button
             type="button"
@@ -235,7 +236,7 @@ export const EditorView: React.FC<Props> = ({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
-            <span>📝</span>
+            <PenTool className="w-3.5 h-3.5" />
             <span>Formulario</span>
           </button>
           <button
@@ -247,7 +248,7 @@ export const EditorView: React.FC<Props> = ({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
-            <span>📄</span>
+            <FileText className="w-3.5 h-3.5" />
             <span>Vista A4</span>
           </button>
         </div>
@@ -334,13 +335,13 @@ export const EditorView: React.FC<Props> = ({
             type="button"
             onClick={handleDownloadPdf}
             disabled={isExportingPdf}
-            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 dark:bg-indigo-600 dark:hover:bg-indigo-500 rounded-xl shadow-xs transition cursor-pointer disabled:opacity-50"
+            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-900 rounded-xl shadow-xs transition cursor-pointer disabled:opacity-50"
             title="Descargar documento en PDF"
           >
             {isExportingPdf ? (
-              <Loader2 className="w-4 h-4 text-white animate-spin" />
+              <Loader2 className="w-4 h-4 text-white dark:text-slate-900 animate-spin" />
             ) : (
-              <Download className="w-4 h-4 text-white" />
+              <Download className="w-4 h-4 text-white dark:text-slate-900" />
             )}
             <span>Descargar PDF</span>
           </button>
@@ -390,9 +391,9 @@ export const EditorView: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={onApplyProfile}
-                  className="min-h-[44px] px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white text-xs font-semibold transition cursor-pointer shadow-xs"
+                  className="min-h-[44px] px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold transition cursor-pointer shadow-xs"
                 >
-                  {userProfile?.nombreCompleto ? '⚡ Aplicar' : 'Configurar'}
+                  {userProfile?.nombreCompleto ? 'Autollenar con mi perfil' : 'Configurar perfil'}
                 </button>
                 <button
                   type="button"
@@ -416,7 +417,7 @@ export const EditorView: React.FC<Props> = ({
                   onLoadSample(selectedDoc);
                   onTriggerToast('Datos de prueba cargados.', 'info');
                 }}
-                className="min-h-[44px] px-3 py-1.5 text-xs font-semibold bg-slate-900 dark:bg-indigo-600 text-white rounded-lg shadow-xs flex items-center gap-1.5 cursor-pointer"
+                className="min-h-[44px] px-3 py-1.5 text-xs font-semibold bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-lg shadow-xs flex items-center gap-1.5 cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                 <span>Datos de prueba</span>
@@ -474,12 +475,12 @@ export const EditorView: React.FC<Props> = ({
             type="button"
             onClick={handleDownloadPdf}
             disabled={isExportingPdf}
-            className="min-h-[44px] flex flex-col items-center justify-center p-2 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-slate-950 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white text-[11px] font-semibold shadow-xs transition active:scale-95 disabled:opacity-50 cursor-pointer"
+            className="min-h-[44px] flex flex-col items-center justify-center p-2 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-slate-950 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 text-[11px] font-semibold shadow-xs transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             {isExportingPdf ? (
-              <Loader2 className="w-4 h-4 text-white animate-spin mb-0.5" />
+              <Loader2 className="w-4 h-4 text-white dark:text-slate-900 animate-spin mb-0.5" />
             ) : (
-              <Download className="w-4 h-4 text-white mb-0.5" />
+              <Download className="w-4 h-4 text-white dark:text-slate-900 mb-0.5" />
             )}
             <span className="truncate">Descargar PDF</span>
           </button>

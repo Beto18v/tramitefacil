@@ -48,9 +48,9 @@ Este documento clasifica de forma rigurosa los defectos técnicos, riesgos de es
 - **Estado:** ✅ **Completado.**
 - **Solución Aplicada:** `"strict": true` activado en `tsconfig.json`. Cero `any` implícitos. `tsc --noEmit` pasa limpio con 0 errores en los 15 dominios.
 
-### P1-3: [RESUELTO] Unificación de iconos en Phosphor Icons (`react-icons/pi`)
+### P1-3: [RESUELTO] Unificación de iconos en Lucide Icons (`lucide-react`) y erradicación de emojis
 - **Estado:** ✅ **Completado.**
-- **Solución Aplicada:** Se desinstaló `lucide-react` y se migró el 100% de la iconografía de la aplicación al ecosistema de alta fidelidad Phosphor Icons (`react-icons/pi`), eliminando dependencias redundantes y adoptando un diseño estético fintech desaturado y minimalista.
+- **Solución Aplicada:** Se desinstaló `react-icons` y se migró el 100% de la iconografía de la aplicación a `lucide-react` con trazo sobrio (`1.5px` - `1.75px`). Se erradicaron todos los emojis literales (`⚡`, `📝`, `📄`, `💊`, `🏦`, `🛒`, etc.) de interfaces, esquemas y textos, reemplazándolos por componentes SVG nativos (`Clock`, `PenTool`, `FileText`, `Lock`).
 
 ### P1-4: [RESUELTO] Dependencias residuales y muertas en el stack de producción
 - **Estado:** ✅ **Completado.**

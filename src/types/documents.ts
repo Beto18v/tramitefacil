@@ -7,25 +7,25 @@ export type DocumentCategory =
   | 'vehiculos';
 
 export type DocumentType =
-  // 💼 Finanzas, Freelance & Honorarios
+  // Finanzas, Freelance & Honorarios
   | 'cuenta_cobro'
   | 'propuesta_servicios'
-  // 🏢 Laboral & Talento Humano
+  // Laboral & Talento Humano
   | 'carta_renuncia'
   | 'certificado_laboral'
   | 'permiso_laboral'
-  // 🏠 Inmobiliario & Propiedad
+  // Inmobiliario & Propiedad
   | 'contrato_arrendamiento'
   | 'no_renovacion_arriendo'
   | 'acta_entrega'
-  // 🤝 Comercial & Negocios
+  // Comercial & Negocios
   | 'contrato_prestacion'
   | 'acuerdo_nda'
-  // ⚖️ Trámites Ciudadanos & Legales
+  // Trámites Ciudadanos & Legales
   | 'derecho_peticion'
   | 'poder_autorizacion'
   | 'habeas_data'
-  // 🚗 Vehículos & Transporte
+  // Vehículos & Transporte
   | 'compraventa_vehiculo'
   | 'autorizacion_patios';
 
@@ -155,7 +155,7 @@ export const CATEGORIES_CONFIG: CategoryHubConfig[] = [
 ];
 
 export const DOCUMENT_CATALOG: DocumentMeta[] = [
-  // 💼 Finanzas, Freelance & Honorarios
+  // Finanzas, Freelance & Honorarios
   {
     id: 'cuenta_cobro',
     title: 'Cuenta de Cobro / Honorarios Multilínea',
@@ -167,7 +167,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'Receipt',
     lawReference: 'Art. 437 E.T. y Art. 1.6.1.4.12 D.U.R. 1625/2016',
     tags: ['cobro', 'honorarios', 'factura', 'prestación', 'cuenta', 'pago', 'retención', 'ica', 'multilínea'],
-    estimatedMinutes: '⚡ 2 min',
+    estimatedMinutes: '2 min',
     featuredTags: ['Multilínea', 'Calcula retención', 'DUR 1625'],
     subfilter: 'Cuentas de Cobro',
   },
@@ -182,12 +182,12 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'FileSpreadsheet',
     lawReference: 'Código de Comercio - Oferta Mercantil (Art. 845)',
     tags: ['propuesta', 'cotización', 'servicios', 'alcance', 'presupuesto', 'comercial', 'fases'],
-    estimatedMinutes: '⚡ 3 min',
+    estimatedMinutes: '3 min',
     featuredTags: ['Hitos de pago', 'Alcance técnico', 'Oferta mercantil'],
     subfilter: 'Cotizaciones',
   },
 
-  // 🏢 Laboral & Talento Humano
+  // Laboral & Talento Humano
   {
     id: 'carta_renuncia',
     title: 'Carta de Renuncia Laboral con Preaviso',
@@ -199,7 +199,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'UserMinus',
     lawReference: 'Código Sustantivo del Trabajo (C.S.T.)',
     tags: ['renuncia', 'retiro', 'trabajo', 'empleo', 'preaviso', 'liquidación', 'cst'],
-    estimatedMinutes: '⚡ 1 min',
+    estimatedMinutes: '1 min',
     featuredTags: ['Exoneración preaviso', 'Liquidación de ley', 'CST'],
     subfilter: 'Renuncias',
   },
@@ -214,7 +214,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'Award',
     lawReference: 'Art. 57 Numeral 7 del Código Sustantivo del Trabajo',
     tags: ['certificado', 'constancia', 'laboral', 'salario', 'tiempo', 'cst', 'funciones'],
-    estimatedMinutes: '⚡ 2 min',
+    estimatedMinutes: '2 min',
     featuredTags: ['Art. 57 CST', 'Salarial y funciones', 'Obligatorio'],
     subfilter: 'Certificados',
   },
@@ -229,12 +229,12 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'CalendarClock',
     lawReference: 'Art. 57 Numeral 6 del Código Sustantivo del Trabajo',
     tags: ['permiso', 'licencia', 'ausencia', 'calamidad', 'vacaciones', 'estudio'],
-    estimatedMinutes: '⚡ 2 min',
+    estimatedMinutes: '2 min',
     featuredTags: ['Calamidad / Citas', 'Remunerada o no', 'CST'],
     subfilter: 'Permisos',
   },
 
-  // 🏠 Inmobiliario & Propiedad
+  // Inmobiliario & Propiedad
   {
     id: 'contrato_arrendamiento',
     title: 'Contrato de Arrendamiento de Vivienda Urbana',
@@ -246,7 +246,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'KeyRound',
     lawReference: 'Ley 820 de 2003 y Código Civil',
     tags: ['contrato', 'arrendamiento', 'alquiler', 'canon', 'arrendador', 'inquilino', 'codeudor'],
-    estimatedMinutes: '⚡ 5 min',
+    estimatedMinutes: '5 min',
     featuredTags: ['Con Fiador/Codeudor', 'Ley 820', 'Inventario'],
     subfilter: 'Arrendamiento',
   },
@@ -261,7 +261,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'Home',
     lawReference: 'Ley 820 de 2003 (Régimen de Arrendamiento)',
     tags: ['arriendo', 'terminación', 'inmueble', 'desalojo', 'preaviso', 'casa'],
-    estimatedMinutes: '⚡ 2 min',
+    estimatedMinutes: '2 min',
     featuredTags: ['Preaviso 3 meses', 'Ley 820 de 2003', 'Sin penalidad'],
     subfilter: 'Terminación',
   },
@@ -276,12 +276,12 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'ClipboardCheck',
     lawReference: 'Ley 820 de 2003 y Acta Notarial / Civil',
     tags: ['acta', 'entrega', 'llaves', 'inventario', 'paz y salvo', 'restitución'],
-    estimatedMinutes: '⚡ 3 min',
+    estimatedMinutes: '3 min',
     featuredTags: ['Paz y salvo', 'Lectura de servicios', 'Inventario'],
     subfilter: 'Inventario',
   },
 
-  // 🤝 Comercial & Negocios
+  // Comercial & Negocios
   {
     id: 'contrato_prestacion',
     title: 'Contrato de Prestación de Servicios Profesionales',
@@ -293,7 +293,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'ScrollText',
     lawReference: 'Código Civil (Art. 1495) y Código de Comercio',
     tags: ['contrato', 'servicios', 'independiente', 'prestación', 'honorarios', 'autonomía', 'nda'],
-    estimatedMinutes: '⚡ 4 min',
+    estimatedMinutes: '4 min',
     featuredTags: ['Sin subordinación', 'Cláusula penal', 'Confidencialidad'],
     subfilter: 'Contratos',
   },
@@ -308,12 +308,12 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'ShieldCheck',
     lawReference: 'Decisión 486 CAN y Código de Comercio',
     tags: ['nda', 'confidencialidad', 'secreto', 'comercial', 'propiedad', 'negocios'],
-    estimatedMinutes: '⚡ 3 min',
+    estimatedMinutes: '3 min',
     featuredTags: ['Protección de IP', 'Cláusula penal', 'Bilateral / Unilateral'],
     subfilter: 'Confidencialidad (NDA)',
   },
 
-  // ⚖️ Trámites Ciudadanos & Legales
+  // Trámites Ciudadanos & Legales
   {
     id: 'derecho_peticion',
     title: 'Derecho de Petición Estándar Multilinea',
@@ -325,7 +325,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'FileText',
     lawReference: 'Artículo 23 Constitución Política y Ley 1755 de 2015',
     tags: ['petición', 'reclamo', 'eps', 'banco', 'salud', 'pqrs', 'ley 1755', 'hechos'],
-    estimatedMinutes: '⚡ 3 min',
+    estimatedMinutes: '3 min',
     featuredTags: ['Hechos dinámicos', 'Término 15 días', 'Art. 23 C.P.'],
     subfilter: 'Peticiones',
   },
@@ -340,7 +340,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'Fingerprint',
     lawReference: 'Art. 2142 y ss. Código Civil y C.G.P.',
     tags: ['poder', 'autorización', 'trámite', 'tercero', 'huella', 'diligencia'],
-    estimatedMinutes: '⚡ 2 min',
+    estimatedMinutes: '2 min',
     featuredTags: ['Facultades expresas', 'Huella dactilar', 'Código Civil'],
     subfilter: 'Poderes',
   },
@@ -355,12 +355,12 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'ShieldAlert',
     lawReference: 'Ley 1266 de 2008 y Ley 2157 de 2021 (Borrón y Cuenta Nueva)',
     tags: ['datacredito', 'cifin', 'habeas data', 'reporte', 'datacrédito', 'centrales'],
-    estimatedMinutes: '⚡ 3 min',
+    estimatedMinutes: '3 min',
     featuredTags: ['Borrón y Cuenta Nueva', 'Ley 2157', 'Centrales de riesgo'],
     subfilter: 'Habeas Data',
   },
 
-  // 🚗 Vehículos & Transporte
+  // Vehículos & Transporte
   {
     id: 'compraventa_vehiculo',
     title: 'Contrato de Compraventa de Vehículo Automotor',
@@ -372,7 +372,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'Car',
     lawReference: 'Código de Comercio (Art. 905) y Ley 769 de 2002',
     tags: ['carro', 'moto', 'vehículo', 'compraventa', 'traspaso', 'placa', 'multas'],
-    estimatedMinutes: '⚡ 4 min',
+    estimatedMinutes: '4 min',
     featuredTags: ['Saneamiento multas', 'Traspaso legal', 'SOAT y Tecno'],
     subfilter: 'Compraventa',
   },
@@ -387,7 +387,7 @@ export const DOCUMENT_CATALOG: DocumentMeta[] = [
     iconName: 'Car',
     lawReference: 'Ley 769 de 2002 (Código Nacional de Tránsito)',
     tags: ['patios', 'inmovilizado', 'tránsito', 'comparendo', 'autorización', 'grúa'],
-    estimatedMinutes: '⚡ 2 min',
+    estimatedMinutes: '2 min',
     featuredTags: ['Organismo de tránsito', 'Huella dactilar', 'Retiro de patios'],
     subfilter: 'Tránsito & Patios',
   },

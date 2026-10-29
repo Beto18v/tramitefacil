@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'Home',
   lawReference: 'Ley 820 de 2003 (Régimen de Arrendamiento)',
   tags: ['arriendo', 'terminación', 'inmueble', 'desalojo', 'preaviso', 'casa'],
-  estimatedMinutes: '⚡ 2 min',
+  estimatedMinutes: '2 min',
   featuredTags: ['Preaviso 3 meses', 'Ley 820 de 2003', 'Sin penalidad'],
   subfilter: 'Terminación',
 };

@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'ShieldAlert',
   lawReference: 'Leyes 1266/2008 y 2157/2021 (Borrón y Cuenta Nueva)',
   tags: ['habeas data', 'datacrédito', 'cifin', 'reporte negativo', 'centrales de riesgo', 'borrón y cuenta nueva'],
-  estimatedMinutes: '⚡ 3 min',
+  estimatedMinutes: '3 min',
   featuredTags: ['Borrón y Cuenta Nueva', 'DataCrédito / CIFIN', 'Ley 1266 de 2008'],
   subfilter: 'Derechos Ciudadanos',
 };

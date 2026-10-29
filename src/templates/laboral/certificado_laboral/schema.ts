@@ -13,7 +13,7 @@ export const meta: DocumentMeta = {
   iconName: 'Award',
   lawReference: 'Art. 57 Numeral 7 del Código Sustantivo del Trabajo',
   tags: ['certificado', 'constancia', 'laboral', 'salario', 'tiempo', 'cst', 'funciones'],
-  estimatedMinutes: '⚡ 2 min',
+  estimatedMinutes: '2 min',
   featuredTags: ['Art. 57 CST', 'Salarial y funciones', 'Obligatorio'],
   subfilter: 'Certificados',
 };
