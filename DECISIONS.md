@@ -15,7 +15,9 @@ Este documento recopila las decisiones de ingeniería, diseño de producto y est
 | **ADR-005** | Autollenado Guiado (Prompt-to-Document) y Oficio Libre Institucional (Fase 2 de IA) | 💡 En backlog | 2026-10-28 |
 | **ADR-006** | Estrategia de Tokenomics de Costo Ultrabajo (`gpt-4o-mini` + Schemas) | 🎯 Aprobado | 2026-10-28 |
 | **ADR-007** | Marco Legal Actualizado, Disclaimer de Responsabilidad y Footer Institucional | 🎯 Aprobado | 2026-10-29 |
-| **ADR-008** | Desaturación Visual, Minimalismo Ejecutivo e Iconografía Phosphor (`react-icons/pi`) | 🎯 Aprobado | 2026-10-29 |
+| **ADR-008** | Desaturación Visual, Minimalismo Ejecutivo e Iconografía Phosphor (`react-icons/pi`) | ✅ Implementado | 2026-10-29 |
+| **ADR-009** | Onboarding Inmediato y Unificación de Autocompletado en un Solo Formato | 🎯 Aprobado (Fase 2) | 2026-10-29 |
+| **ADR-010** | Modo Claro / Oscuro con Paleta Personalizada (Elegancia Grafito / Obsidiana) | 🎯 Aprobado (Fase 2) | 2026-10-29 |
 
 ---
 
@@ -95,5 +97,28 @@ Este documento recopila las decisiones de ingeniería, diseño de producto y est
   3. **Jerarquía Visual y Aire:**
      - Aumentar espacios negativos (*white space*), usar bordes sutiles `slate-200/70` y sombras difusas elegantes.
      - Unificar la paleta a 1 color primario institucional (Royal Indigo) + 1 color de estado (Emerald Mint para firmas/perfil verificado).
+
+---
+
+### ADR-009: Onboarding Inmediato y Unificación de Autocompletado en un Solo Formato
+- **Contexto:** Actualmente hay banners e indicaciones de autocompletado dispersos en múltiples lugares que saturan la vista y dan sensación de plantilla genérica de IA. Además, el usuario novato necesita entender qué hace la app en 3 segundos.
+- **Decisión:**
+  1. **Claridad Inmediata al Ingresar (Value Proposition en 3 Pasos):**
+     - Al entrar a la app, un bloque visual limpio y rápido que explica el flujo sin rodeos:
+       `1. Elige tu trámite` → `2. Completa tus datos (o autollena con 1 clic)` → `3. Descarga en PDF/Word oficial`.
+  2. **Un Solo Formato de Autocompletado Unificado:**
+     - Eliminar tarjetas repetitivas intermedias.
+     - Un único centro de datos del emisor: rápido de guardar, rápido de activar y transparente (ves exactamente qué datos se inyectarán).
+
+---
+
+### ADR-010: Sistema de Modo Claro y Oscuro con Paleta de Marca Personal
+- **Contexto:** El azul primario estándar (`blue-600`) se percibe saturado y genérico. Se requiere una identidad cromática de autor: sutil y reposada en modo claro, y ejecutiva/lujosa en modo oscuro.
+- **Decisión:**
+  1. **Soporte Nativo Claro / Oscuro (`dark` mode toggle persistente en localStorage):**
+     - **Modo Claro (Editorial Paper & Charcoal):** Fondos `slate-50` / marfil sutil, texto en grafito profundo `slate-950`, acentos en índigo noche tenue (`#334155` / `#1E293B` con toques de azul tinta `#1D4ED8`), evitando azules chillones.
+     - **Modo Oscuro (Obsidian & Platinum):** Fondos en obsidiana espacial (`#090D16` / `#0B0F19`), superficies en pizarra mate (`#111827`), bordes sutiles con luz ambiental (`rgba(255,255,255,0.08)`), textos en blanco platino y acentos esmeralda/ámbar sutiles.
+  2. **Hoja A4 Inmutable:** El documento legal formal mantiene su lienzo blanco de hoja física A4 para garantizar que la previsualización corresponda al PDF real impreso.
+
 
 
