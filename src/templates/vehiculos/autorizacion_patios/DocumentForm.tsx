@@ -4,7 +4,7 @@ import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, SwitchField } from '../../../components/ui';
 import { SignaturePad } from '../../../components/SignaturePad';
-import { PiCar, PiFileText, PiPlus, PiShield, PiTrash, PiUserCheck } from 'react-icons/pi';
+import { Car, FileText, Plus, Shield, Trash2, UserCheck } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> = ({
   data,
@@ -52,13 +52,13 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
         step="Paso 01"
         title="Propietario y Persona Autorizada"
         subtitle="Identificación del titular del automotor y de quien retirará el vehículo"
-        icon={<PiUserCheck className="w-5 h-5 text-indigo-600" />}
+        icon={<UserCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
           {/* Propietario */}
-          <div className="p-3 bg-sky-50/50 border border-sky-100 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-sky-800 uppercase tracking-wide">
+          <div className="p-3 bg-sky-50/50 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/40 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-sky-800 dark:text-sky-300 uppercase tracking-wide">
               Datos del Propietario (Poderdante):
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -100,8 +100,8 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
           </div>
 
           {/* Autorizado */}
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wide">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wide">
               Datos de la Persona Autorizada (Apoderado / Conductor):
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -142,7 +142,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-700">
             <InputField
               label="Ciudad del Trámite"
               value={data.ciudad}
@@ -164,7 +164,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
         step="Paso 02"
         title="Vehículo e Inmovilización"
         subtitle="Placa, patio de custodia y organismo de tránsito"
-        icon={<PiCar className="w-5 h-5 text-indigo-600" />}
+        icon={<Car className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -225,20 +225,20 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
         step="Paso 03"
         title="Facultades Expresas y Huella"
         subtitle="Acciones autorizadas para retirar y firmar inventario"
-        icon={<PiShield className="w-5 h-5 text-indigo-600" />}
+        icon={<Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-slate-800">
+            <label className="text-xs font-bold text-slate-800 dark:text-slate-200">
               Facultades Expresas Concedidas:
             </label>
             <button
               type="button"
               onClick={handleAddFacultad}
-              className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 text-sky-700 hover:bg-sky-100 text-xs font-semibold transition cursor-pointer border border-sky-200"
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold transition cursor-pointer border border-slate-200 dark:border-slate-700"
             >
-              <PiPlus className="w-3.5 h-3.5" />
+              <Plus className="w-3.5 h-3.5" />
               <span>+ Agregar facultad</span>
             </button>
           </div>
@@ -250,15 +250,15 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
                 value={fac}
                 onChange={(e) => handleUpdateFacultad(idx, e.target.value)}
                 placeholder={`Facultad ${idx + 1}...`}
-                className="flex-1 min-h-[44px] text-xs px-3.5 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600"
+                className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20"
               />
               <button
                 type="button"
                 onClick={() => handleRemoveFacultad(idx)}
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
                 aria-label={`Eliminar facultad ${idx + 1}`}
               >
-                <PiTrash className="w-4 h-4" />
+                <Trash2 className="w-4 h-4" />
               </button>
             </div>
           ))}
@@ -277,7 +277,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
         step="Paso 04"
         title="Firma del Propietario"
         subtitle="Firma manuscrita en pantalla o renglón notarial"
-        icon={<PiFileText className="w-5 h-5 text-indigo-600" />}
+        icon={<FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <SignaturePad

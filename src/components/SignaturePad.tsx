@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { PiArrowCounterClockwise, PiPenNib, PiTextT, PiCheck, PiSparkle } from 'react-icons/pi';
+import { RotateCcw, PenTool, Type, Check, Sparkles } from 'lucide-react';
 
 interface Props {
   signatureType: 'text' | 'draw';
@@ -128,23 +128,23 @@ export const SignaturePad: React.FC<Props> = ({
   };
 
   return (
-    <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 space-y-3.5">
+    <div className="bg-slate-50 dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-4 space-y-3.5 transition-colors">
       {/* Selector de tipo de firma */}
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <label className="text-xs font-bold text-slate-800 tracking-tight">
+        <label className="text-xs font-bold text-slate-800 dark:text-slate-200 tracking-tight">
           Formato de Firma en el Documento
         </label>
-        <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+        <div className="flex items-center gap-1 bg-white dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
           <button
             type="button"
             onClick={() => onSignatureChange('text')}
             className={`min-h-[36px] px-3 py-1 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition cursor-pointer ${
               signatureType === 'text'
-                ? 'bg-slate-900 text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                ? 'bg-slate-900 dark:bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700/60'
             }`}
           >
-            <PiTextT className="w-3.5 h-3.5" />
+            <Type className="w-3.5 h-3.5" />
             <span>Tipográfica Formal</span>
           </button>
           <button
@@ -152,30 +152,30 @@ export const SignaturePad: React.FC<Props> = ({
             onClick={() => onSignatureChange('draw', signatureDataUrl)}
             className={`min-h-[36px] px-3 py-1 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition cursor-pointer ${
               signatureType === 'draw'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                ? 'bg-slate-900 dark:bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700/60'
             }`}
           >
-            <PiPenNib className="w-3.5 h-3.5" />
+            <PenTool className="w-3.5 h-3.5" />
             <span>Dibujar Firma Digital</span>
           </button>
         </div>
       </div>
 
       {signatureType === 'text' ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-3.5 text-xs text-slate-600 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
-            <PiTextT className="w-4 h-4" />
+        <div className="bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 p-3.5 text-xs text-slate-600 dark:text-slate-300 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 shrink-0">
+            <Type className="w-4 h-4" />
           </div>
           <div>
-            <strong className="block text-slate-900 font-semibold">Pie de firma formal impreso</strong>
+            <strong className="block text-slate-900 dark:text-slate-100 font-semibold">Pie de firma formal impreso</strong>
             Se generará una línea de firma notarial con tu nombre completo, tipo y número de documento, ciudad y teléfono para firma manual con bolígrafo.
           </div>
         </div>
       ) : (
         <div className="space-y-2.5">
           {/* Canvas container */}
-          <div className="relative bg-white rounded-xl border-2 border-dashed border-blue-200 shadow-xs overflow-hidden touch-none select-none">
+          <div className="relative bg-white rounded-xl border-2 border-dashed border-indigo-200 dark:border-indigo-900/60 shadow-xs overflow-hidden touch-none select-none">
             <canvas
               ref={canvasRef}
               onMouseDown={startDrawing}
@@ -185,7 +185,7 @@ export const SignaturePad: React.FC<Props> = ({
               onTouchStart={startDrawing}
               onTouchMove={draw}
               onTouchEnd={stopDrawing}
-              className="w-full h-[150px] cursor-crosshair block"
+              className="w-full h-[150px] cursor-crosshair block bg-white"
               style={{ width: '100%', height: '150px' }}
             />
 
@@ -201,9 +201,9 @@ export const SignaturePad: React.FC<Props> = ({
             <button
               type="button"
               onClick={handleClear}
-              className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 text-slate-600 hover:text-rose-600 bg-white hover:bg-rose-50 border border-slate-200 rounded-xl transition cursor-pointer font-medium"
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/30 border border-slate-200 dark:border-slate-700 rounded-xl transition cursor-pointer font-medium"
             >
-              <PiArrowCounterClockwise className="w-3.5 h-3.5" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Limpiar trazo</span>
             </button>
 
@@ -212,16 +212,16 @@ export const SignaturePad: React.FC<Props> = ({
                 type="button"
                 onClick={handleSaveToProfile}
                 disabled={!hasDrawn && !signatureDataUrl}
-                className="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-1.5 text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl transition cursor-pointer font-medium disabled:opacity-40"
+                className="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-1.5 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 rounded-xl transition cursor-pointer font-medium disabled:opacity-40"
               >
                 {savedToProfileSuccess ? (
                   <>
-                    <PiCheck className="w-4 h-4 text-emerald-600" />
-                    <span className="text-emerald-700 font-semibold">¡Guardada en tu perfil!</span>
+                    <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-emerald-700 dark:text-emerald-400 font-semibold">¡Guardada en tu perfil!</span>
                   </>
                 ) : (
                   <>
-                    <PiSparkle className="w-3.5 h-3.5 text-blue-600" />
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                     <span>Guardar firma en mi perfil</span>
                   </>
                 )}

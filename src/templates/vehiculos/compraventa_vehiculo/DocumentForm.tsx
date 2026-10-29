@@ -9,7 +9,7 @@ import {
   SwitchField,
 } from '../../../components/ui';
 import { SignaturePad } from '../../../components/SignaturePad';
-import { PiCar, PiCurrencyDollar, PiFileDoc, PiUsers } from 'react-icons/pi';
+import { Car, DollarSign, FileText, Users } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> = ({
   data,
@@ -45,13 +45,13 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 01"
         title="Vendedor y Comprador"
         subtitle="Identificación y contacto de las partes contratantes"
-        icon={<PiUsers className="w-5 h-5 text-indigo-600" />}
+        icon={<Users className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
           {/* Vendedor */}
-          <div className="p-3 bg-sky-50/50 border border-sky-100 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-sky-800 uppercase tracking-wide">
+          <div className="p-3 bg-sky-50/50 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/40 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-sky-800 dark:text-sky-300 uppercase tracking-wide">
               Datos del Vendedor:
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -98,8 +98,8 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
           </div>
 
           {/* Comprador */}
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wide">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wide">
               Datos del Comprador:
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -145,7 +145,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-700">
             <InputField
               label="Ciudad del Contrato"
               value={data.ciudad}
@@ -167,7 +167,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 02"
         title="Datos del Vehículo"
         subtitle="Placa, marca, modelo, motor, chasis y clase de automotor"
-        icon={<PiCar className="w-5 h-5 text-indigo-600" />}
+        icon={<Car className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -262,7 +262,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 03"
         title="Precio, Pago y Traspaso"
         subtitle="Valor convenido, división de gastos de traspaso e impuestos"
-        icon={<PiCurrencyDollar className="w-5 h-5 text-indigo-600" />}
+        icon={<DollarSign className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -309,7 +309,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 04"
         title="Firma del Vendedor"
         subtitle="Dibuja tu firma en pantalla o imprímela con línea formal"
-        icon={<PiFileDoc className="w-5 h-5 text-indigo-600" />}
+        icon={<FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <SignaturePad

@@ -3,7 +3,7 @@ import { ActaEntregaData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, TextareaField } from '../../../components/ui';
-import { PiClipboardText, PiHouse, PiPlus, PiTrash, PiUser } from 'react-icons/pi';
+import { ClipboardList, Home, Plus, Trash2, User } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
   data,
@@ -47,12 +47,12 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
         step="Paso 01"
         title="Partes de la Entrega"
         subtitle="Quién entrega y quién recibe el inmueble"
-        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
+        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
-          <div className="p-3 bg-slate-50 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-slate-700 uppercase">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">
               Quién Hace Entrega:
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -83,8 +83,8 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
             </div>
           </div>
 
-          <div className="p-3 bg-slate-50 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-slate-700 uppercase">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">
               Quién Recibe a Satisfacción:
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -122,7 +122,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
         step="Paso 02"
         title="Inmueble, Fecha y Llaves"
         subtitle="Ubicación y juegos de llaves entregados"
-        icon={<PiHouse className="w-5 h-5 text-indigo-600" />}
+        icon={<Home className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -175,7 +175,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
         step="Paso 03"
         title="Lecturas de Medidores y Paz y Salvos"
         subtitle="Contadores de acueducto, energía, gas e inventario"
-        icon={<PiClipboardText className="w-5 h-5 text-indigo-600" />}
+        icon={<ClipboardList className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -213,13 +213,13 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
           {/* Paz y salvos aportados */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-slate-700">Paz y Salvos Aportados:</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Paz y Salvos Aportados:</label>
               <button
                 type="button"
                 onClick={handleAddPaz}
-                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer"
               >
-                <PiPlus className="w-3.5 h-3.5" /> Agregar paz y salvo
+                <Plus className="w-3.5 h-3.5" /> Agregar paz y salvo
               </button>
             </div>
             {(data.pazSalvosPresentados || []).map((paz, idx) => (
@@ -229,14 +229,14 @@ export const DocumentForm: React.FC<DocumentFormProps<ActaEntregaData>> = ({
                   value={paz}
                   onChange={(e) => handleUpdatePaz(idx, e.target.value)}
                   placeholder="Ej: Factura cancelada de Acueducto..."
-                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20"
                 />
                 <button
                   type="button"
                   onClick={() => handleRemovePaz(idx)}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
                 >
-                  <PiTrash className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             ))}

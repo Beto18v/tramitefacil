@@ -3,7 +3,7 @@ import { HabeasDataData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, TextareaField } from '../../../components/ui';
-import { PiBuildings, PiPlus, PiShieldWarning, PiTrash, PiUser } from 'react-icons/pi';
+import { Building2, Plus, ShieldAlert, Trash2, User } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
   data,
@@ -51,7 +51,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 01"
         title="Central de Riesgo y Fuente"
         subtitle="DataCrédito, TransUnion/CIFIN o Procrédito"
-        icon={<PiBuildings className="w-5 h-5 text-indigo-600" />}
+        icon={<Building2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -113,7 +113,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 02"
         title="Causal Legal de Habeas Data y Hechos"
         subtitle="Caducidad, suplantación, pago o inexistencia"
-        icon={<PiShieldWarning className="w-5 h-5 text-indigo-600" />}
+        icon={<ShieldAlert className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -154,15 +154,15 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
           {/* Anexos */}
           <div className="space-y-2 pt-1">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Pruebas y Anexos Documentales:
               </label>
               <button
                 type="button"
                 onClick={handleAddAnexo}
-                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800"
+                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer"
               >
-                <PiPlus className="w-3.5 h-3.5" /> Agregar anexo
+                <Plus className="w-3.5 h-3.5" /> Agregar anexo
               </button>
             </div>
             {(data.anexosDocumentales || []).map((anexo, idx) => (
@@ -172,15 +172,15 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
                   value={anexo}
                   onChange={(e) => handleUpdateAnexo(idx, e.target.value)}
                   placeholder={`Anexo ${idx + 1}...`}
-                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20"
                 />
                 <button
                   type="button"
                   onClick={() => handleRemoveAnexo(idx)}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
                   aria-label={`Eliminar anexo ${idx + 1}`}
                 >
-                  <PiTrash className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -193,7 +193,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 03"
         title="Datos del Titular y Notificaciones"
         subtitle="Nombre, documento y canal para recibir la respuesta"
-        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
+        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={false}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

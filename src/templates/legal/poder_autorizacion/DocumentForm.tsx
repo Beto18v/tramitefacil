@@ -3,7 +3,7 @@ import { PoderAutorizacionData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, TextareaField, SwitchField } from '../../../components/ui';
-import { PiPlus, PiShield, PiTrash, PiUser, PiUserCheck } from 'react-icons/pi';
+import { Plus, Shield, Trash2, User, UserCheck } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = ({
   data,
@@ -43,7 +43,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
         step="Paso 01"
         title="Datos del Otorgante (Poderdante)"
         subtitle="Quién confiere la autorización legal"
-        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
+        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -93,7 +93,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
         step="Paso 02"
         title="Datos del Apoderado (Autorizado)"
         subtitle="Persona que realizará el trámite en tu representación"
-        icon={<PiUserCheck className="w-5 h-5 text-indigo-600" />}
+        icon={<UserCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -136,7 +136,7 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
         step="Paso 03"
         title="Trámite y Facultades Concedidas"
         subtitle="Gestión específica autorizada y límite temporal"
-        icon={<PiShield className="w-5 h-5 text-indigo-600" />}
+        icon={<Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -160,13 +160,13 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
           {/* Facultades Dinámicas */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-slate-700">Facultades Expresas Concedidas:</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Facultades Expresas Concedidas:</label>
               <button
                 type="button"
                 onClick={handleAddFacultad}
-                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer"
               >
-                <PiPlus className="w-3.5 h-3.5" /> Agregar facultad
+                <Plus className="w-3.5 h-3.5" /> Agregar facultad
               </button>
             </div>
             {(data.facultadesEspecificas || []).map((fac, idx) => (
@@ -176,14 +176,14 @@ export const DocumentForm: React.FC<DocumentFormProps<PoderAutorizacionData>> = 
                   value={fac}
                   onChange={(e) => handleUpdateFacultad(idx, e.target.value)}
                   placeholder={`Facultad ${idx + 1}...`}
-                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20"
                 />
                 <button
                   type="button"
                   onClick={() => handleRemoveFacultad(idx)}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
                 >
-                  <PiTrash className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             ))}

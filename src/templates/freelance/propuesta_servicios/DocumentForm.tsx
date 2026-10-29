@@ -7,7 +7,7 @@ import {
   RepeaterField,
 } from '../../../components/ui';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
-import { PiUser, PiBuildings, PiFileXls, PiCurrencyDollar, PiClock } from 'react-icons/pi';
+import { User, Building2, FileSpreadsheet, DollarSign, Clock } from 'lucide-react';
 
 export interface PropuestaServiciosFormProps {
   data: PropuestaServiciosData;
@@ -42,7 +42,7 @@ export const DocumentForm: React.FC<PropuestaServiciosFormProps> = ({ data, onCh
       {/* 1. Datos del Proponente */}
       <CollapsibleSection
         title="1. Tus Datos (Proponente / Profesional)"
-        icon={<PiUser className="w-4 h-4 text-blue-600" />}
+        icon={<User className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -85,7 +85,7 @@ export const DocumentForm: React.FC<PropuestaServiciosFormProps> = ({ data, onCh
       {/* 2. Datos del Cliente y Emisión */}
       <CollapsibleSection
         title="2. Datos del Cliente y Emisión"
-        icon={<PiBuildings className="w-4 h-4 text-blue-600" />}
+        icon={<Building2 className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -132,7 +132,7 @@ export const DocumentForm: React.FC<PropuestaServiciosFormProps> = ({ data, onCh
       {/* 3. Definición del Proyecto y Alcance */}
       <CollapsibleSection
         title="3. Proyecto, Objetivo y Alcance"
-        icon={<PiFileXls className="w-4 h-4 text-blue-600" />}
+        icon={<FileSpreadsheet className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -165,7 +165,7 @@ export const DocumentForm: React.FC<PropuestaServiciosFormProps> = ({ data, onCh
       {/* 4. Lista de Entregables */}
       <CollapsibleSection
         title="4. Entregables Principales"
-        icon={<PiClock className="w-4 h-4 text-blue-600" />}
+        icon={<Clock className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <RepeaterField
@@ -183,7 +183,7 @@ export const DocumentForm: React.FC<PropuestaServiciosFormProps> = ({ data, onCh
       {/* 5. Inversión y Cronograma */}
       <CollapsibleSection
         title="5. Honorarios, Pagos y Cronograma"
-        icon={<PiCurrencyDollar className="w-4 h-4 text-blue-600" />}
+        icon={<DollarSign className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="space-y-3">

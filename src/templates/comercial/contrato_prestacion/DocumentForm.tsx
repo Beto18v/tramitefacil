@@ -4,7 +4,7 @@ import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
 import { InputField, SelectField, CurrencyField, TextareaField, SwitchField } from '../../../components/ui';
-import { PiCurrencyDollar, PiPenNib, PiPlus, PiScroll, PiTrash, PiUser } from 'react-icons/pi';
+import { DollarSign, PenTool, Plus, FileText, Trash2, User } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> = ({
   data,
@@ -56,13 +56,13 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
         step="Paso 01"
         title="Partes del Contrato"
         subtitle="Identificación del Contratante y Contratista"
-        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
+        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
           {/* Contratante */}
-          <div className="p-3 bg-slate-50 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-slate-700 uppercase">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">
               Datos del Contratante (Cliente / Empresa):
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -102,8 +102,8 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
           </div>
 
           {/* Contratista */}
-          <div className="p-3 bg-slate-50 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-slate-700 uppercase">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">
               Datos del Contratista (Profesional Independiente):
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -149,7 +149,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
         step="Paso 02"
         title="Objeto del Contrato y Obligaciones"
         subtitle="Descripción de los servicios a prestar"
-        icon={<PiScroll className="w-5 h-5 text-indigo-600" />}
+        icon={<FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -164,13 +164,13 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-slate-700">Obligaciones Específicas:</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Obligaciones Específicas:</label>
               <button
                 type="button"
                 onClick={handleAddObligacion}
-                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer"
               >
-                <PiPlus className="w-3.5 h-3.5" /> Agregar obligación
+                <Plus className="w-3.5 h-3.5" /> Agregar obligación
               </button>
             </div>
             {(data.obligacionesContratista || []).map((ob, idx) => (
@@ -180,14 +180,14 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
                   value={ob}
                   onChange={(e) => handleUpdateObligacion(idx, e.target.value)}
                   placeholder={`Obligación ${idx + 1}...`}
-                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20"
                 />
                 <button
                   type="button"
                   onClick={() => handleRemoveObligacion(idx)}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600 cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
                 >
-                  <PiTrash className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -200,7 +200,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
         step="Paso 03"
         title="Valor, Pagos y Plazos"
         subtitle="Monto total pactado, fechas y lugar de ejecución"
-        icon={<PiCurrencyDollar className="w-5 h-5 text-indigo-600" />}
+        icon={<DollarSign className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -258,7 +258,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
           />
         </div>
 
-        <div className="space-y-2 pt-3 border-t border-slate-200">
+        <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-slate-800">
           <SwitchField
             label="Incluir cláusula expresa de total autonomía técnica sin relación de subordinación laboral"
             checked={data.clausulaIndependencia}
@@ -278,7 +278,7 @@ export const DocumentForm: React.FC<DocumentFormProps<ContratoPrestacionData>> =
         step="Paso 04"
         title="Firma del Contratista"
         subtitle="Dibuja tu firma digital en pantalla o usa la línea editorial"
-        icon={<PiPenNib className="w-5 h-5 text-indigo-600" />}
+        icon={<PenTool className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <SignaturePad

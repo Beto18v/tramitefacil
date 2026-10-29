@@ -46,8 +46,9 @@ import { EditorView } from './components/EditorView';
 import { UserProfileModal } from './components/UserProfileModal';
 import { loadUserProfile, saveUserProfile, injectProfileIntoDocument } from './utils/profileInjector';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { useTheme } from './hooks/useTheme';
 import { Footer } from './components/Footer';
-import { PiCheckCircle, PiWarningCircle, PiInfo, PiX } from 'react-icons/pi';
+import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 
 const STORAGE_KEY = 'tramite_facil_state_v1';
 
@@ -58,6 +59,7 @@ interface ToastState {
 }
 
 export default function App() {
+  const [theme, toggleTheme] = useTheme();
   const [appState, setAppState] = useLocalStorage<AppStorageState>(
     STORAGE_KEY,
     getInitialFullStorageState,
@@ -285,7 +287,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-950 selection:text-blue-900 dark:selection:text-blue-200 overflow-x-hidden transition-colors">
       {/* 1. Global Navigation Header */}
       <Header
         currentView={currentView}
@@ -294,6 +296,8 @@ export default function App() {
         onSelectDoc={(id) => setSelectedDocId(id)}
         userProfile={userProfile}
         onOpenProfileModal={() => setIsProfileModalOpen(true)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {/* 2. Main Viewport */}
@@ -339,11 +343,11 @@ export default function App() {
       {toast.show && (
         <aside
           aria-live="polite"
-          className="no-print fixed bottom-20 lg:bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-800 animate-in slide-in-from-bottom-4 duration-200 max-w-sm sm:max-w-md"
+          className="no-print fixed bottom-20 lg:bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white shadow-2xl border border-slate-800 dark:border-slate-700 animate-in slide-in-from-bottom-4 duration-200 max-w-sm sm:max-w-md"
         >
-          {toast.type === 'success' && <PiCheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />}
-          {toast.type === 'error' && <PiWarningCircle className="w-5 h-5 text-rose-400 shrink-0" />}
-          {toast.type === 'info' && <PiInfo className="w-5 h-5 text-blue-400 shrink-0" />}
+          {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
+          {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />}
+          {toast.type === 'info' && <Info className="w-5 h-5 text-blue-400 shrink-0" />}
 
           <span className="text-xs font-medium leading-snug flex-1">
             {toast.message}
@@ -354,7 +358,7 @@ export default function App() {
             className="p-1 text-slate-400 hover:text-white rounded-xl transition min-h-[32px] min-w-[32px] flex items-center justify-center cursor-pointer"
             aria-label="Cerrar notificación"
           >
-            <PiX className="w-4 h-4" />
+            <X className="w-4 h-4" />
           </button>
         </aside>
       )}

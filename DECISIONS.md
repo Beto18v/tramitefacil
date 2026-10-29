@@ -15,9 +15,10 @@ Este documento recopila las decisiones de ingeniería, diseño de producto y est
 | **ADR-005** | Autollenado Guiado (Prompt-to-Document) y Oficio Libre Institucional (Fase 2 de IA) | 💡 En backlog | 2026-10-28 |
 | **ADR-006** | Estrategia de Tokenomics de Costo Ultrabajo (`gpt-4o-mini` + Schemas) | 🎯 Aprobado | 2026-10-28 |
 | **ADR-007** | Marco Legal Actualizado, Disclaimer de Responsabilidad y Footer Institucional | 🎯 Aprobado | 2026-10-29 |
-| **ADR-008** | Desaturación Visual, Minimalismo Ejecutivo e Iconografía Phosphor (`react-icons/pi`) | ✅ Implementado | 2026-10-29 |
-| **ADR-009** | Onboarding Inmediato y Unificación de Autocompletado en un Solo Formato | 🎯 Aprobado (Fase 2) | 2026-10-29 |
-| **ADR-010** | Modo Claro / Oscuro con Paleta Personalizada (Elegancia Grafito / Obsidiana) | 🎯 Aprobado (Fase 2) | 2026-10-29 |
+| **ADR-008** | Desaturación Visual, Minimalismo Ejecutivo e Iconografía Lucide (`lucide-react`) | ✅ Implementado | 2026-10-29 |
+| **ADR-009** | Onboarding Inmediato y Unificación de Autocompletado en un Solo Formato | ✅ Implementado | 2026-10-29 |
+| **ADR-010** | Modo Claro / Oscuro con Paleta Personalizada (Elegancia Grafito / Obsidiana) | ✅ Implementado | 2026-10-29 |
+| **ADR-011** | Evaluación de Arquitectura: Vite SPA vs Next.js para TrámiteFácil Hub | 🎯 Aprobado (Estrategia por Fases) | 2026-10-29 |
 
 ---
 
@@ -87,38 +88,55 @@ Este documento recopila las decisiones de ingeniería, diseño de producto y est
 
 ---
 
-### ADR-008: Desaturación Visual, Minimalismo Ejecutivo e Iconografía Phosphor (`react-icons/pi`)
-- **Contexto:** La interfaz actual sufre de saturación visual: demasiados iconos decorativos en cada label/título y colores chillones dispersos.
+### ADR-008: Desaturación Visual, Minimalismo Ejecutivo e Iconografía Lucide (`lucide-react`)
+- **Contexto:** La interfaz anterior presentaba saturación visual. Tras evaluar Phosphor Icons (`react-icons/pi`), se determinó expresamente que la suite idónea para la identidad del proyecto es **Lucide Icons (`lucide-react`)**, utilizada con moderación y trazo sobrio (`1.5px` - `1.75px`).
 - **Decisión:**
-  1. **Familia de Iconos:** Adoptar **Phosphor Icons (`react-icons/pi`)**, reconocidos por su estética contemporánea, estilizada y limpia (referente: Linear, Amie, Raycast).
+  1. **Familia de Iconos:** Adoptar de manera canónica **`lucide-react`** y desinstalar `react-icons` para reducir el tamaño del bundle.
   2. **Regla de Desaturación ("Menos es Más"):**
      - Retirar el 70% de los iconos redundantes o puramente decorativos en formularios y subtítulos.
      - Conservar iconos únicamente donde aporten valor funcional directo (búsqueda, navegación, acciones primarias de descarga y perfil).
   3. **Jerarquía Visual y Aire:**
-     - Aumentar espacios negativos (*white space*), usar bordes sutiles `slate-200/70` y sombras difusas elegantes.
-     - Unificar la paleta a 1 color primario institucional (Royal Indigo) + 1 color de estado (Emerald Mint para firmas/perfil verificado).
+     - Aumentar espacios negativos (*white space*), usar bordes sutiles `slate-200/80` / `dark:border-slate-800` y sombras difusas elegantes.
+     - Unificar la paleta a 1 color primario institucional (grafito / índigo) + 1 color de estado (Emerald Mint para firmas/perfil verificado).
 
 ---
 
 ### ADR-009: Onboarding Inmediato y Unificación de Autocompletado en un Solo Formato
-- **Contexto:** Actualmente hay banners e indicaciones de autocompletado dispersos en múltiples lugares que saturan la vista y dan sensación de plantilla genérica de IA. Además, el usuario novato necesita entender qué hace la app en 3 segundos.
+- **Contexto:** Actualmente había banners e indicaciones de autocompletado dispersos en múltiples lugares que saturaban la vista y daban sensación de plantilla genérica de IA. Además, el usuario novato necesita entender qué hace la app en 3 segundos.
 - **Decisión:**
-  1. **Claridad Inmediata al Ingresar (Value Proposition en 3 Pasos):**
+  1. **Claridad Inmediata al Ingresar (Value Proposition en 3 Pasos en `Hero.tsx`):**
      - Al entrar a la app, un bloque visual limpio y rápido que explica el flujo sin rodeos:
        `1. Elige tu trámite` → `2. Completa tus datos (o autollena con 1 clic)` → `3. Descarga en PDF/Word oficial`.
   2. **Un Solo Formato de Autocompletado Unificado:**
-     - Eliminar tarjetas repetitivas intermedias.
-     - Un único centro de datos del emisor: rápido de guardar, rápido de activar y transparente (ves exactamente qué datos se inyectarán).
+     - Eliminadas tarjetas repetitivas intermedias.
+     - Un único centro de datos del emisor en Header y Editor: rápido de guardar, rápido de activar y transparente.
 
 ---
 
 ### ADR-010: Sistema de Modo Claro y Oscuro con Paleta de Marca Personal
 - **Contexto:** El azul primario estándar (`blue-600`) se percibe saturado y genérico. Se requiere una identidad cromática de autor: sutil y reposada en modo claro, y ejecutiva/lujosa en modo oscuro.
 - **Decisión:**
-  1. **Soporte Nativo Claro / Oscuro (`dark` mode toggle persistente en localStorage):**
+  1. **Soporte Nativo Claro / Oscuro (`dark` mode toggle persistente en localStorage con `useTheme`):**
      - **Modo Claro (Editorial Paper & Charcoal):** Fondos `slate-50` / marfil sutil, texto en grafito profundo `slate-950`, acentos en índigo noche tenue (`#334155` / `#1E293B` con toques de azul tinta `#1D4ED8`), evitando azules chillones.
      - **Modo Oscuro (Obsidian & Platinum):** Fondos en obsidiana espacial (`#090D16` / `#0B0F19`), superficies en pizarra mate (`#111827`), bordes sutiles con luz ambiental (`rgba(255,255,255,0.08)`), textos en blanco platino y acentos esmeralda/ámbar sutiles.
-  2. **Hoja A4 Inmutable:** El documento legal formal mantiene su lienzo blanco de hoja física A4 para garantizar que la previsualización corresponda al PDF real impreso.
+  2. **Hoja A4 Inmutable:** El documento legal formal mantiene su lienzo blanco de hoja física A4 (`bg-white text-slate-900`) para garantizar que la previsualización corresponda exactamente al PDF real impreso.
+
+---
+
+### ADR-011: Evaluación de Arquitectura: Vite SPA vs Next.js para TrámiteFácil Hub
+- **Contexto:** Se evaluó si convenía migrar de Vite SPA (React 19 + Tailwind v4) a Next.js (App Router).
+- **Análisis Comparativo:**
+  - **Ventajas actuales de Vite:**
+    1. **100% Offline-First PWA:** Operación local completa con service worker precacheado en Android/iOS/PC sin depender de conectividad.
+    2. **Costo de Hosting $0 en Vercel:** Entrega estática ultraeficiente por Edge CDN con cero costo de invocaciones serverless.
+    3. **Generación directa de Canvas/PDF:** `html2canvas` y `jspdf` requieren APIs del DOM (`window`, `HTMLCanvasElement`) sin fricciones de Server-Side Rendering (SSR).
+  - **Ventajas de Next.js (Disparadores de Migración Futura):**
+    1. **SEO Masivo por Trámite:** Generación de páginas estáticas indexables en Google para búsquedas de alta intención (ej. `/tramite/cuenta-de-cobro-colombia`, `/tramite/derecho-de-peticion-salud`).
+    2. **Rutas de Backend / API Keys Seguras:** Ocultamiento de credenciales de IA (Gemini/OpenAI) sin exponerlas al cliente.
+    3. **Monetización y Webhooks de Pago:** Integración de pasarelas de pago colombianas (Wompi, Bold, PSE, MercadoPago) mediante Server Actions y webhooks seguros.
+- **Estrategia Acordada:**
+  - **Fase Actual:** Consolidar la app sobre Vite SPA garantizando la modularización limpia en `src/templates/*` y `src/utils/*`. Gracias a este desacoplamiento, el 85% de la base de código es agnóstico del framework.
+  - **Fase de Escala (Futuro):** Si se decide priorizar adquisición de tráfico orgánico en Google o pasarelas de pago, se ejecutará una migración directa a Next.js en una fase dedicada (ej. *Fase 4: Motor de SEO y Rutas Next.js*).
 
 
 

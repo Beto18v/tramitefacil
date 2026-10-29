@@ -3,7 +3,7 @@ import { NoRenovacionArriendoData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, TextareaField, SwitchField } from '../../../components/ui';
-import { PiWarningCircle, PiHouse, PiKey, PiUser } from 'react-icons/pi';
+import { AlertCircle, Home, Key, User } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>> = ({
   data,
@@ -58,8 +58,8 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
   return (
     <div className="space-y-4 pb-8">
       {/* Aviso legal ley 820 */}
-      <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl text-xs text-amber-900 flex items-start gap-3">
-        <PiWarningCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+      <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-xs text-amber-900 dark:text-amber-200 flex items-start gap-3">
+        <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
           <strong>Preaviso Legal Obligatorio (Ley 820 de 2003):</strong> Para vivienda urbana, la comunicación
           debe remitirse con al menos <strong>3 meses de antelación</strong> a la fecha de vencimiento
@@ -72,11 +72,11 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 01"
         title="Rol y Partes del Arrendamiento"
         subtitle="Identificación del Remitente y Destinatario"
-        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
+        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-2">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
             ¿Quién remite la comunicación?
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -85,12 +85,12 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
               onClick={() => update('rolRemitente', 'arrendador')}
               className={`min-h-[52px] p-3 text-xs rounded-xl border text-left transition-all cursor-pointer ${
                 data.rolRemitente === 'arrendador'
-                  ? 'border-indigo-600 bg-indigo-50/70 text-indigo-900 font-bold ring-2 ring-indigo-600/20'
-                  : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
+                  ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200 font-bold ring-2 ring-indigo-600/20'
+                  : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800'
               }`}
             >
               Soy el Arrendador
-              <span className="block text-[11px] font-normal text-slate-500 mt-0.5">
+              <span className="block text-[11px] font-normal text-slate-500 dark:text-slate-400 mt-0.5">
                 Propietario / Quien alquila
               </span>
             </button>
@@ -100,12 +100,12 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
               onClick={() => update('rolRemitente', 'arrendatario')}
               className={`min-h-[52px] p-3 text-xs rounded-xl border text-left transition-all cursor-pointer ${
                 data.rolRemitente === 'arrendatario'
-                  ? 'border-indigo-600 bg-indigo-50/70 text-indigo-900 font-bold ring-2 ring-indigo-600/20'
-                  : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
+                  ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200 font-bold ring-2 ring-indigo-600/20'
+                  : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800'
               }`}
             >
               Soy el Arrendatario
-              <span className="block text-[11px] font-normal text-slate-500 mt-0.5">
+              <span className="block text-[11px] font-normal text-slate-500 dark:text-slate-400 mt-0.5">
                 Inquilino / Quien habita
               </span>
             </button>
@@ -162,7 +162,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 02"
         title="Inmueble y Fechas Contractuales"
         subtitle="Dirección del predio y fecha de restitución de llaves"
-        icon={<PiHouse className="w-5 h-5 text-indigo-600" />}
+        icon={<Home className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -220,7 +220,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 03"
         title="Causal Legal e Inspección Conjunta"
         subtitle="Motivación de no prórroga e instrucciones para inventario"
-        icon={<PiKey className="w-5 h-5 text-indigo-600" />}
+        icon={<Key className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">

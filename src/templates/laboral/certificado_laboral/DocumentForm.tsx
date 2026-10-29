@@ -3,7 +3,7 @@ import { CertificadoLaboralData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { InputField, SelectField, SwitchField } from '../../../components/ui';
-import { PiCertificate, PiBuildings, PiUser } from 'react-icons/pi';
+import { Award, Building2, User } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> = ({
   data,
@@ -26,7 +26,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 01"
         title="Empresa y Área Destinataria"
         subtitle="Entidad a la que se solicita la constancia"
-        icon={<PiBuildings className="w-5 h-5 text-indigo-600" />}
+        icon={<Building2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -71,7 +71,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 02"
         title="Tus Datos y Cargo Laborado"
         subtitle="Nombre, documento y tiempo de servicios"
-        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
+        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -123,12 +123,12 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 03"
         title="Opciones y Destino del Certificado"
         subtitle="Salario, funciones y correo para recepción"
-        icon={<PiCertificate className="w-5 h-5 text-indigo-600" />}
+        icon={<Award className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-            <span className="text-xs font-semibold text-slate-800 block mb-1">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl space-y-2">
+            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block mb-1">
               Campos requeridos en el certificado:
             </span>
             <SwitchField

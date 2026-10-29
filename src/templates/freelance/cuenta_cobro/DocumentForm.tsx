@@ -9,7 +9,7 @@ import {
 } from '../../../components/ui';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
-import { PiCurrencyDollar, PiUser, PiBuildings, PiCreditCard, PiShieldCheck, PiPlus, PiTrash, PiSparkle } from 'react-icons/pi';
+import { DollarSign, User, Building2, CreditCard, ShieldCheck, Plus, Trash2, Sparkles } from 'lucide-react';
 import { calcularSubtotalConceptos } from './calculations';
 import { quickConceptTemplates } from './schema';
 
@@ -100,7 +100,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 1. Datos Generales de Emisión */}
       <CollapsibleSection
         title="1. Emisión y Numeración"
-        icon={<PiCurrencyDollar className="w-4 h-4 text-blue-600" />}
+        icon={<DollarSign className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -131,7 +131,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 2. Datos del Contratista (Emisor) */}
       <CollapsibleSection
         title="2. Tus Datos (Contratista / Emisor)"
-        icon={<PiUser className="w-4 h-4 text-blue-600" />}
+        icon={<User className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -193,7 +193,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 3. Datos del Cliente / Empresa Pagadora */}
       <CollapsibleSection
         title="3. Datos del Cliente o Empresa"
-        icon={<PiBuildings className="w-4 h-4 text-blue-600" />}
+        icon={<Building2 className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -243,13 +243,13 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 4. Conceptos y Liquidación Económica */}
       <CollapsibleSection
         title="4. Servicios y Liquidación de Honorarios"
-        icon={<PiCurrencyDollar className="w-4 h-4 text-blue-600" />}
+        icon={<DollarSign className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         {/* Plantillas rápidas sugeridas */}
-        <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-xl mb-4">
-          <p className="text-xs font-semibold text-blue-900 flex items-center gap-1.5 mb-2">
-            <PiSparkle className="w-3.5 h-3.5 text-blue-600" />
+        <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl mb-4">
+          <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5 mb-2">
+            <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
             Sugerencias Rápidas de Concepto:
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -258,7 +258,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
                 key={i}
                 type="button"
                 onClick={() => applyQuickConcept(tpl.text, tpl.suggestedPrice)}
-                className="text-[11px] font-medium px-2.5 py-1 bg-white hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-lg transition-colors cursor-pointer"
+                className="text-[11px] font-medium px-2.5 py-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors cursor-pointer"
               >
                 + {tpl.label}
               </button>
@@ -281,19 +281,19 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
             {conceptos.map((item, index) => (
               <div
                 key={item.id}
-                className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 relative"
+                className="p-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl space-y-2.5 relative"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-700 font-mono">
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 font-mono">
                     Ítem #{index + 1}
                   </span>
                   {conceptos.length > 1 && (
                     <button
                       type="button"
                       onClick={() => handleRemoveConcepto(index)}
-                      className="text-rose-600 hover:text-rose-800 p-1 rounded-md text-xs inline-flex items-center gap-1 cursor-pointer"
+                      className="text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 p-1 rounded-md text-xs inline-flex items-center gap-1 cursor-pointer"
                     >
-                      <PiTrash className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3.5 h-3.5" />
                       <span>Eliminar</span>
                     </button>
                   )}
@@ -337,9 +337,9 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
             <button
               type="button"
               onClick={handleAddConcepto}
-              className="w-full py-2.5 border-2 border-dashed border-blue-300 hover:border-blue-500 bg-blue-50/50 hover:bg-blue-50 text-blue-700 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              className="w-full py-2.5 border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
-              <PiPlus className="w-4 h-4" />
+              <Plus className="w-4 h-4" />
               <span>Añadir Otro Concepto o Servicio</span>
             </button>
           </div>
@@ -363,8 +363,8 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
         )}
 
         {/* Retenciones Tributarias */}
-        <div className="mt-4 pt-4 border-t border-slate-200 space-y-3">
-          <p className="text-xs font-bold text-slate-800">
+        <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+          <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
             Deducciones y Retenciones Tributarias Aplicables:
           </p>
 
@@ -415,7 +415,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 5. Datos Bancarios */}
       <CollapsibleSection
         title="5. Datos Bancarios para Transferencia"
-        icon={<PiCreditCard className="w-4 h-4 text-blue-600" />}
+        icon={<CreditCard className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -449,7 +449,7 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
       {/* 6. Declaraciones Legales y Firma */}
       <CollapsibleSection
         title="6. Declaraciones Juramentadas y Firma"
-        icon={<PiShieldCheck className="w-4 h-4 text-blue-600" />}
+        icon={<ShieldCheck className="w-4 h-4 text-slate-700 dark:text-slate-300" />}
         defaultOpen={true}
       >
         <div className="space-y-2 mb-4">
@@ -467,8 +467,8 @@ export const DocumentForm: React.FC<CuentaCobroFormProps> = ({
           />
         </div>
 
-        <div className="border-t border-slate-200 pt-4">
-          <p className="text-xs font-semibold text-slate-800 mb-2">
+        <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+          <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 mb-2">
             Rúbrica o Firma del Contratista Emisor:
           </p>
           <SignaturePad

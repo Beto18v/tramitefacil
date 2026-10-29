@@ -4,7 +4,7 @@ import { DocumentFormProps } from '../../types';
 import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
 import { SignaturePad } from '../../../components/SignaturePad';
 import { InputField, TextareaField, SwitchField } from '../../../components/ui';
-import { PiBriefcase, PiBuildings, PiHandshake, PiSparkle, PiUser } from 'react-icons/pi';
+import { Briefcase, Building2, Handshake, Sparkles, User } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<CartaRenunciaData>> = ({
   data,
@@ -53,7 +53,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CartaRenunciaData>> = ({
         step="Paso 01"
         title="Empresa y Destinatario"
         subtitle="Nombre de la empresa, jefatura o talento humano"
-        icon={<PiBuildings className="w-5 h-5 text-indigo-600" />}
+        icon={<Building2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -104,7 +104,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CartaRenunciaData>> = ({
         step="Paso 02"
         title="Tus Datos y Cargo Laboral"
         subtitle="Cargo desempeñado, fecha de retiro y preaviso"
-        icon={<PiBriefcase className="w-5 h-5 text-indigo-600" />}
+        icon={<Briefcase className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -165,13 +165,13 @@ export const DocumentForm: React.FC<DocumentFormProps<CartaRenunciaData>> = ({
         step="Paso 03"
         title="Motivo, Agradecimiento y Liquidación"
         subtitle="Razones de renuncia, empalme y solicitud de pago de prestaciones"
-        icon={<PiHandshake className="w-5 h-5 text-indigo-600" />}
+        icon={<Handshake className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
-          <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 space-y-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-              <PiSparkle className="w-4 h-4 text-indigo-600" />
+          <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-3.5 space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
+              <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <span>Selecciona un motivo común pre-redactado (1 toque):</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -180,7 +180,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CartaRenunciaData>> = ({
                   key={m.label}
                   type="button"
                   onClick={() => handleApplyMotivo(m.cat, m.text)}
-                  className="min-h-[38px] px-3 py-1.5 text-xs font-medium bg-white hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-200 border border-slate-200 rounded-xl transition cursor-pointer shadow-2xs"
+                  className="min-h-[38px] px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-700 dark:hover:text-indigo-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl transition cursor-pointer shadow-2xs"
                 >
                   {m.label}
                 </button>
@@ -223,7 +223,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CartaRenunciaData>> = ({
         step="Paso 04"
         title="Firma del Trabajador"
         subtitle="Firma manuscrita en pantalla o pie notarial impreso"
-        icon={<PiUser className="w-5 h-5 text-indigo-600" />}
+        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
         defaultOpen={true}
       >
         <SignaturePad
