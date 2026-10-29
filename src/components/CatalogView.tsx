@@ -6,13 +6,7 @@ import {
 } from '../types/documents';
 import { Hero, QuickCategoryFilter } from './Hero';
 import { DocumentCard } from './DocumentCard';
-import {
-  ShieldCheck,
-  UserCheck,
-  User,
-  Lock,
-  FileCheck,
-} from 'lucide-react';
+import { PiShieldCheck, PiUserCheck, PiUser, PiLock, PiFileDoc } from 'react-icons/pi';
 
 interface Props {
   onSelectDoc: (id: DocumentType) => void;
@@ -68,9 +62,10 @@ export const CatalogView: React.FC<Props> = ({
         activeFilter={activeFilter}
         onFilterChange={setActiveFilter}
         totalResults={filteredDocuments.length}
+        onSelectDoc={onSelectDoc}
       />
 
-      {/* 2. User Profile Banner (Discreet Fintech Banner) */}
+      {/* 2. PiUser Profile Banner (Discreet Fintech Banner) */}
       {onOpenProfileModal && (
         <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-3">
@@ -78,9 +73,9 @@ export const CatalogView: React.FC<Props> = ({
               userProfile?.nombreCompleto ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'
             }`}>
               {userProfile?.nombreCompleto ? (
-                <UserCheck className="w-5 h-5 text-emerald-600" />
+                <PiUserCheck className="w-5 h-5 text-emerald-600" />
               ) : (
-                <User className="w-5 h-5 text-slate-500" />
+                <PiUser className="w-5 h-5 text-slate-500" />
               )}
             </div>
             <div>
@@ -165,7 +160,7 @@ export const CatalogView: React.FC<Props> = ({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-200 text-xs text-slate-600">
         <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
           <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0">
-            <Lock className="w-5 h-5 text-emerald-600" />
+            <PiLock className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
             <strong className="block text-slate-900 font-semibold">100% Privado en Cliente</strong>
@@ -175,7 +170,7 @@ export const CatalogView: React.FC<Props> = ({
 
         <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
           <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0">
-            <FileCheck className="w-5 h-5 text-blue-600" />
+            <PiFileDoc className="w-5 h-5 text-blue-600" />
           </div>
           <div>
             <strong className="block text-slate-900 font-semibold">Formato Formal PDF & Word</strong>
@@ -185,7 +180,7 @@ export const CatalogView: React.FC<Props> = ({
 
         <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
           <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 border border-purple-100 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5 text-purple-600" />
+            <PiShieldCheck className="w-5 h-5 text-purple-600" />
           </div>
           <div>
             <strong className="block text-slate-900 font-semibold">Validez y Normatividad</strong>
