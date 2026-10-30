@@ -159,6 +159,7 @@ export interface DocumentStyleConfig {
   fontFamily: 'serif' | 'sans';
   fontSize: 'compact' | 'normal' | 'spacious';
   paperSize: 'a4' | 'letter';
+  includeWatermark?: boolean;
 }
 
 // Line Item Concept for multi-line documents

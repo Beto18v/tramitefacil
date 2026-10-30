@@ -5,7 +5,7 @@ import {
   DocumentStyleConfig,
 } from '../../types/documents';
 import { getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from '../../templates';
-import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize2, ShieldCheck } from 'lucide-react';
 
 interface Props {
   selectedDoc: DocumentType;
@@ -69,6 +69,22 @@ export const DocumentPreview: React.FC<Props> = ({
               Moderna (Sans)
             </button>
           </div>
+
+          <span className="text-slate-300 dark:text-slate-700 hidden lg:inline">|</span>
+          {/* Watermark toggle */}
+          <button
+            type="button"
+            onClick={() => onUpdateStyle({ ...styleConfig, includeWatermark: styleConfig.includeWatermark === false })}
+            className={`min-h-[28px] hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium transition cursor-pointer border ${
+              styleConfig.includeWatermark !== false
+                ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                : 'bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 border-dashed border-slate-300 dark:border-slate-700 opacity-60'
+            }`}
+            title={styleConfig.includeWatermark !== false ? 'Sello institucional activo (Clic para ocultar en la descarga)' : 'Sello institucional oculto (Clic para activar)'}
+          >
+            <ShieldCheck className={`w-3.5 h-3.5 ${styleConfig.includeWatermark !== false ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'}`} />
+            <span>Sello TrámiteFácil</span>
+          </button>
         </div>
 
         <div className="flex items-center gap-2">

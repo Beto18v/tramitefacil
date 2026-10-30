@@ -10,6 +10,7 @@ export const defaultStyleConfig: DocumentStyleConfig = {
   fontFamily: 'serif',
   fontSize: 'normal',
   paperSize: 'a4',
+  includeWatermark: true,
 };
 
 /**

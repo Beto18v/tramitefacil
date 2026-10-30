@@ -275,9 +275,11 @@ export const DocumentView: React.FC<DocumentViewProps> = ({ data, styleConfig })
           widthClass="w-full max-w-md"
         />
 
-        <div className="text-right text-[10px] text-slate-400 font-mono hidden sm:block pb-1">
-          Generado vía TrámiteFácil Hub · Documento Privado
-        </div>
+        {styleConfig.includeWatermark !== false && (
+          <div className="text-right text-[10px] text-slate-400 font-mono hidden sm:block pb-1">
+            Generado vía TrámiteFácil Hub · Documento Privado
+          </div>
+        )}
       </div>
     </div>
   );

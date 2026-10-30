@@ -176,11 +176,13 @@ export const DocumentView: React.FC<DocumentViewProps> = ({ data, styleConfig })
       </div>
 
       {/* Marca de agua discreta en la esquina inferior derecha */}
-      <div className="text-right pt-4 mt-2">
-        <span className="text-[9px] text-slate-300 font-mono tracking-widest uppercase select-none">
-          TrámiteFácil Hub · Documento Privado
-        </span>
-      </div>
+      {styleConfig.includeWatermark !== false && (
+        <div className="text-right pt-4 mt-2">
+          <span className="text-[9px] text-slate-300 font-mono tracking-widest uppercase select-none">
+            TrámiteFácil Hub · Documento Privado
+          </span>
+        </div>
+      )}
     </div>
   );
 };
