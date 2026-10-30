@@ -35,8 +35,34 @@
 /* Print optimizations */
 @media print {
   @page {
-    size: auto;
+    size: A4 portrait;
     margin: 12mm 15mm 15mm 15mm;
+  }
+
+  /* Reset all ancestor containers to avoid cutting or squishing the printable document to 50% */
+  html,
+  body,
+  #root,
+  main,
+  div[class*="flex-1"],
+  div[class*="lg:w-1/2"],
+  div[class*="w-full"],
+  .preview-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    transform: none !important;
   }
 
   body {
@@ -48,35 +74,45 @@
     print-color-adjust: exact !important;
   }
 
-  /* Hide app shell */
+  /* Hide app shell and interactive controls */
   header,
   footer,
   aside,
   nav,
   .no-print,
-  .screen-only {
+  .screen-only,
+  #pdf-standalone-render-wrapper,
+  #pdf-export-sheet {
     display: none !important;
   }
 
-  /* Document sheet becomes the entire print flow */
+  /* Document sheet becomes the entire full-width print flow */
   .print-area {
     display: block !important;
     position: static !important;
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
     padding: 0 !important;
     margin: 0 !important;
     background: #ffffff !important;
+    color: #000000 !important;
     box-shadow: none !important;
     border: none !important;
     border-radius: 0 !important;
+    transform: none !important;
   }
 
-  /* Remove any transforms or scaled previews */
-  .preview-wrapper {
-    transform: none !important;
-    overflow: visible !important;
+  .print-area,
+  .print-area [class*="min-h-"] {
+    min-height: 0 !important;
     height: auto !important;
-    padding: 0 !important;
+  }
+
+  .print-area * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

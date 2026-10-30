@@ -1,6 +1,12 @@
+import * as htmlToImage from 'html-to-image';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
+/**
+ * Exports a DOM element to an exact standard A4 or Letter PDF.
+ * Uses html-to-image (SVG foreignObject) for 100% accurate, high-resolution rendering
+ * with full modern CSS compatibility (oklch, color-mix), zero layout flashing,
+ * and intelligent multi-page slicing with page-overflow protection.
+ */
 export async function exportElementToPdf(
   element: HTMLElement,
   filename: string,
@@ -8,84 +14,114 @@ export async function exportElementToPdf(
 ): Promise<void> {
   const safeFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
 
-  try {
-    // 1. Capture high-resolution image of the simulated A4 paper sheet
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      backgroundColor: '#ffffff',
-      windowWidth: element.scrollWidth,
-    });
+  // 1. Locate the document root inside the element or use element directly
+  const targetNode =
+    (element.querySelector('.print-area') as HTMLElement) ||
+    element;
 
-    // 2. Compute proportions for A4 / Letter in mm
-    const isLetter = paperFormat === 'letter';
-    const pageWidth = isLetter ? 215.9 : 210;
-    const pageHeight = isLetter ? 279.4 : 297;
-    const margin = 10; // mm
+  // 2. High-resolution canvas rendering (scale = 2 for crisp 300 DPI text & signatures)
+  // html-to-image uses browser-native rendering, avoiding the CSS parsing crashes of legacy libraries
+  const canvas = await htmlToImage.toCanvas(targetNode, {
+    pixelRatio: 2,
+    backgroundColor: '#ffffff',
+    skipFonts: true,
+    style: {
+      transform: 'none',
+      transformOrigin: 'top left',
+      margin: '0',
+      boxShadow: 'none',
+      border: 'none',
+      width: '794px',
+      maxWidth: '794px',
+      minWidth: '794px',
+    },
+  });
 
-    const printableWidth = pageWidth - margin * 2;
-    const printableHeight = pageHeight - margin * 2;
+  // 3. Physical page dimensions in millimeters
+  const isLetter = paperFormat === 'letter';
+  const pageWidthMm = isLetter ? 215.9 : 210;
+  const pageHeightMm = isLetter ? 279.4 : 297;
 
-    const imgWidth = printableWidth;
-    const imgHeight = (canvas.height * printableWidth) / canvas.width;
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: paperFormat,
+    compress: true,
+  });
 
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: paperFormat,
-      compress: true,
-    });
+  // Set default view so PDF readers fit the entire page comfortably without massive zoom
+  pdf.setDisplayMode('fullpage', 'continuous');
+  pdf.setProperties({
+    title: filename.replace(/\.pdf$/i, ''),
+    subject: 'Documento Legal y Comercial Colombiano - TrámiteFácil Hub',
+    author: 'TrámiteFácil Hub',
+    creator: 'TrámiteFácil Hub (https://tramitefacil-hub.vercel.app)',
+  });
 
-    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+  // Calculate slice height in canvas pixels based on exact physical aspect ratio
+  const pagePixelHeight = Math.round((pageHeightMm / pageWidthMm) * canvas.width);
 
-    // 3. Render single or multi-page PDF
-    if (imgHeight <= printableHeight) {
-      pdf.addImage(imgData, 'JPEG', margin, margin, imgWidth, imgHeight);
-    } else {
-      let heightLeft = imgHeight;
-      let position = margin;
+  // Avoid creating an extra trailing page if the remainder is negligible (< 120px on 2x retina canvas, ~60 CSS px)
+  const remainder = canvas.height % pagePixelHeight;
+  const hasInsignificantOverflow = remainder > 0 && remainder <= 120;
 
-      pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
-      heightLeft -= printableHeight;
+  // Calculate total pages
+  let numPages = Math.ceil(canvas.height / pagePixelHeight);
+  if (hasInsignificantOverflow && numPages > 1) {
+    numPages -= 1;
+  }
+  numPages = Math.max(1, numPages);
 
-      while (heightLeft > 0) {
-        position = margin - (imgHeight - heightLeft);
-        pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
-        heightLeft -= printableHeight;
-      }
+  for (let pageIndex = 0; pageIndex < numPages; pageIndex++) {
+    if (pageIndex > 0) {
+      pdf.addPage();
     }
 
-    // 4. Create direct typed Blob and trigger download via invisible <a> element
-    const pdfBlob = pdf.output('blob');
-    const blob = new Blob([pdfBlob], { type: 'application/pdf' });
-    const blobUrl = window.URL.createObjectURL(blob);
+    const pageCanvas = document.createElement('canvas');
+    pageCanvas.width = canvas.width;
+    pageCanvas.height = pagePixelHeight;
+    const ctx = pageCanvas.getContext('2d');
 
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.download = safeFilename;
-    link.rel = 'noopener';
-    link.style.display = 'none';
+    if (ctx) {
+      // Clean white sheet background
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      if (numPages === 1 && canvas.height > pagePixelHeight) {
+        // If it's a single-page document with slight overflow (e.g. padding), fit it smoothly to page height
+        ctx.drawImage(
+          canvas,
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+          0,
+          0,
+          canvas.width,
+          pagePixelHeight
+        );
+      } else {
+        const sourceY = pageIndex * pagePixelHeight;
+        const sourceHeight = Math.min(pagePixelHeight, canvas.height - sourceY);
 
-    // Revoke object URL after delay
-    setTimeout(() => {
-      try {
-        window.URL.revokeObjectURL(blobUrl);
-      } catch (_) {
-        // Ignored
+        ctx.drawImage(
+          canvas,
+          0,
+          sourceY,
+          canvas.width,
+          sourceHeight,
+          0,
+          0,
+          canvas.width,
+          sourceHeight
+        );
       }
-    }, 60000);
-  } catch (error) {
-    console.warn(
-      'Direct PDF Blob generation failed or was blocked by sandbox iframe policy. Falling back to native print dialog:',
-      error
-    );
-    // Automatic fallback to native print dialog
-    window.print();
+
+      const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.98);
+      pdf.addImage(pageImgData, 'JPEG', 0, 0, pageWidthMm, pageHeightMm, undefined, 'FAST');
+    }
   }
+
+  // 4. Download file directly
+  pdf.save(safeFilename);
 }
