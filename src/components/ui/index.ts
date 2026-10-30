@@ -4,3 +4,4 @@ export * from './CurrencyField';
 export * from './TextareaField';
 export * from './SwitchField';
 export * from './RepeaterField';
+export * from './CollapsibleSection';

@@ -57,7 +57,16 @@ export function calculateCompletion(data: AcuerdoNdaData): number {
   return Math.round((filled / fieldsToCheck.length) * 100);
 }
 
+export function getFilename(data: AcuerdoNdaData, ext: 'pdf' | 'docx'): string {
+  const today = new Date().toISOString().split('T')[0];
+  const cleanPrefix = meta.title.replace(/[^a-zA-Z0-9]/g, '_');
+  const personOrOrg = (data.nombreParteEmisora || 'Emisora');
+  const cleanPerson = personOrOrg.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 20);
+  return `${cleanPrefix}_${cleanPerson}_${today}.${ext}`;
+}
+
 export const acuerdoNdaDefinition: DocumentDefinition<AcuerdoNdaData> = {
+  getFilename,
   meta,
   defaultData,
   sampleData,

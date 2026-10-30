@@ -49,7 +49,16 @@ export function calculateCompletion(data: CertificadoLaboralData): number {
   return Math.round((filled / fieldsToCheck.length) * 100);
 }
 
+export function getFilename(data: CertificadoLaboralData, ext: 'pdf' | 'docx'): string {
+  const today = new Date().toISOString().split('T')[0];
+  const cleanPrefix = meta.title.replace(/[^a-zA-Z0-9]/g, '_');
+  const personOrOrg = (data.nombreTrabajador || 'Empleado');
+  const cleanPerson = personOrOrg.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 20);
+  return `${cleanPrefix}_${cleanPerson}_${today}.${ext}`;
+}
+
 export const certificadoLaboralDefinition: DocumentDefinition<CertificadoLaboralData> = {
+  getFilename,
   meta,
   defaultData,
   sampleData,

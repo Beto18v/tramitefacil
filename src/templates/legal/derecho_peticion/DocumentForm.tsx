@@ -1,8 +1,8 @@
 import React from 'react';
 import { DerechoPeticionData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
-import { SignaturePad } from '../../../components/SignaturePad';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
+import { SignaturePad } from '../../../components/shared/SignaturePad';
 import { InputField, SelectField, TextareaField } from '../../../components/ui';
 import { Building2, Plus, Scale, Sparkles, Trash2, User } from 'lucide-react';
 

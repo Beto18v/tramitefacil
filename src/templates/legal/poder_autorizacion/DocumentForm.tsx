@@ -1,7 +1,7 @@
 import React from 'react';
 import { PoderAutorizacionData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
 import { InputField, SelectField, TextareaField, SwitchField } from '../../../components/ui';
 import { Plus, Shield, Trash2, User, UserCheck } from 'lucide-react';
 

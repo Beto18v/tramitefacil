@@ -9,45 +9,14 @@ import {
 import {
   defaultStyleConfig,
   getInitialFullStorageState,
-  defaultCuentaCobro,
-  defaultPropuestaServicios,
-  defaultContratoPrestacion,
-  defaultCartaRenuncia,
-  defaultCertificadoLaboral,
-  defaultPermisoLaboral,
-  defaultNoRenovacionArriendo,
-  defaultContratoArrendamiento,
-  defaultActaEntrega,
-  defaultDerechoPeticion,
-  defaultPoderAutorizacion,
-  defaultHabeasData,
-  defaultAcuerdoNda,
-  defaultCompraventaVehiculo,
-  defaultAutorizacionPatios,
-  sampleCuentaCobro,
-  samplePropuestaServicios,
-  sampleContratoPrestacion,
-  sampleCartaRenuncia,
-  sampleCertificadoLaboral,
-  samplePermisoLaboral,
-  sampleNoRenovacionArriendo,
-  sampleContratoArrendamiento,
-  sampleActaEntrega,
-  sampleDerechoPeticion,
-  samplePoderAutorizacion,
-  sampleHabeasData,
-  sampleAcuerdoNda,
-  sampleCompraventaVehiculo,
-  sampleAutorizacionPatios,
 } from './data/initialData';
-import { Header } from './components/Header';
-import { CatalogView } from './components/CatalogView';
-import { EditorView } from './components/EditorView';
-import { UserProfileModal } from './components/UserProfileModal';
+import { getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from './templates';
+import { Header, Footer } from './components/layout';
+import { CatalogView, EditorView } from './components/views';
+import { UserProfileModal } from './components/shared';
 import { loadUserProfile, saveUserProfile, injectProfileIntoDocument } from './utils/profileInjector';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useTheme } from './hooks/useTheme';
-import { Footer } from './components/Footer';
 import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 
 const STORAGE_KEY = 'tramite_facil_state_v1';
@@ -92,7 +61,7 @@ export default function App() {
     }));
   };
 
-  // User Profile state (tramitefacil_profile_v1)
+  // User Profile state
   const [userProfile, setUserProfile] = useState<UserProfile | null>(() => {
     return loadUserProfile();
   });
@@ -184,106 +153,11 @@ export default function App() {
     showToast(`¡Datos de ${userProfile.nombreCompleto.split(' ')[0]} autocompletados con éxito!`, 'success');
   };
 
-  // Load sample for a document
-  const handleLoadSample = (docType: DocumentType) => {
-    switch (docType) {
-      case 'cuenta_cobro':
-        handleUpdateData('cuentaCobro', sampleCuentaCobro);
-        break;
-      case 'propuesta_servicios':
-        handleUpdateData('propuestaServicios', samplePropuestaServicios);
-        break;
-      case 'contrato_prestacion':
-        handleUpdateData('contratoPrestacion', sampleContratoPrestacion);
-        break;
-      case 'carta_renuncia':
-        handleUpdateData('cartaRenuncia', sampleCartaRenuncia);
-        break;
-      case 'certificado_laboral':
-        handleUpdateData('certificadoLaboral', sampleCertificadoLaboral);
-        break;
-      case 'permiso_laboral':
-        handleUpdateData('permisoLaboral', samplePermisoLaboral);
-        break;
-      case 'no_renovacion_arriendo':
-        handleUpdateData('noRenovacionArriendo', sampleNoRenovacionArriendo);
-        break;
-      case 'contrato_arrendamiento':
-        handleUpdateData('contratoArrendamiento', sampleContratoArrendamiento);
-        break;
-      case 'acta_entrega':
-        handleUpdateData('actaEntrega', sampleActaEntrega);
-        break;
-      case 'derecho_peticion':
-        handleUpdateData('derechoPeticion', sampleDerechoPeticion);
-        break;
-      case 'poder_autorizacion':
-        handleUpdateData('poderAutorizacion', samplePoderAutorizacion);
-        break;
-      case 'habeas_data':
-        handleUpdateData('habeasData', sampleHabeasData);
-        break;
-      case 'acuerdo_nda':
-        handleUpdateData('acuerdoNda', sampleAcuerdoNda);
-        break;
-      case 'compraventa_vehiculo':
-        handleUpdateData('compraventaVehiculo', sampleCompraventaVehiculo);
-        break;
-      case 'autorizacion_patios':
-        handleUpdateData('autorizacionPatios', sampleAutorizacionPatios);
-        break;
-    }
-  };
-
   // Reset a document to default
   const handleReset = (docType: DocumentType) => {
-    switch (docType) {
-      case 'cuenta_cobro':
-        handleUpdateData('cuentaCobro', defaultCuentaCobro);
-        break;
-      case 'propuesta_servicios':
-        handleUpdateData('propuestaServicios', defaultPropuestaServicios);
-        break;
-      case 'contrato_prestacion':
-        handleUpdateData('contratoPrestacion', defaultContratoPrestacion);
-        break;
-      case 'carta_renuncia':
-        handleUpdateData('cartaRenuncia', defaultCartaRenuncia);
-        break;
-      case 'certificado_laboral':
-        handleUpdateData('certificadoLaboral', defaultCertificadoLaboral);
-        break;
-      case 'permiso_laboral':
-        handleUpdateData('permisoLaboral', defaultPermisoLaboral);
-        break;
-      case 'no_renovacion_arriendo':
-        handleUpdateData('noRenovacionArriendo', defaultNoRenovacionArriendo);
-        break;
-      case 'contrato_arrendamiento':
-        handleUpdateData('contratoArrendamiento', defaultContratoArrendamiento);
-        break;
-      case 'acta_entrega':
-        handleUpdateData('actaEntrega', defaultActaEntrega);
-        break;
-      case 'derecho_peticion':
-        handleUpdateData('derechoPeticion', defaultDerechoPeticion);
-        break;
-      case 'poder_autorizacion':
-        handleUpdateData('poderAutorizacion', defaultPoderAutorizacion);
-        break;
-      case 'habeas_data':
-        handleUpdateData('habeasData', defaultHabeasData);
-        break;
-      case 'acuerdo_nda':
-        handleUpdateData('acuerdoNda', defaultAcuerdoNda);
-        break;
-      case 'compraventa_vehiculo':
-        handleUpdateData('compraventaVehiculo', defaultCompraventaVehiculo);
-        break;
-      case 'autorizacion_patios':
-        handleUpdateData('autorizacionPatios', defaultAutorizacionPatios);
-        break;
-    }
+    const def = getDocumentDefinition(docType);
+    const key = DOC_TYPE_TO_DATA_KEY[docType];
+    handleUpdateData(key, def.defaultData);
   };
 
   return (
@@ -312,7 +186,6 @@ export default function App() {
             data={documentsData}
             onUpdateData={handleUpdateData}
             onBackToCatalog={handleGoToCatalog}
-            onLoadSample={handleLoadSample}
             onReset={handleReset}
             styleConfig={styleConfig}
             onUpdateStyle={setStyleConfig}
@@ -328,7 +201,7 @@ export default function App() {
       {/* 3. Institutional Footer */}
       <Footer />
 
-      {/* 4. User Profile Modal (tramitefacil_profile_v1) */}
+      {/* 4. User Profile Modal */}
       <UserProfileModal
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}

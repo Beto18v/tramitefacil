@@ -7,8 +7,8 @@ import {
   TextareaField,
   SwitchField,
 } from '../../../components/ui';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
-import { SignaturePad } from '../../../components/SignaturePad';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
+import { SignaturePad } from '../../../components/shared/SignaturePad';
 import { DollarSign, User, Building2, CreditCard, ShieldCheck, Plus, Trash2, Sparkles } from 'lucide-react';
 import { calcularSubtotalConceptos } from './calculations';
 import { quickConceptTemplates } from './schema';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { HabeasDataData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
 import { InputField, SelectField, TextareaField } from '../../../components/ui';
 import { Building2, Plus, ShieldAlert, Trash2, User } from 'lucide-react';
 

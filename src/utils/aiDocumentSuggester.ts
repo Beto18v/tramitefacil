@@ -1,4 +1,5 @@
-import { DOCUMENT_CATALOG, DocumentMeta, DocumentType } from '../types/documents';
+import { DocumentMeta, DocumentType } from '../types/documents';
+import { DOCUMENT_CATALOG } from '../templates';
 
 export interface EntityGuidance {
   entityName: string;

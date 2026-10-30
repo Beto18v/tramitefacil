@@ -60,7 +60,16 @@ export function calculateCompletion(data: ActaEntregaData): number {
   return Math.round((filled / fieldsToCheck.length) * 100);
 }
 
+export function getFilename(data: ActaEntregaData, ext: 'pdf' | 'docx'): string {
+  const today = new Date().toISOString().split('T')[0];
+  const cleanPrefix = meta.title.replace(/[^a-zA-Z0-9]/g, '_');
+  const personOrOrg = (data.direccionInmueble ? data.direccionInmueble.slice(0, 15) : 'Inmueble');
+  const cleanPerson = personOrOrg.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 20);
+  return `${cleanPrefix}_${cleanPerson}_${today}.${ext}`;
+}
+
 export const actaEntregaDefinition: DocumentDefinition<ActaEntregaData> = {
+  getFilename,
   meta,
   defaultData,
   sampleData,

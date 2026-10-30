@@ -1,5 +1,4 @@
 import { ContratoArrendamientoData, DocumentMeta } from '../../../types/documents';
-import { defaultContratoArrendamiento, sampleContratoArrendamiento } from '../../../data/initialData';
 
 export const meta: DocumentMeta = {
   id: 'contrato_arrendamiento',
@@ -18,6 +17,64 @@ export const meta: DocumentMeta = {
   subfilter: 'Arrendamiento',
 };
 
-export const defaultData: ContratoArrendamientoData = defaultContratoArrendamiento;
-export const sampleData: ContratoArrendamientoData = sampleContratoArrendamiento;
+const TODAY = new Date().toISOString().split('T')[0];
+
+export const defaultData: ContratoArrendamientoData = {
+  ciudad: 'Bogotá D.C.',
+  fecha: TODAY,
+  nombreArrendador: '',
+  tipoDocArrendador: 'Cédula de Ciudadanía',
+  numDocArrendador: '',
+  telefonoArrendador: '',
+  nombreArrendatario: '',
+  tipoDocArrendatario: 'Cédula de Ciudadanía',
+  numDocArrendatario: '',
+  telefonoArrendatario: '',
+  incluyeCodeudor: false,
+  nombreCodeudor: '',
+  tipoDocCodeudor: 'Cédula de Ciudadanía',
+  numDocCodeudor: '',
+  telefonoCodeudor: '',
+  direccionInmueble: '',
+  matriculaInmobiliaria: '',
+  canonMensual: 0,
+  diaLimitePago: 5,
+  formaPagoCanon: 'Consignación o transferencia bancaria en la cuenta designada por el arrendador.',
+  duracionMeses: 12,
+  fechaInicio: TODAY,
+  fechaFin: '',
+  cuotaAdministracion: 0,
+  responsableServicios: 'Arrendatario',
+  montoDepositoGarantia: 0,
+  signatureType: 'text',
+};
+export const sampleData: ContratoArrendamientoData = {
+  ciudad: 'Medellín',
+  fecha: TODAY,
+  nombreArrendador: 'Álvaro José Uribe Echeverry',
+  tipoDocArrendador: 'Cédula de Ciudadanía',
+  numDocArrendador: '71.654.321',
+  telefonoArrendador: '+57 300 456 7890',
+  nombreArrendatario: 'Catalina María Londoño Gaviria',
+  tipoDocArrendatario: 'Cédula de Ciudadanía',
+  numDocArrendatario: '1.036.789.123',
+  telefonoArrendatario: '+57 314 555 8899',
+  incluyeCodeudor: true,
+  nombreCodeudor: 'Jorge Mario Londoño Vélez',
+  tipoDocCodeudor: 'Cédula de Ciudadanía',
+  numDocCodeudor: '70.890.123',
+  telefonoCodeudor: '+57 310 444 3322',
+  direccionInmueble: 'Carrera 43A # 1Sur-150, Apto 1204, El Poblado, Medellín',
+  matriculaInmobiliaria: '001-987456',
+  canonMensual: 3200000,
+  diaLimitePago: 5,
+  formaPagoCanon: 'Transferencia electrónica a la cuenta de ahorros Bancolombia N° 004-987654-12 a nombre del arrendador.',
+  duracionMeses: 12,
+  fechaInicio: TODAY,
+  fechaFin: '2027-10-31',
+  cuotaAdministracion: 480000,
+  responsableServicios: 'El arrendatario asumirá el 100% de los servicios de energía (EPM), agua, gas y telecomunicaciones.',
+  montoDepositoGarantia: 0,
+  signatureType: 'text',
+};
 

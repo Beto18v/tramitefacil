@@ -1,7 +1,7 @@
 import React from 'react';
 import { DerechoPeticionData } from '../../../types/documents';
 import { DocumentViewProps } from '../../types';
-import { SignatureBlock } from '../../../components/templates/SignatureBlock';
+import { SignatureBlock } from '../../common/SignatureBlock';
 
 export const DocumentView: React.FC<DocumentViewProps<DerechoPeticionData>> = ({
   data,
@@ -18,7 +18,7 @@ export const DocumentView: React.FC<DocumentViewProps<DerechoPeticionData>> = ({
 
   return (
     <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-8 md:p-12 min-h-[1050px] flex flex-col justify-between`}
+      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-8 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
     >
       <div className="space-y-5">
         {/* Fecha y Ciudad */}

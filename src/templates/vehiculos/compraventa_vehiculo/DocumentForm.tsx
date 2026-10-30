@@ -1,14 +1,14 @@
 import React from 'react';
 import { CompraventaVehiculoData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
 import {
   InputField,
   SelectField,
   CurrencyField,
   SwitchField,
 } from '../../../components/ui';
-import { SignaturePad } from '../../../components/SignaturePad';
+import { SignaturePad } from '../../../components/shared/SignaturePad';
 import { Car, DollarSign, FileText, Users } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> = ({

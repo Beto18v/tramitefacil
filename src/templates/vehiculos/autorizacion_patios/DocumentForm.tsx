@@ -1,9 +1,9 @@
 import React from 'react';
 import { AutorizacionPatiosData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
 import { InputField, SelectField, SwitchField } from '../../../components/ui';
-import { SignaturePad } from '../../../components/SignaturePad';
+import { SignaturePad } from '../../../components/shared/SignaturePad';
 import { Car, FileText, Plus, Shield, Trash2, UserCheck } from 'lucide-react';
 
 export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> = ({

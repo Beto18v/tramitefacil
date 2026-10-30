@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActaEntregaData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
 import { InputField, SelectField, TextareaField } from '../../../components/ui';
 import { ClipboardList, Home, Plus, Trash2, User } from 'lucide-react';
 

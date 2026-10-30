@@ -1,8 +1,8 @@
 import React from 'react';
 import { PermisoLaboralData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
-import { SignaturePad } from '../../../components/SignaturePad';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
+import { SignaturePad } from '../../../components/shared/SignaturePad';
 import { InputField, SelectField, TextareaField, SwitchField } from '../../../components/ui';
 import { Building2, Calendar, User } from 'lucide-react';
 

@@ -62,7 +62,16 @@ export function calculateCompletion(data: ContratoPrestacionData): number {
   return Math.round((filled / fieldsToCheck.length) * 100);
 }
 
+export function getFilename(data: ContratoPrestacionData, ext: 'pdf' | 'docx'): string {
+  const today = new Date().toISOString().split('T')[0];
+  const cleanPrefix = meta.title.replace(/[^a-zA-Z0-9]/g, '_');
+  const personOrOrg = (data.nombreContratista || 'Contratista');
+  const cleanPerson = personOrOrg.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 20);
+  return `${cleanPrefix}_${cleanPerson}_${today}.${ext}`;
+}
+
 export const contratoPrestacionDefinition: DocumentDefinition<ContratoPrestacionData> = {
+  getFilename,
   meta,
   defaultData,
   sampleData,

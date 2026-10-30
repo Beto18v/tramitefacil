@@ -1,8 +1,4 @@
 import { CompraventaVehiculoData, DocumentMeta } from '../../../types/documents';
-import {
-  defaultCompraventaVehiculo,
-  sampleCompraventaVehiculo,
-} from '../../../data/initialData';
 
 export const meta: DocumentMeta = {
   id: 'compraventa_vehiculo',
@@ -30,6 +26,64 @@ export const meta: DocumentMeta = {
   subfilter: 'Vehículos',
 };
 
-export const defaultData: CompraventaVehiculoData = defaultCompraventaVehiculo;
-export const sampleData: CompraventaVehiculoData = sampleCompraventaVehiculo;
+const TODAY = new Date().toISOString().split('T')[0];
+
+export const defaultData: CompraventaVehiculoData = {
+  ciudad: 'Bogotá D.C.',
+  fecha: TODAY,
+  nombreVendedor: '',
+  tipoDocVendedor: 'Cédula de Ciudadanía',
+  numDocVendedor: '',
+  telefonoVendedor: '',
+  direccionVendedor: '',
+  nombreComprador: '',
+  tipoDocComprador: 'Cédula de Ciudadanía',
+  numDocComprador: '',
+  telefonoComprador: '',
+  direccionComprador: '',
+  placa: '',
+  marca: '',
+  linea: '',
+  modeloAnio: 2020,
+  claseVehiculo: 'Automóvil',
+  color: '',
+  numeroMotor: '',
+  numeroChasis: '',
+  precioVenta: 0,
+  formaPago: 'Transferencia bancaria al momento de la firma y radicación del traspaso.',
+  soatVigenteHasta: '',
+  tecnomecanicaHasta: '',
+  gastosTraspasoPorcentajes: '50% a cargo del comprador y 50% a cargo del vendedor; retención en la fuente a cargo del vendedor.',
+  pazYSalvoMultas: true,
+  signatureType: 'text',
+};
+export const sampleData: CompraventaVehiculoData = {
+  ciudad: 'Bogotá D.C.',
+  fecha: TODAY,
+  nombreVendedor: 'Gustavo Adolfo Benítez Prieto',
+  tipoDocVendedor: 'Cédula de Ciudadanía',
+  numDocVendedor: '79.654.123',
+  telefonoVendedor: '+57 310 882 1199',
+  direccionVendedor: 'Calle 147 # 12-30, Apto 301, Bogotá D.C.',
+  nombreComprador: 'Paula Andrea Medina Castillo',
+  tipoDocComprador: 'Cédula de Ciudadanía',
+  numDocComprador: '1.018.456.987',
+  telefonoComprador: '+57 320 445 6677',
+  direccionComprador: 'Carrera 58 # 134-20, Bogotá D.C.',
+  placa: 'KLR-456',
+  marca: 'Mazda',
+  linea: 'Mazda 3 Touring',
+  modeloAnio: 2021,
+  claseVehiculo: 'Automóvil Sedán',
+  color: 'Rojo Diamante Metalizado',
+  numeroMotor: 'PE-20458921',
+  numeroChasis: '3MZBN1U75MM104523',
+  precioVenta: 68000000,
+  formaPago: 'Transferencia electrónica bancaria inmediata al momento de la radicación de la solicitud de traspaso ante el SIM / Ventanilla Única de Movilidad.',
+  soatVigenteHasta: '2027-04-15',
+  tecnomecanicaHasta: '2027-04-15',
+  gastosTraspasoPorcentajes: 'Derechos de traspaso 50% comprador y 50% vendedor; retención en la fuente 1% a cargo del vendedor.',
+  pazYSalvoMultas: true,
+  signatureType: 'text',
+};
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NoRenovacionArriendoData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
 import { InputField, SelectField, TextareaField, SwitchField } from '../../../components/ui';
 import { AlertCircle, Home, Key, User } from 'lucide-react';
 

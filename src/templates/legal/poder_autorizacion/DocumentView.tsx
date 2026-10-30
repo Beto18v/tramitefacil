@@ -17,7 +17,7 @@ export const DocumentView: React.FC<DocumentViewProps<PoderAutorizacionData>> = 
 
   return (
     <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-8 md:p-12 min-h-[1050px] flex flex-col justify-between`}
+      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-8 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
     >
       <div className="space-y-6">
         {/* Encabezado */}

@@ -1,4 +1,4 @@
-import { DocumentType, AllDocumentsData } from '../types/documents';
+import { DocumentType, AllDocumentsData, DocumentMeta } from '../types/documents';
 import { DocumentDefinition } from './types';
 import { cuentaCobroDefinition } from './freelance/cuenta_cobro';
 import { propuestaServiciosDefinition } from './freelance/propuesta_servicios';
@@ -68,3 +68,7 @@ export const DOCUMENT_DEFINITIONS: Record<DocumentType, AnyDocumentDefinition> =
 export function getDocumentDefinition(docType: DocumentType): AnyDocumentDefinition {
   return DOCUMENT_DEFINITIONS[docType];
 }
+
+export const DOCUMENT_CATALOG: DocumentMeta[] = Object.values(DOCUMENT_DEFINITIONS).map(
+  (def) => def.meta
+);

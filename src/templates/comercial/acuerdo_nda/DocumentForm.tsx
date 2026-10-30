@@ -1,8 +1,8 @@
 import React from 'react';
 import { AcuerdoNdaData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
-import { SignaturePad } from '../../../components/SignaturePad';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
+import { SignaturePad } from '../../../components/shared/SignaturePad';
 import { InputField, SelectField, CurrencyField, TextareaField, SwitchField } from '../../../components/ui';
 import { Calendar, DollarSign, ShieldCheck, Sparkles, Users } from 'lucide-react';
 

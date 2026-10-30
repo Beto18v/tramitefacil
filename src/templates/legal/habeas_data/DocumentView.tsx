@@ -24,7 +24,7 @@ export const DocumentView: React.FC<DocumentViewProps<HabeasDataData>> = ({
 
   return (
     <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-10 md:p-12 min-h-[1050px] flex flex-col justify-between`}
+      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-10 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
     >
       <div className="space-y-5">
         {/* Fecha y Ciudad */}

@@ -2,7 +2,7 @@ import React from 'react';
 import { CompraventaVehiculoData } from '../../../types/documents';
 import { DocumentViewProps } from '../../types';
 import { formatearMoneda, numeroALetras } from '../../../utils/numberToWords';
-import { SignatureBlock } from '../../../components/templates/SignatureBlock';
+import { SignatureBlock } from '../../common/SignatureBlock';
 
 export const DocumentView: React.FC<DocumentViewProps<CompraventaVehiculoData>> = ({
   data,
@@ -19,7 +19,7 @@ export const DocumentView: React.FC<DocumentViewProps<CompraventaVehiculoData>> 
 
   return (
     <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-10 md:p-12 min-h-[1050px] flex flex-col justify-between`}
+      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-10 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
     >
       <div className="space-y-4">
         {/* Title */}

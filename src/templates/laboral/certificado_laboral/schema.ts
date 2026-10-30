@@ -1,5 +1,4 @@
 import { CertificadoLaboralData, DocumentMeta } from '../../../types/documents';
-import { defaultCertificadoLaboral, sampleCertificadoLaboral } from '../../../data/initialData';
 
 export const meta: DocumentMeta = {
   id: 'certificado_laboral',
@@ -18,6 +17,38 @@ export const meta: DocumentMeta = {
   subfilter: 'Certificados',
 };
 
-export const defaultData: CertificadoLaboralData = defaultCertificadoLaboral;
-export const sampleData: CertificadoLaboralData = sampleCertificadoLaboral;
+const TODAY = new Date().toISOString().split('T')[0];
+
+export const defaultData: CertificadoLaboralData = {
+  ciudad: 'Bogotá D.C.',
+  fecha: TODAY,
+  nombreEmpresa: '',
+  destinatarioArea: 'Dirección de Gestión Humana y Nómina',
+  nombreTrabajador: '',
+  tipoDocumento: 'Cédula de Ciudadanía',
+  numeroDocumento: '',
+  cargoDesempenado: '',
+  periodoTrabajado: 'Desde el inicio del contrato hasta la fecha actual',
+  incluirSalario: true,
+  incluirFunciones: true,
+  motivoSolicitud: 'Trámite financiero y personal',
+  correoEntrega: '',
+  signatureType: 'text',
+};
+export const sampleData: CertificadoLaboralData = {
+  ciudad: 'Bucaramanga',
+  fecha: TODAY,
+  nombreEmpresa: 'CLÍNICA DE ESPECIALISTAS DE SANTANDER S.A.S.',
+  destinatarioArea: 'Gerencia de Gestión Humana y Desarrollo Organizacional',
+  nombreTrabajador: 'Lina Marcela Peñaloza Rincón',
+  tipoDocumento: 'Cédula de Ciudadanía',
+  numeroDocumento: '1.098.672.441',
+  cargoDesempenado: 'Jefe de Enfermería y Auditora de Calidad',
+  periodoTrabajado: '01 de febrero de 2021 hasta la fecha actual',
+  incluirSalario: true,
+  incluirFunciones: true,
+  motivoSolicitud: 'Solicitud formal para trámite de crédito hipotecario de vivienda ante entidad bancaria.',
+  correoEntrega: 'lina.penaloza@correo.com',
+  signatureType: 'text',
+};
 

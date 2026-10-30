@@ -34,6 +34,7 @@ export interface DocumentDefinition<TData = any> {
   meta: DocumentMetaInfo;
   defaultData: TData;
   sampleData: TData;
+  getFilename: (data: TData, ext: 'pdf' | 'docx') => string;
   renderView: (props: DocumentComponentProps<TData>) => ReactElement | null;
   renderForm: (props: DocumentFormProps<TData>) => ReactElement | null;
   toPlainText: (data: TData) => string;

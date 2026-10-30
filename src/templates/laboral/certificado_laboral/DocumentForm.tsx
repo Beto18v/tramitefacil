@@ -1,7 +1,7 @@
 import React from 'react';
 import { CertificadoLaboralData } from '../../../types/documents';
 import { DocumentFormProps } from '../../types';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
 import { InputField, SelectField, SwitchField } from '../../../components/ui';
 import { Award, Building2, User } from 'lucide-react';
 

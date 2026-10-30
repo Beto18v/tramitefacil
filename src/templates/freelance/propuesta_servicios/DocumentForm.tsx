@@ -6,7 +6,7 @@ import {
   TextareaField,
   RepeaterField,
 } from '../../../components/ui';
-import { CollapsibleSection } from '../../../components/forms/CollapsibleSection';
+import { CollapsibleSection } from '../../../components/ui/CollapsibleSection';
 import { User, Building2, FileSpreadsheet, DollarSign, Clock } from 'lucide-react';
 
 export interface PropuestaServiciosFormProps {
