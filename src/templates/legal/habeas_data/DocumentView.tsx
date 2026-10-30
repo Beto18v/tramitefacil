@@ -1,20 +1,12 @@
 import React from 'react';
 import { HabeasDataData } from '../../../types/documents';
 import { DocumentViewProps } from '../../types';
+import { LegalDocumentShell } from '../../common';
 
 export const DocumentView: React.FC<DocumentViewProps<HabeasDataData>> = ({
   data,
   styleConfig,
 }) => {
-  const fontClass =
-    styleConfig.fontFamily === 'serif' ? 'font-document-serif' : 'font-document-sans';
-  const sizeClass =
-    styleConfig.fontSize === 'compact'
-      ? 'text-[12px] leading-relaxed'
-      : styleConfig.fontSize === 'spacious'
-      ? 'text-[14.5px] leading-relaxed'
-      : 'text-[13px] leading-relaxed';
-
   const causalLabels: Record<HabeasDataData['causalSolicitud'], string> = {
     caducidad: 'Caducidad del dato negativo (Término legal máximo de permanencia cumplido)',
     suplantacion: 'Suplantación de identidad / Fraude',
@@ -23,46 +15,47 @@ export const DocumentView: React.FC<DocumentViewProps<HabeasDataData>> = ({
   };
 
   return (
-    <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-10 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
+    <LegalDocumentShell
+      styleConfig={styleConfig}
+      headerType="letter"
+      letter={{
+        cityAndDate: `${data.ciudad || 'Ciudad'}, ${data.fecha || 'Fecha'}`,
+        recipient: (
+          <div className="space-y-1 text-xs md:text-sm">
+            <p className="font-semibold text-slate-900 uppercase">Señores:</p>
+            <p className="font-bold text-slate-950 text-sm md:text-base uppercase">
+              {data.centralDeRiesgo || 'CENTRAL DE INFORMACIÓN FINANCIERA'}
+            </p>
+            {data.entidadReportante && (
+              <p className="text-slate-700">
+                Con copia / vinculado a la entidad fuente: <strong>{data.entidadReportante}</strong>
+              </p>
+            )}
+            <p className="text-slate-600">Área de Reclamaciones y Habeas Data</p>
+          </div>
+        ),
+        subject:
+          'Ejercicio del derecho fundamental de Habeas Data (Leyes Estatutarias 1266 de 2008 y 2157 de 2021)',
+        reference: data.numeroObligacion
+          ? `Obligación / Producto objeto de reclamación: ${data.numeroObligacion}`
+          : undefined,
+      }}
+      signatures={
+        <div className="pt-8 border-t border-slate-200">
+          <p className="text-xs text-slate-500 mb-8">Atentamente y con el debido respeto,</p>
+          <div className="w-80">
+            <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
+            <p className="font-bold text-slate-950 uppercase text-xs">
+              {data.nombreTitular || 'FIRMA DEL TITULAR'}
+            </p>
+            <p className="text-[11px] text-slate-700">
+              {data.tipoDocTitular}: <span className="font-mono">{data.numDocTitular || '________________'}</span>
+            </p>
+          </div>
+        </div>
+      }
     >
       <div className="space-y-5">
-        {/* Fecha y Ciudad */}
-        <div className="text-right text-xs md:text-sm text-slate-700">
-          <p>
-            {data.ciudad || 'Ciudad'}, {data.fecha || 'Fecha'}
-          </p>
-        </div>
-
-        {/* Destinatario */}
-        <div className="space-y-1 text-xs md:text-sm">
-          <p className="font-semibold text-slate-900 uppercase">Señores:</p>
-          <p className="font-bold text-slate-950 text-sm md:text-base uppercase">
-            {data.centralDeRiesgo || 'CENTRAL DE INFORMACIÓN FINANCIERA'}
-          </p>
-          {data.entidadReportante && (
-            <p className="text-slate-700">
-              Con copia / vinculado a la entidad fuente: <strong>{data.entidadReportante}</strong>
-            </p>
-          )}
-          <p className="text-slate-600">Área de Reclamaciones y Habeas Data</p>
-        </div>
-
-        {/* Asunto */}
-        <div className="bg-slate-50 border-l-4 border-slate-900 p-3 my-2">
-          <p className="font-bold text-slate-950 text-xs md:text-sm uppercase">
-            ASUNTO:{' '}
-            <span className="font-semibold normal-case text-slate-900">
-              Ejercicio del derecho fundamental de Habeas Data (Leyes Estatutarias 1266 de 2008 y 2157 de 2021)
-            </span>
-          </p>
-          {data.numeroObligacion && (
-            <p className="text-xs text-slate-600 mt-1 font-mono">
-              Obligación / Producto objeto de reclamación: {data.numeroObligacion}
-            </p>
-          )}
-        </div>
-
         {/* Comparencia del titular */}
         <div className="text-justify text-slate-800">
           <p>
@@ -132,21 +125,6 @@ export const DocumentView: React.FC<DocumentViewProps<HabeasDataData>> = ({
           </p>
         </div>
       </div>
-
-      {/* Firma */}
-      <div className="pt-8 mt-6 border-t border-slate-200">
-        <p className="text-xs text-slate-500 mb-8">Atentamente y con el debido respeto,</p>
-        <div className="w-80">
-          <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-          <p className="font-bold text-slate-950 uppercase text-xs">
-            {data.nombreTitular || 'FIRMA DEL TITULAR'}
-          </p>
-          <p className="text-[11px] text-slate-700">
-            {data.tipoDocTitular}: <span className="font-mono">{data.numDocTitular || '________________'}</span>
-          </p>
-        </div>
-      </div>
-    </div>
+    </LegalDocumentShell>
   );
 };
-

@@ -1,54 +1,53 @@
 import React from 'react';
 import { CertificadoLaboralData } from '../../../types/documents';
 import { DocumentViewProps } from '../../types';
+import { LegalDocumentShell } from '../../common';
 
 export const DocumentView: React.FC<DocumentViewProps<CertificadoLaboralData>> = ({
   data,
   styleConfig,
 }) => {
-  const fontClass =
-    styleConfig.fontFamily === 'serif' ? 'font-document-serif' : 'font-document-sans';
-  const sizeClass =
-    styleConfig.fontSize === 'compact'
-      ? 'text-[12.5px] leading-relaxed'
-      : styleConfig.fontSize === 'spacious'
-      ? 'text-[15px] leading-loose'
-      : 'text-[13.5px] leading-relaxed';
-
   return (
-    <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-10 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
+    <LegalDocumentShell
+      styleConfig={styleConfig}
+      density="comfortable"
+      headerType="letter"
+      letter={{
+        cityAndDate: `${data.ciudad || 'Ciudad'}, ${data.fecha || 'Fecha'}`,
+        recipient: (
+          <div className="space-y-1 text-xs md:text-sm">
+            <p className="font-semibold text-slate-900">Señores:</p>
+            <p className="font-bold text-slate-950 uppercase text-sm md:text-base">
+              {data.nombreEmpresa || 'NOMBRE DE LA EMPRESA / EMPLEADOR'}
+            </p>
+            <p className="text-slate-700">
+              Atención: {data.destinatarioArea || 'Departamento de Talento Humano'}
+            </p>
+            <p className="text-slate-600">{data.ciudad || 'Presente'}</p>
+          </div>
+        ),
+        subject:
+          'Solicitud formal de expedición de Certificado Laboral (Art. 57, numeral 7° del Código Sustantivo del Trabajo)',
+      }}
+      signatures={
+        <div className="pt-10 border-t border-slate-200">
+          <p className="text-xs text-slate-500 mb-8">Atentamente,</p>
+          <div className="w-72">
+            <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
+            <p className="font-bold text-slate-950 uppercase text-sm">
+              {data.nombreTrabajador || 'NOMBRE DEL TRABAJADOR'}
+            </p>
+            <p className="text-xs text-slate-700">
+              {data.tipoDocumento}: <span className="font-mono">{data.numeroDocumento || '________________'}</span>
+            </p>
+            {data.correoEntrega && (
+              <p className="text-xs text-slate-600">Email: {data.correoEntrega}</p>
+            )}
+          </div>
+        </div>
+      }
     >
       <div className="space-y-6">
-        {/* Ciudad y fecha */}
-        <div className="text-right text-xs md:text-sm text-slate-700">
-          <p>
-            {data.ciudad || 'Ciudad'}, {data.fecha || 'Fecha'}
-          </p>
-        </div>
-
-        {/* Destinatario */}
-        <div className="space-y-1 text-xs md:text-sm">
-          <p className="font-semibold text-slate-900">Señores:</p>
-          <p className="font-bold text-slate-950 uppercase text-sm md:text-base">
-            {data.nombreEmpresa || 'NOMBRE DE LA EMPRESA / EMPLEADOR'}
-          </p>
-          <p className="text-slate-700">
-            Atención: {data.destinatarioArea || 'Departamento de Talento Humano'}
-          </p>
-          <p className="text-slate-600">{data.ciudad || 'Presente'}</p>
-        </div>
-
-        {/* Asunto */}
-        <div className="border-b-2 border-slate-900 pb-2">
-          <p className="font-bold text-slate-950 text-xs md:text-sm uppercase">
-            ASUNTO:{' '}
-            <span className="font-semibold normal-case text-slate-900">
-              Solicitud formal de expedición de Certificado Laboral (Art. 57, numeral 7° del Código Sustantivo del Trabajo)
-            </span>
-          </p>
-        </div>
-
         {/* Saludo formal */}
         <p className="text-slate-800">Respetados señores:</p>
 
@@ -110,24 +109,6 @@ export const DocumentView: React.FC<DocumentViewProps<CertificadoLaboralData>> =
           )}
         </div>
       </div>
-
-      {/* Firma */}
-      <div className="pt-10 mt-8 border-t border-slate-200">
-        <p className="text-xs text-slate-500 mb-8">Atentamente,</p>
-        <div className="w-72">
-          <div className="border-b-2 border-slate-900 mb-2 h-10"></div>
-          <p className="font-bold text-slate-950 uppercase text-sm">
-            {data.nombreTrabajador || 'NOMBRE DEL TRABAJADOR'}
-          </p>
-          <p className="text-xs text-slate-700">
-            {data.tipoDocumento}: <span className="font-mono">{data.numeroDocumento || '________________'}</span>
-          </p>
-          {data.correoEntrega && (
-            <p className="text-xs text-slate-600">Email: {data.correoEntrega}</p>
-          )}
-        </div>
-      </div>
-    </div>
+    </LegalDocumentShell>
   );
 };
-

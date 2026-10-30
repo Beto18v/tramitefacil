@@ -1,68 +1,60 @@
 import React from 'react';
 import { DerechoPeticionData } from '../../../types/documents';
 import { DocumentViewProps } from '../../types';
-import { SignatureBlock } from '../../common/SignatureBlock';
+import { SignatureBlock, LegalDocumentShell } from '../../common';
 
 export const DocumentView: React.FC<DocumentViewProps<DerechoPeticionData>> = ({
   data,
   styleConfig,
 }) => {
-  const fontClass =
-    styleConfig.fontFamily === 'serif' ? 'font-document-serif' : 'font-document-sans';
-  const sizeClass =
-    styleConfig.fontSize === 'compact'
-      ? 'text-[12px] leading-relaxed'
-      : styleConfig.fontSize === 'spacious'
-      ? 'text-[14.5px] leading-relaxed'
-      : 'text-[13px] leading-relaxed';
-
   return (
-    <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-8 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
+    <LegalDocumentShell
+      styleConfig={styleConfig}
+      headerType="letter"
+      letter={{
+        cityAndDate: `${data.ciudad || 'Ciudad'}, ${data.fecha || 'Fecha de radicación'}`,
+        recipient: (
+          <div className="space-y-1 text-xs md:text-sm">
+            <p className="font-semibold text-slate-900 uppercase">Señores:</p>
+            <p className="font-bold text-slate-950 text-sm md:text-base uppercase">
+              {data.entidadDestinataria || 'NOMBRE DE LA ENTIDAD / EMPRESA'}
+            </p>
+            {data.cargoDestinatario && (
+              <p className="text-slate-700">Atn: {data.cargoDestinatario}</p>
+            )}
+            {data.dependenciaDestinataria && (
+              <p className="text-slate-600">{data.dependenciaDestinataria}</p>
+            )}
+            {data.direccionEntidad && (
+              <p className="text-slate-600">{data.direccionEntidad}</p>
+            )}
+            {data.correoEntidad && (
+              <p className="text-slate-600">Correo: {data.correoEntidad}</p>
+            )}
+          </div>
+        ),
+        subject: data.asunto || 'DERECHO DE PETICIÓN (Art. 23 Constitución Política de Colombia)',
+        reference: data.referencia,
+        subjectStyle: 'boxed',
+      }}
+      signatures={
+        <div className="pt-8 border-t border-slate-200">
+          <SignatureBlock
+            signatureType={data.signatureType}
+            signatureDataUrl={data.signatureDataUrl}
+            name={data.nombrePeticionario || 'NOMBRE DEL PETICIONARIO'}
+            docType={data.tipoDocumento || 'Cédula de Ciudadanía'}
+            docNumber={data.numeroDocumento || '________________'}
+            expedition={data.lugarExpedicion}
+            phone={data.telefono}
+            email={data.correo}
+            address={data.direccionNotificacion}
+            label="Atentamente y con el debido respeto,"
+          />
+        </div>
+      }
     >
       <div className="space-y-5">
-        {/* Fecha y Ciudad */}
-        <div className="text-right text-xs md:text-sm text-slate-700">
-          <p>
-            {data.ciudad || 'Ciudad'}, {data.fecha || 'Fecha de radicación'}
-          </p>
-        </div>
-
-        {/* Destinatario */}
-        <div className="space-y-1 text-xs md:text-sm">
-          <p className="font-semibold text-slate-900 uppercase">Señores:</p>
-          <p className="font-bold text-slate-950 text-sm md:text-base uppercase">
-            {data.entidadDestinataria || 'NOMBRE DE LA ENTIDAD / EMPRESA'}
-          </p>
-          {data.cargoDestinatario && (
-            <p className="text-slate-700">Atn: {data.cargoDestinatario}</p>
-          )}
-          {data.dependenciaDestinataria && (
-            <p className="text-slate-600">{data.dependenciaDestinataria}</p>
-          )}
-          {data.direccionEntidad && (
-            <p className="text-slate-600">{data.direccionEntidad}</p>
-          )}
-          {data.correoEntidad && (
-            <p className="text-slate-600">Correo: {data.correoEntidad}</p>
-          )}
-        </div>
-
-        {/* Asunto & Referencia */}
-        <div className="bg-slate-50 border border-slate-300 rounded-lg p-3.5 my-3">
-          <p className="font-bold text-slate-950 text-xs md:text-sm uppercase">
-            ASUNTO:{' '}
-            <span className="font-semibold normal-case text-slate-900">
-              {data.asunto || 'DERECHO DE PETICIÓN (Art. 23 Constitución Política de Colombia)'}
-            </span>
-          </p>
-          {data.referencia && (
-            <p className="text-xs text-slate-600 mt-1">
-              <strong>Referencia / Trámite:</strong> {data.referencia}
-            </p>
-          )}
-        </div>
-
         {/* Encabezado formal del peticionario */}
         <div className="text-justify text-slate-800">
           <p>
@@ -187,23 +179,6 @@ export const DocumentView: React.FC<DocumentViewProps<DerechoPeticionData>> = ({
           </div>
         </div>
       </div>
-
-      {/* Firma */}
-      <div className="pt-8 mt-6 border-t border-slate-200">
-        <SignatureBlock
-          signatureType={data.signatureType}
-          signatureDataUrl={data.signatureDataUrl}
-          name={data.nombrePeticionario || 'NOMBRE DEL PETICIONARIO'}
-          docType={data.tipoDocumento || 'Cédula de Ciudadanía'}
-          docNumber={data.numeroDocumento || '________________'}
-          expedition={data.lugarExpedicion}
-          phone={data.telefono}
-          email={data.correo}
-          address={data.direccionNotificacion}
-          label="Atentamente y con el debido respeto,"
-        />
-      </div>
-    </div>
+    </LegalDocumentShell>
   );
 };
-

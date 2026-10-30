@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropuestaServiciosData, DocumentStyleConfig } from '../../../types/documents';
 import { formatearMoneda } from '../../../utils/numberToWords';
+import { LegalDocumentShell } from '../../common';
 
 export interface DocumentViewProps {
   data: PropuestaServiciosData;
@@ -8,40 +9,42 @@ export interface DocumentViewProps {
 }
 
 export const DocumentView: React.FC<DocumentViewProps> = ({ data, styleConfig }) => {
-  const fontClass =
-    styleConfig.fontFamily === 'serif' ? 'font-document-serif' : 'font-document-sans';
-  const sizeClass =
-    styleConfig.fontSize === 'compact'
-      ? 'text-[12px] leading-relaxed'
-      : styleConfig.fontSize === 'spacious'
-      ? 'text-[14.5px] leading-relaxed'
-      : 'text-[13px] leading-relaxed';
-
   return (
-    <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-10 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
-    >
-      <div className="space-y-5">
-        {/* Header Title con espaciado anti-colisión */}
-        <div className="border-b-2 border-slate-900 pb-3 mb-4 flex justify-between items-start gap-4">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-xl md:text-2xl font-bold uppercase tracking-tight text-slate-950 leading-tight">
-              Propuesta Comercial de Servicios
-            </h1>
-            <p className="text-xs text-slate-600 mt-1 leading-normal">
-              Oferta Mercantil de Servicios Profesionales (Art. 845 Código de Comercio)
+    <LegalDocumentShell
+      styleConfig={styleConfig}
+      headerType="banner"
+      banner={{
+        title: 'Propuesta Comercial de Servicios',
+        subtitle: 'Oferta Mercantil de Servicios Profesionales (Art. 845 Código de Comercio)',
+        dateCity: `${data.ciudad || 'Bogotá D.C.'}, ${data.fecha || 'Fecha'}`,
+        extraInfo: `Validez: ${data.validezDias || 15} días calendario`,
+      }}
+      signatures={
+        <div className="pt-6 border-t border-slate-200 flex flex-wrap justify-between items-end gap-6">
+          <div className="w-full max-w-sm">
+            <div className="border-b-2 border-slate-900 mb-2 w-64 max-w-full h-8"></div>
+            <p className="font-bold text-slate-950 uppercase text-xs tracking-tight">
+              {data.nombreProponente || 'NOMBRE DEL PROPONENTE'}
             </p>
+            {data.identificacionProponente && (
+              <p className="text-[11px] text-slate-700 font-mono mt-0.5">{data.identificacionProponente}</p>
+            )}
+            {data.profesionProponente && (
+              <p className="text-[10px] text-slate-500 mt-0.5">{data.profesionProponente}</p>
+            )}
           </div>
-          <div className="text-right text-xs text-slate-600 shrink-0">
-            <p className="font-semibold text-slate-900 whitespace-nowrap">
-              {data.ciudad || 'Bogotá D.C.'}, {data.fecha || 'Fecha'}
-            </p>
-            <p className="text-[11px] text-slate-500 mt-0.5 whitespace-nowrap">
-              Validez: {data.validezDias || 15} días calendario
-            </p>
+
+          <div className="w-60 border border-slate-300 p-3 bg-slate-50 rounded-lg text-center text-[10px] text-slate-600">
+            <p className="font-semibold text-slate-800 mb-1">Aceptación de la Propuesta:</p>
+            <div className="h-6"></div>
+            <div className="border-t border-dashed border-slate-400 pt-1 text-[9px] text-slate-500">
+              Firma del Cliente y Fecha
+            </div>
           </div>
         </div>
-
+      }
+    >
+      <div className="space-y-5">
         {/* Emisor y Cliente */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 border border-slate-200 text-xs rounded-lg">
           <div>
@@ -150,39 +153,6 @@ export const DocumentView: React.FC<DocumentViewProps> = ({ data, styleConfig })
           </div>
         )}
       </div>
-
-      {/* Firma del Proponente y Aceptación */}
-      <div className="pt-6 mt-6 border-t border-slate-200 flex flex-wrap justify-between items-end gap-6">
-        <div className="w-full max-w-sm">
-          <div className="border-b-2 border-slate-900 mb-2 w-64 max-w-full h-8"></div>
-          <p className="font-bold text-slate-950 uppercase text-xs tracking-tight">
-            {data.nombreProponente || 'NOMBRE DEL PROPONENTE'}
-          </p>
-          {data.identificacionProponente && (
-            <p className="text-[11px] text-slate-700 font-mono mt-0.5">{data.identificacionProponente}</p>
-          )}
-          {data.profesionProponente && (
-            <p className="text-[10px] text-slate-500 mt-0.5">{data.profesionProponente}</p>
-          )}
-        </div>
-
-        <div className="w-60 border border-slate-300 p-3 bg-slate-50 rounded-lg text-center text-[10px] text-slate-600">
-          <p className="font-semibold text-slate-800 mb-1">Aceptación de la Propuesta:</p>
-          <div className="h-6"></div>
-          <div className="border-t border-dashed border-slate-400 pt-1 text-[9px] text-slate-500">
-            Firma del Cliente y Fecha
-          </div>
-        </div>
-      </div>
-
-      {/* Marca de agua discreta en la esquina inferior derecha */}
-      {styleConfig.includeWatermark !== false && (
-        <div className="text-right pt-4 mt-2">
-          <span className="text-[9px] text-slate-300 font-mono tracking-widest uppercase select-none">
-            TrámiteFácil Hub · Documento Privado
-          </span>
-        </div>
-      )}
-    </div>
+    </LegalDocumentShell>
   );
 };

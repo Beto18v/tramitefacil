@@ -1,7 +1,7 @@
 import React from 'react';
 import { CuentaCobroData, DocumentStyleConfig } from '../../../types/documents';
 import { numeroALetras, formatearMoneda } from '../../../utils/numberToWords';
-import { SignatureBlock } from '../../common/SignatureBlock';
+import { SignatureBlock, LegalDocumentShell } from '../../common';
 import { calcularSubtotalConceptos, calcularTotalesCuentaCobro } from './calculations';
 
 export interface DocumentViewProps {
@@ -10,15 +10,6 @@ export interface DocumentViewProps {
 }
 
 export const DocumentView: React.FC<DocumentViewProps> = ({ data, styleConfig }) => {
-  const fontClass =
-    styleConfig.fontFamily === 'serif' ? 'font-document-serif' : 'font-document-sans';
-  const sizeClass =
-    styleConfig.fontSize === 'compact'
-      ? 'text-[12px] leading-relaxed'
-      : styleConfig.fontSize === 'spacious'
-      ? 'text-[15px] leading-relaxed'
-      : 'text-[13.5px] leading-relaxed';
-
   const subtotalCalculado =
     data.usarConceptosMultiples && data.conceptos && data.conceptos.length > 0
       ? calcularSubtotalConceptos(data.conceptos)
@@ -35,31 +26,35 @@ export const DocumentView: React.FC<DocumentViewProps> = ({ data, styleConfig })
   const valorLetras = numeroALetras(totalNeto, data.moneda || 'PESOS M/CTE.');
 
   return (
-    <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-8 md:p-10 pb-16 md:pb-20 min-h-[980px] flex flex-col justify-between`}
-    >
-      <div>
-        {/* Header bar */}
-        <div className="border-b-2 border-slate-900 pb-3 mb-4 flex justify-between items-start">
-          <div>
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-slate-950 uppercase">
-              Cuenta de Cobro
-            </h1>
-            <p className="text-xs text-slate-600 mt-1">
-              Documento equivalente a factura (Art. 1.6.1.4.12 D.U.R. 1625/2016)
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="inline-block bg-slate-100 border border-slate-300 px-3 py-1 font-mono text-sm font-semibold text-slate-900">
-              N° {data.numeroConsecutivo || '001'}
-            </div>
-            <p className="text-xs text-slate-500 mt-1">
-              {data.ciudad || 'Bogotá'}, {data.fechaEmision || 'Fecha de emisión'}
-            </p>
-          </div>
+    <LegalDocumentShell
+      styleConfig={styleConfig}
+      headerType="banner"
+      banner={{
+        title: 'Cuenta de Cobro',
+        subtitle: 'Documento equivalente a factura (Art. 1.6.1.4.12 D.U.R. 1625/2016)',
+        badge: `N° ${data.numeroConsecutivo || '001'}`,
+        dateCity: `${data.ciudad || 'Bogotá'}, ${data.fechaEmision || 'Fecha de emisión'}`,
+      }}
+      signatures={
+        <div className="pt-4 border-t border-slate-200">
+          <SignatureBlock
+            signatureType={data.signatureType}
+            signatureDataUrl={data.signatureDataUrl}
+            name={data.nombreContratista || 'NOMBRE DEL CONTRATISTA'}
+            docType={data.tipoDocumentoContratista || 'C.C.'}
+            docNumber={data.numeroDocumentoContratista || '[Número de documento]'}
+            expedition={data.expedicionContratista}
+            phone={data.telefonoContratista}
+            email={data.correoContratista}
+            address={data.direccionContratista}
+            role="EL CONTRATISTA / PRESTADOR DEL SERVICIO"
+            label="Atentamente,"
+            widthClass="w-full max-w-md"
+          />
         </div>
-
-        {/* Cliente / Deudor */}
+      }
+    >
+      {/* Cliente / Deudor */}
         <div className="bg-slate-50 border border-slate-200 p-3 mb-4 text-xs md:text-sm rounded-lg">
           <p className="font-semibold text-slate-700 uppercase tracking-wide text-[11px] mb-1.5">
             Debe a favor de:
@@ -256,31 +251,6 @@ export const DocumentView: React.FC<DocumentViewProps> = ({ data, styleConfig })
             )}
           </div>
         )}
-      </div>
-
-      {/* Bloque de Firma del Contratista Emisor con margen inferior protegido */}
-      <div className="pt-4 mt-6 border-t border-slate-200 flex flex-wrap justify-between items-end gap-4">
-        <SignatureBlock
-          signatureType={data.signatureType}
-          signatureDataUrl={data.signatureDataUrl}
-          name={data.nombreContratista || 'NOMBRE DEL CONTRATISTA'}
-          docType={data.tipoDocumentoContratista || 'C.C.'}
-          docNumber={data.numeroDocumentoContratista || '[Número de documento]'}
-          expedition={data.expedicionContratista}
-          phone={data.telefonoContratista}
-          email={data.correoContratista}
-          address={data.direccionContratista}
-          role="EL CONTRATISTA / PRESTADOR DEL SERVICIO"
-          label="Atentamente,"
-          widthClass="w-full max-w-md"
-        />
-
-        {styleConfig.includeWatermark !== false && (
-          <div className="text-right text-[10px] text-slate-400 font-mono hidden sm:block pb-1">
-            Generado vía TrámiteFácil Hub · Documento Privado
-          </div>
-        )}
-      </div>
-    </div>
+    </LegalDocumentShell>
   );
 };

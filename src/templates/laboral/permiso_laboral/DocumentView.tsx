@@ -1,21 +1,12 @@
 import React from 'react';
 import { PermisoLaboralData } from '../../../types/documents';
 import { DocumentViewProps } from '../../types';
-import { SignatureBlock } from '../../common/SignatureBlock';
+import { SignatureBlock, LegalDocumentShell } from '../../common';
 
 export const DocumentView: React.FC<DocumentViewProps<PermisoLaboralData>> = ({
   data,
   styleConfig,
 }) => {
-  const fontClass =
-    styleConfig.fontFamily === 'serif' ? 'font-document-serif' : 'font-document-sans';
-  const sizeClass =
-    styleConfig.fontSize === 'compact'
-      ? 'text-[12.5px] leading-relaxed'
-      : styleConfig.fontSize === 'spacious'
-      ? 'text-[15px] leading-loose'
-      : 'text-[13.5px] leading-relaxed';
-
   const tiposLegibles: Record<PermisoLaboralData['tipoPermiso'], string> = {
     calamidad: 'Calamidad Doméstica',
     estudio: 'Permiso Académico / Estudio',
@@ -25,40 +16,58 @@ export const DocumentView: React.FC<DocumentViewProps<PermisoLaboralData>> = ({
   };
 
   return (
-    <div
-      className={`${fontClass} ${sizeClass} text-slate-900 bg-white p-6 sm:p-10 md:p-12 min-h-[980px] pb-16 md:pb-20 flex flex-col justify-between`}
+    <LegalDocumentShell
+      styleConfig={styleConfig}
+      density="comfortable"
+      headerType="letter"
+      letter={{
+        cityAndDate: `${data.ciudad || 'Ciudad'}, ${data.fecha || 'Fecha'}`,
+        recipient: (
+          <div className="space-y-1 text-xs md:text-sm">
+            <p className="font-semibold text-slate-900">Señores:</p>
+            <p className="font-bold text-slate-950 uppercase text-sm md:text-base">
+              {data.nombreEmpresa || 'NOMBRE DE LA EMPRESA'}
+            </p>
+            <p className="text-slate-800">
+              Atención: <strong>{data.nombreJefe || 'Jefe Inmediato'}</strong>
+            </p>
+            <p className="text-slate-600">{data.cargoJefe || 'Dirección de Área'}</p>
+            <p className="text-slate-600">{data.ciudad || 'Presente'}</p>
+          </div>
+        ),
+        subject: `Solicitud formal de ${(data.tipoPermiso && tiposLegibles[data.tipoPermiso]) || 'Permiso Laboral'}`,
+      }}
+      signatures={
+        <div className="pt-8 border-t border-slate-200">
+          <p className="text-xs text-slate-500 mb-8">
+            Agradeciendo de antemano su comprensión y pronta aprobación,
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
+            <SignatureBlock
+              signatureType={data.signatureType}
+              signatureDataUrl={data.signatureDataUrl}
+              name={data.nombreEmpleado || 'FIRMA DEL TRABAJADOR'}
+              docType={data.tipoDocumento || 'C.C.'}
+              docNumber={data.numeroDocumento || '________________'}
+              role={data.cargoEmpleado}
+              label=""
+              widthClass="w-full sm:w-64"
+            />
+
+            <div className="w-full sm:w-64 border border-slate-300 p-3 bg-slate-50 text-center text-[10px] text-slate-600">
+              <p className="font-semibold text-slate-800 mb-1">Aprobación de la Empresa:</p>
+              <div className="flex justify-center gap-4 my-1 text-[11px]">
+                <span>[ ] Aprobado</span>
+                <span>[ ] No Aprobado</span>
+              </div>
+              <div className="border-b border-slate-300 mx-4 my-2"></div>
+              <p>Firma Jefe Inmediato / RRHH</p>
+            </div>
+          </div>
+        </div>
+      }
     >
       <div className="space-y-6">
-        {/* Ciudad y fecha */}
-        <div className="text-right text-xs md:text-sm text-slate-700">
-          <p>
-            {data.ciudad || 'Ciudad'}, {data.fecha || 'Fecha'}
-          </p>
-        </div>
-
-        {/* Destinatario */}
-        <div className="space-y-1 text-xs md:text-sm">
-          <p className="font-semibold text-slate-900">Señores:</p>
-          <p className="font-bold text-slate-950 uppercase text-sm md:text-base">
-            {data.nombreEmpresa || 'NOMBRE DE LA EMPRESA'}
-          </p>
-          <p className="text-slate-800">
-            Atención: <strong>{data.nombreJefe || 'Jefe Inmediato'}</strong>
-          </p>
-          <p className="text-slate-600">{data.cargoJefe || 'Dirección de Área'}</p>
-          <p className="text-slate-600">{data.ciudad || 'Presente'}</p>
-        </div>
-
-        {/* Asunto */}
-        <div className="border-b-2 border-slate-900 pb-2">
-          <p className="font-bold text-slate-950 text-xs md:text-sm uppercase">
-            ASUNTO:{' '}
-            <span className="font-semibold normal-case text-slate-900">
-              Solicitud formal de {(data.tipoPermiso && tiposLegibles[data.tipoPermiso]) || 'Permiso Laboral'}
-            </span>
-          </p>
-        </div>
-
         {/* Saludo */}
         <p className="text-slate-800">Respetado(a) señor(a):</p>
 
@@ -120,35 +129,6 @@ export const DocumentView: React.FC<DocumentViewProps<PermisoLaboralData>> = ({
           )}
         </div>
       </div>
-
-      {/* Firmas: Solicitante y Autorización de la Empresa */}
-      <div className="pt-8 mt-6 border-t border-slate-200">
-        <p className="text-xs text-slate-500 mb-8">
-          Agradeciendo de antemano su comprensión y pronta aprobación,
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
-          <SignatureBlock
-            signatureType={data.signatureType}
-            signatureDataUrl={data.signatureDataUrl}
-            name={data.nombreEmpleado || 'FIRMA DEL TRABAJADOR'}
-            docType={data.tipoDocumento || 'C.C.'}
-            docNumber={data.numeroDocumento || '________________'}
-            role={data.cargoEmpleado}
-            label=""
-            widthClass="w-full sm:w-64"
-          />
-
-          <div className="w-full sm:w-64 border border-slate-300 p-3 bg-slate-50 text-center text-[10px] text-slate-600">
-            <p className="font-semibold text-slate-800 mb-1">Aprobación de la Empresa:</p>
-            <div className="flex justify-center gap-4 my-1 text-[11px]">
-              <span>[ ] Aprobado</span>
-              <span>[ ] No Aprobado</span>
-            </div>
-            <div className="border-b border-slate-300 mx-4 my-2"></div>
-            <p>Firma Jefe Inmediato / RRHH</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    </LegalDocumentShell>
   );
 };
