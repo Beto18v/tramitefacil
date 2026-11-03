@@ -22,7 +22,9 @@ import {
   UserCheck,
   UserCog,
   PenTool,
+  Sparkles,
 } from 'lucide-react';
+import { AiAutofillModal } from '../../features/ai';
 
 interface Props {
   selectedDoc: DocumentType;
@@ -57,6 +59,7 @@ export const EditorView: React.FC<Props> = ({
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [isExportingDocx, setIsExportingDocx] = useState(false);
   const [hasCopied, setHasCopied] = useState(false);
+  const [isAutofillModalOpen, setIsAutofillModalOpen] = useState(false);
 
   const sheetRef = useRef<HTMLDivElement>(null);
   const exportSheetRef = useRef<HTMLDivElement>(null);
@@ -69,6 +72,14 @@ export const EditorView: React.FC<Props> = ({
   const completionPercentage = useMemo(() => {
     return definition.calculateCompletion(currentDocData);
   }, [definition, currentDocData]);
+
+  const handleApplyAutofill = (extractedFields: Record<string, any>) => {
+    const merged = {
+      ...currentDocData,
+      ...extractedFields,
+    };
+    onUpdateData(dataKey, merged);
+  };
 
   const getDynamicFilename = (ext: 'pdf' | 'docx') => {
     return definition.getFilename(currentDocData, ext);
@@ -168,36 +179,57 @@ export const EditorView: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Center Mobile Selector: [ Formulario ] | [ Vista A4 ] */}
-        <div className="lg:hidden flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700">
+        {/* Center Mobile Selector: [ Formulario ] | [ Vista A4 ] + Botón IA */}
+        <div className="lg:hidden flex items-center gap-1.5">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <button
+              type="button"
+              onClick={() => setActiveMobileTab('form')}
+              className={`min-h-[44px] px-3.5 py-1.5 text-xs font-medium rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
+                activeMobileTab === 'form'
+                  ? 'bg-indigo-600 text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-slate-100'
+              }`}
+            >
+              <PenTool className="w-3.5 h-3.5" />
+              <span>Formulario</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveMobileTab('preview')}
+              className={`min-h-[44px] px-3.5 py-1.5 text-xs font-medium rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
+                activeMobileTab === 'preview'
+                  ? 'bg-indigo-600 text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-slate-100'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Vista A4</span>
+            </button>
+          </div>
           <button
             type="button"
-            onClick={() => setActiveMobileTab('form')}
-            className={`min-h-[44px] px-3.5 py-1.5 text-xs font-medium rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
-              activeMobileTab === 'form'
-                ? 'bg-indigo-600 text-white shadow-xs font-semibold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-slate-100'
-            }`}
+            onClick={() => setIsAutofillModalOpen(true)}
+            className="min-h-[44px] px-2.5 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 rounded-2xl flex items-center justify-center cursor-pointer shadow-2xs"
+            title="Autollenar con IA"
           >
-            <PenTool className="w-3.5 h-3.5" />
-            <span>Formulario</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveMobileTab('preview')}
-            className={`min-h-[44px] px-3.5 py-1.5 text-xs font-medium rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
-              activeMobileTab === 'preview'
-                ? 'bg-indigo-600 text-white shadow-xs font-semibold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-slate-100'
-            }`}
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Vista A4</span>
+            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
           </button>
         </div>
 
         {/* Right Desktop Actions */}
         <div className="hidden lg:flex items-center flex-wrap gap-2 text-xs">
+          {/* Autollenar con IA (Prompt-to-Document) */}
+          <button
+            type="button"
+            onClick={() => setIsAutofillModalOpen(true)}
+            className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-200 dark:border-indigo-800 rounded-xl shadow-2xs transition cursor-pointer"
+            title="Autollenar campos dictando o pegando tu caso con IA"
+          >
+            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <span>Llenar con IA</span>
+          </button>
+
           {/* Autocompletar con perfil */}
           <button
             type="button"
@@ -453,6 +485,17 @@ export const EditorView: React.FC<Props> = ({
           })}
         </div>
       </div>
+
+      {/* Modal de Autollenado Guiado con IA */}
+      <AiAutofillModal
+        isOpen={isAutofillModalOpen}
+        onClose={() => setIsAutofillModalOpen(false)}
+        docType={selectedDoc}
+        docTitle={docMeta.title}
+        currentData={currentDocData}
+        onApplyData={handleApplyAutofill}
+        onTriggerToast={onTriggerToast}
+      />
     </div>
   );
 };

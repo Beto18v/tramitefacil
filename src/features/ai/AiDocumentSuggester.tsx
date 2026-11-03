@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useTransition } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
   ArrowRight,
@@ -22,13 +22,14 @@ import {
   ShoppingCart,
   CreditCard,
   Lock,
+  Loader2,
   type LucideIcon,
 } from 'lucide-react';
 import { DocumentType } from '../../types/documents';
 import {
-  analyzeCaseDescription,
-  SuggestionResult,
-} from '../../utils/aiDocumentSuggester';
+  suggestDocument,
+  AiSuggestionResponse,
+} from '../../services/aiService';
 
 interface Props {
   onSelectDoc?: (id: DocumentType) => void;
@@ -79,23 +80,61 @@ export const AiDocumentSuggester: React.FC<Props> = ({
   className = '',
 }) => {
   const [caseDescription, setCaseDescription] = useState('');
-  const [analysisResult, setAnalysisResult] = useState<SuggestionResult>({
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<AiSuggestionResponse>({
     status: 'empty',
     alternatives: [],
     queryAnalyzed: '',
+    source: 'offline_heuristic',
   });
-  const [, startTransition] = useTransition();
 
-  // Ejecuta el análisis en tiempo real al cambiar el texto
+  // Ejecuta el análisis con debounce para evitar llamadas excesivas
   useEffect(() => {
-    startTransition(() => {
-      const result = analyzeCaseDescription(caseDescription);
-      setAnalysisResult(result);
-    });
+    const trimmed = caseDescription.trim();
+    if (!trimmed || trimmed.length < 5) {
+      setAnalysisResult({
+        status: 'empty',
+        alternatives: [],
+        queryAnalyzed: '',
+        source: 'offline_heuristic',
+      });
+      setIsAnalyzing(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    setIsAnalyzing(true);
+
+    const timer = setTimeout(async () => {
+      try {
+        const result = await suggestDocument(trimmed, controller.signal);
+        setAnalysisResult(result);
+      } catch (err: any) {
+        if (err?.name !== 'AbortError') {
+          console.error(err);
+        }
+      } finally {
+        setIsAnalyzing(false);
+      }
+    }, 450);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [caseDescription]);
 
-  const handleSelectExample = (text: string) => {
+  const handleSelectExample = async (text: string) => {
     setCaseDescription(text);
+    setIsAnalyzing(true);
+    try {
+      const result = await suggestDocument(text);
+      setAnalysisResult(result);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleClear = () => {
@@ -156,10 +195,18 @@ export const AiDocumentSuggester: React.FC<Props> = ({
               Describe tu caso en lenguaje natural
             </label>
           </div>
-          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full flex items-center gap-1">
-            <Lock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
-            Análisis 100% privado en tu navegador
-          </span>
+          <div className="flex items-center gap-2">
+            {isAnalyzing && (
+              <span className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-2 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
+                <Loader2 className="w-3 h-3 animate-spin text-indigo-600 dark:text-indigo-400" />
+                Consultando IA...
+              </span>
+            )}
+            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full flex items-center gap-1">
+              <Lock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+              100% privado en tu navegador
+            </span>
+          </div>
         </div>
 
         {/* Text Area */}
@@ -224,10 +271,23 @@ export const AiDocumentSuggester: React.FC<Props> = ({
                 <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                 <span>Trámite Recomendado por Inteligencia Legal</span>
               </div>
-              <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                Coincidencia {analysisResult.bestMatch.confidence === 'alta' ? 'Alta (Recomendado)' : 'Moderada'}
-              </span>
+              <div className="flex items-center gap-2">
+                {analysisResult.source === 'gemini_cloud' ? (
+                  <span className="text-[11px] font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+                    Gemini 2.0 Flash
+                  </span>
+                ) : (
+                  <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-slate-500 dark:text-slate-400" />
+                    Motor Offline Local
+                  </span>
+                )}
+                <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                  Coincidencia {analysisResult.bestMatch.confidence === 'alta' ? 'Alta (Recomendado)' : 'Moderada'}
+                </span>
+              </div>
             </div>
 
             {/* Document Header */}

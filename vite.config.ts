@@ -1,11 +1,31 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+
+function vercelAiDevPlugin(): Plugin {
+  return {
+    name: 'vercel-ai-dev-middleware',
+    configureServer(server) {
+      server.middlewares.use('/api/ai', async (req, res) => {
+        try {
+          const handlerModule = await server.ssrLoadModule('/api/ai.ts');
+          await handlerModule.default(req, res);
+        } catch (err: any) {
+          console.error('Error en middleware local /api/ai:', err);
+          res.statusCode = 500;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: err?.message || 'Internal Dev Server Error' }));
+        }
+      });
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
+    vercelAiDevPlugin(),
     react(),
     tailwindcss(),
     VitePWA({
