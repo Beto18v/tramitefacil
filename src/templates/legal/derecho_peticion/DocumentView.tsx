@@ -80,11 +80,14 @@ export const DocumentView: React.FC<DocumentViewProps<DerechoPeticionData>> = ({
             <ol className="list-decimal list-outside ml-5 space-y-2 text-justify text-slate-800">
               {data.hechos
                 .filter((h) => h.trim() !== '')
-                .map((hecho, idx) => (
-                  <li key={idx} className="pl-1">
-                    {hecho}
-                  </li>
-                ))}
+                .map((hecho, idx) => {
+                  const cleanText = hecho.replace(/^\s*(?:hecho\s+)?(?:[0-9]{1,2})[\.\-\)]+\s+/i, '');
+                  return (
+                    <li key={idx} className="pl-1">
+                      {cleanText || hecho}
+                    </li>
+                  );
+                })}
             </ol>
           ) : (
             <p className="text-slate-400 italic text-xs">

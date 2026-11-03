@@ -39,8 +39,8 @@ export const defaultData: DerechoPeticionData = {
   asunto: 'Derecho de Petición en interés particular (Artículo 23 Constitución Política)',
   referencia: '',
   hechos: [
-    '1. Me encuentro formalmente afiliado a la entidad destinataria en calidad de usuario / titular.',
-    '2. En fecha reciente presenté solicitud previa o requerimiento formal sin haber recibido respuesta de fondo.',
+    'Me encuentro formalmente afiliado a la entidad destinataria en calidad de usuario / titular.',
+    'En fecha reciente presenté solicitud previa o requerimiento formal sin haber recibido respuesta de fondo.',
   ],
   pretensiones: [
     'PRIMERA: Se dé respuesta clara, precisa, congruente y de fondo a la presente solicitud dentro del término legal improrrogable.',
@@ -72,10 +72,10 @@ export const sampleData: DerechoPeticionData = {
   asunto: 'DERECHO DE PETICIÓN URGENTE - AUTORIZACIÓN Y ENTREGA INMEDIATA DE MEDICAMENTO VITAL NO POS',
   referencia: 'Afiliada N° 41567890 / Historia Clínica N° 2026-HC-441',
   hechos: [
-    '1. Soy una persona de 68 años de edad, diagnosticada con Hipertensión Pulmonar Severa Grado III, condición médica que compromete directamente mi función cardiorrespiratoria.',
-    '2. Con fecha 12 de septiembre de 2026, mi médico tratante adscrito a su red hospitalaria prescribió con carácter urgente el medicamento Bosentán 125mg para tratamiento continuo.',
-    '3. Habiendo transcurrido más de cuarenta y cinco (45) días calendario desde la radicación de la orden médica, la farmacia dispensadora adscrita manifiesta no tener disponibilidad de inventario.',
-    '4. La suspensión del suministro médico pone en riesgo inminente mi integridad física y viola de manera directa mi derecho fundamental a la salud y a la vida digna.',
+    'Soy una persona de 68 años de edad, diagnosticada con Hipertensión Pulmonar Severa Grado III, condición médica que compromete directamente mi función cardiorrespiratoria.',
+    'Con fecha 12 de septiembre de 2026, mi médico tratante adscrito a su red hospitalaria prescribió con carácter urgente el medicamento Bosentán 125mg para tratamiento continuo.',
+    'Habiendo transcurrido más de cuarenta y cinco (45) días calendario desde la radicación de la orden médica, la farmacia dispensadora adscrita manifiesta no tener disponibilidad de inventario.',
+    'La suspensión del suministro médico pone en riesgo inminente mi integridad física y viola de manera directa mi derecho fundamental a la salud y a la vida digna.',
   ],
   pretensiones: [
     'PRIMERA: Se ordene la autorización inmediata y la entrega efectiva del medicamento Bosentán 125mg prescrito por mi médico tratante en un plazo no superior a 48 horas.',

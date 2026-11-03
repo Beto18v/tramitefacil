@@ -1,4 +1,31 @@
 import type { IncomingMessage, ServerResponse } from 'http';
+import fs from 'fs';
+import path from 'path';
+
+function resolveEnvKey(varName: string): string | undefined {
+  if (process.env[varName]) {
+    return process.env[varName];
+  }
+  // En desarrollo local, intenta leer de .env.local o .env si process.env no fue populado
+  try {
+    for (const filename of ['.env.local', '.env']) {
+      const fullPath = path.resolve(process.cwd(), filename);
+      if (fs.existsSync(fullPath)) {
+        const content = fs.readFileSync(fullPath, 'utf8');
+        const regex = new RegExp(`^${varName}\\s*=\\s*([^\\r\\n#]+)`, 'm');
+        const match = content.match(regex);
+        if (match && match[1]) {
+          const val = match[1].trim().replace(/^['"]|['"]$/g, '');
+          if (val) {
+            process.env[varName] = val;
+            return val;
+          }
+        }
+      }
+    }
+  } catch {}
+  return undefined;
+}
 
 // Lista blanca oficial de los documentos soportados en TrámiteFácil
 const VALID_DOC_TYPES = [
@@ -160,6 +187,46 @@ function sendJson(res: ServerResponse, status: number, data: any) {
 /**
  * Handler Serverless de Vercel
  */
+// Invocador resiliente de Gemini con fallback automático entre modelos económicos
+async function callGeminiApi(
+  apiKey: string,
+  preferredModel: string,
+  requestPayload: any
+): Promise<Response> {
+  const candidateModels = [
+    preferredModel,
+    'gemini-flash-lite-latest',
+    'gemini-3.5-flash-lite',
+    'gemini-flash-latest',
+  ].filter(Boolean);
+
+  const uniqueModels = [...new Set(candidateModels)];
+  let lastResponse: Response | null = null;
+
+  for (const model of uniqueModels) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestPayload),
+      });
+
+      if (response.status === 404) {
+        // Modelo descontinuado o no disponible para la clave, probar siguiente
+        lastResponse = response;
+        continue;
+      }
+      return response;
+    } catch {
+      // Fallo de red
+    }
+  }
+
+  if (lastResponse) return lastResponse;
+  throw new Error('No se pudo establecer conexión con los modelos de Gemini.');
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
@@ -196,7 +263,7 @@ export default async function handler(req: any, res: any) {
   }
 
   // 3. Verificación de Clave Gemini
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = resolveEnvKey('GEMINI_API_KEY');
   if (!apiKey) {
     return sendJson(res, 503, {
       error: 'GEMINI_API_KEY_NOT_CONFIGURED',
@@ -204,8 +271,7 @@ export default async function handler(req: any, res: any) {
     });
   }
 
-  const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
-  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+  const GEMINI_MODEL = resolveEnvKey('GEMINI_MODEL') || 'gemini-flash-lite-latest';
 
   // =========================================================================
   // ACCIÓN 1: 'diagnose' (Entrevista Guiada en 2 Pasos con Lenguaje Sencillo)
@@ -268,18 +334,14 @@ ${sanitizedCase}
 </caso_usuario_no_confiable>`;
 
     try {
-      const response = await fetch(GEMINI_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }] }],
+      const response = await callGeminiApi(apiKey, GEMINI_MODEL, {
+        contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }] }],
           generationConfig: {
             temperature: 0.1,
             maxOutputTokens: 750,
             responseMimeType: 'application/json',
           },
-        }),
-      });
+        });
 
       if (!response.ok) {
         return sendJson(res, 502, { error: 'Error del proveedor de IA.', details: response.statusText });
@@ -361,18 +423,14 @@ Respuestas o aclaraciones del usuario: ${JSON.stringify(answers || {})}
 Datos del perfil del usuario (si están disponibles): ${JSON.stringify(userProfile || {})}`;
 
     try {
-      const response = await fetch(GEMINI_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }] }],
+      const response = await callGeminiApi(apiKey, GEMINI_MODEL, {
+        contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }] }],
           generationConfig: {
             temperature: 0.15,
             maxOutputTokens: 1400,
             responseMimeType: 'application/json',
           },
-        }),
-      });
+        });
 
       if (!response.ok) {
         return sendJson(res, 502, { error: 'Error del proveedor de IA en redacción.', details: response.statusText });
@@ -419,18 +477,14 @@ ESQUEMA:
 }`;
 
     try {
-      const response = await fetch(GEMINI_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\nCaso: ${sanitizedCase}` }] }],
+      const response = await callGeminiApi(apiKey, GEMINI_MODEL, {
+        contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\nCaso: ${sanitizedCase}` }] }],
           generationConfig: {
             temperature: 0.1,
             maxOutputTokens: 500,
             responseMimeType: 'application/json',
           },
-        }),
-      });
+        });
 
       if (!response.ok) return sendJson(res, 502, { error: 'Error de Gemini.' });
       const geminiResult = await response.json();
@@ -451,23 +505,22 @@ ESQUEMA:
   if (action === 'autofill') {
     const { docType, narrative, currentData } = payload;
     const sanitizedDocType = typeof docType === 'string' ? docType.trim() : '';
+    if (sanitizedDocType && !VALID_DOC_TYPES.includes(sanitizedDocType as any)) {
+      return sendJson(res, 400, { error: `Tipo de documento '${sanitizedDocType}' no soportado.` });
+    }
     const sanitizedNarrative = sanitizeInput(narrative, 2000);
 
     const systemPrompt = `Extrae datos de la narración y devuelve un JSON plano para el documento '${sanitizedDocType}'. No inventes datos que no estén.`;
 
     try {
-      const response = await fetch(GEMINI_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\nDatos actuales: ${JSON.stringify(currentData || {})}\n\nTexto: ${sanitizedNarrative}` }] }],
+      const response = await callGeminiApi(apiKey, GEMINI_MODEL, {
+        contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\nDatos actuales: ${JSON.stringify(currentData || {})}\n\nTexto: ${sanitizedNarrative}` }] }],
           generationConfig: {
             temperature: 0.1,
             maxOutputTokens: 600,
             responseMimeType: 'application/json',
           },
-        }),
-      });
+        });
 
       if (!response.ok) return sendJson(res, 502, { error: 'Error en autofill.' });
       const geminiResult = await response.json();

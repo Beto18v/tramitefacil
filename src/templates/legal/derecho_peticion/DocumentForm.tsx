@@ -13,10 +13,10 @@ const quickClaimTemplates = [
       'DERECHO DE PETICIÓN URGENTE - AUTORIZACIÓN Y ENTREGA EFECTIVA DE MEDICAMENTOS VITALES Y ASIGNACIÓN DE CITA ESPECIALIZADA',
     tipoEntidad: 'Salud / EPS' as const,
     hechos: [
-      '1. Me encuentro legalmente afiliado(a) a su entidad en calidad de cotizante / beneficiario del Sistema de Seguridad Social en Salud.',
-      '2. Mi médico tratante prescribió tratamiento médico y fórmula especializada, la cual fue debidamente radicada ante sus canales de atención.',
-      '3. A la fecha actual han transcurrido los términos de ley sin que se haya efectuado la entrega del medicamento ni asignado la cita médica requerida.',
-      '4. La dilación administrativa vulnera directamente mi derecho fundamental a la salud, a la integridad física y a la vida digna.',
+      'Me encuentro legalmente afiliado(a) a su entidad en calidad de cotizante / beneficiario del Sistema de Seguridad Social en Salud.',
+      'Mi médico tratante prescribió tratamiento médico y fórmula especializada, la cual fue debidamente radicada ante sus canales de atención.',
+      'A la fecha actual han transcurrido los términos de ley sin que se haya efectuado la entrega del medicamento ni asignado la cita médica requerida.',
+      'La dilación administrativa vulnera directamente mi derecho fundamental a la salud, a la integridad física y a la vida digna.',
     ],
     pretensiones: [
       'PRIMERA: Se ordene la entrega inmediata y sin más dilaciones de los medicamentos prescritos en la orden médica radicada.',
@@ -29,9 +29,9 @@ const quickClaimTemplates = [
       'DERECHO DE PETICIÓN - RECLAMO POR FACTURACIÓN INEXACTA Y COBROS NO AUTORIZADOS EN SERVICIO DOMICILIARIO',
     tipoEntidad: 'Servicios Públicos' as const,
     hechos: [
-      '1. Soy usuario y suscriptor del servicio público domiciliario en el inmueble ubicado en la dirección de notificación.',
-      '2. En la última factura recibida se evidencia un incremento desproporcionado e injustificado en el consumo facturado o cobros por conceptos no pactados.',
-      '3. En el predio no se han presentado fugas perceptibles ni variaciones en los hábitos de consumo que justifiquen dicha variación tarifaria.',
+      'Soy usuario y suscriptor del servicio público domiciliario en el inmueble ubicado en la dirección de notificación.',
+      'En la última factura recibida se evidencia un incremento desproporcionado e injustificado en el consumo facturado o cobros por conceptos no pactados.',
+      'En el predio no se han presentado fugas perceptibles ni variaciones en los hábitos de consumo que justifiquen dicha variación tarifaria.',
     ],
     pretensiones: [
       'PRIMERA: Se realice la revisión técnica del medidor y se investiguen las causas de la desviación significativa de consumo.',
@@ -45,8 +45,8 @@ const quickClaimTemplates = [
       'DERECHO DE PETICIÓN - RECLAMO POR DÉBITOS AUTOMÁTICOS O SEGUROS NO AUTORIZADOS EN CUENTA BANCARIA',
     tipoEntidad: 'Entidad Financiera / Banco' as const,
     hechos: [
-      '1. Soy titular del producto financiero o cuenta de ahorros identificada con la entidad bancaria.',
-      '2. En el último extracto bancario se aprecian débitos automáticos por concepto de comisiones o seguros que jamás fueron autorizados de manera expresa por mi parte.',
+      'Soy titular del producto financiero o cuenta de ahorros identificada con la entidad bancaria.',
+      'En el último extracto bancario se aprecian débitos automáticos por concepto de comisiones o seguros que jamás fueron autorizados de manera expresa por mi parte.',
     ],
     pretensiones: [
       'PRIMERA: Se ordene la cancelación inmediata de la suscripción o póliza no consentida vinculada a mi producto.',
@@ -54,6 +54,10 @@ const quickClaimTemplates = [
     ],
   },
 ];
+
+// Helper para evitar duplicación del número si el texto incluye "1. ", "1) ", etc.
+const stripLeadingNumber = (text: string) =>
+  (text || '').replace(/^\s*(?:hecho\s+)?(?:[0-9]{1,2})[\.\-\)]+\s+/i, '');
 
 export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
   data,
@@ -64,13 +68,26 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
     onChange({ ...data, [key]: val });
   };
 
+  // Limpieza automática si los datos cargados de localStorage contienen numeración redundante
+  React.useEffect(() => {
+    if (
+      data.hechos &&
+      data.hechos.some((h) => /^\s*(?:hecho\s+)?(?:[0-9]{1,2})[\.\-\)]+\s+/i.test(h))
+    ) {
+      update(
+        'hechos',
+        data.hechos.map((h) => stripLeadingNumber(h))
+      );
+    }
+  }, [data.hechos]);
+
   const handleAddHecho = () => {
     update('hechos', [...(data.hechos || []), '']);
   };
 
   const handleUpdateHecho = (index: number, val: string) => {
     const updated = [...(data.hechos || [])];
-    updated[index] = val;
+    updated[index] = stripLeadingNumber(val);
     update('hechos', updated);
   };
 
@@ -298,7 +315,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                 <span className="text-xs font-bold text-slate-400 dark:text-slate-500 mt-3">{idx + 1}.</span>
                 <textarea
                   rows={2}
-                  value={hecho}
+                  value={stripLeadingNumber(hecho)}
                   onChange={(e) => handleUpdateHecho(idx, e.target.value)}
                   placeholder={`Describa el hecho ${idx + 1}...`}
                   className="flex-1 text-xs p-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20 leading-relaxed"

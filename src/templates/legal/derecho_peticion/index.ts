@@ -8,7 +8,10 @@ import { DocumentForm } from './DocumentForm';
 export function toPlainText(data: DerechoPeticionData): string {
   const hechosTexto = (data.hechos || [])
     .filter((h: string) => h.trim() !== '')
-    .map((h: string, i: number) => `${i + 1}. ${h}`)
+    .map((h: string, i: number) => {
+      const cleanH = h.replace(/^\s*(?:hecho\s+)?(?:[0-9]{1,2})[\.\-\)]+\s+/i, '');
+      return `${i + 1}. ${cleanH || h}`;
+    })
     .join('\n');
   const peticionesTexto = (data.pretensiones || [])
     .filter((p: string) => p.trim() !== '')

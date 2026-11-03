@@ -1,15 +1,23 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { defineConfig, Plugin } from 'vite';
+import { defineConfig, Plugin, loadEnv } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 function vercelAiDevPlugin(): Plugin {
   return {
     name: 'vercel-ai-dev-middleware',
+    config(config, { mode }) {
+      const env = loadEnv(mode, process.cwd(), '');
+      Object.assign(process.env, env);
+    },
     configureServer(server) {
       server.middlewares.use('/api/ai', async (req, res) => {
         try {
+          // Cargar variables de entorno en caliente desde .env o .env.local
+          const env = loadEnv(server.config.mode, process.cwd(), '');
+          Object.assign(process.env, env);
+
           const handlerModule = await server.ssrLoadModule('/api/ai.ts');
           await handlerModule.default(req, res);
         } catch (err: any) {
