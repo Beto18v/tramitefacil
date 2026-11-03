@@ -87,8 +87,17 @@ export default function App() {
   }, [toast.show, toast.message]);
 
   // Navigate to editor with document
-  const handleSelectDocFromCatalog = (docId: DocumentType) => {
+  const handleSelectDocFromCatalog = (docId: DocumentType, customData?: any) => {
     setSelectedDocId(docId);
+    if (customData && docId === 'documento_formal') {
+      setDocumentsData((prev) => ({
+        ...prev,
+        documentoFormal: {
+          ...prev.documentoFormal,
+          ...customData,
+        },
+      }));
+    }
     setCurrentView('editor');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

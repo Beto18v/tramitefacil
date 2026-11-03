@@ -6,7 +6,7 @@ import { DocumentCard } from '../../features/catalog';
 import { ShieldCheck, Lock, FileText } from 'lucide-react';
 
 interface Props {
-  onSelectDoc: (id: DocumentType) => void;
+  onSelectDoc: (id: DocumentType, customData?: any) => void;
 }
 
 export const CatalogView: React.FC<Props> = ({ onSelectDoc }) => {

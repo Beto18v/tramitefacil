@@ -29,7 +29,7 @@ interface Props {
   activeFilter: QuickCategoryFilter;
   onFilterChange: (filter: QuickCategoryFilter) => void;
   totalResults: number;
-  onSelectDoc?: (id: DocumentType) => void;
+  onSelectDoc?: (id: DocumentType, customData?: any) => void;
   defaultMode?: SearchMode;
 }
 

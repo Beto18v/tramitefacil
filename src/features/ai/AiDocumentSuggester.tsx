@@ -7,32 +7,31 @@ import {
   Receipt,
   Car,
   Home,
-  Key,
   FileText,
-  UserCheck,
-  UserMinus,
-  Calendar,
   ShieldCheck,
   Building2,
   DollarSign,
   AlertCircle,
   RotateCcw,
   CheckCircle2,
-  Info,
-  ShoppingCart,
-  CreditCard,
   Lock,
   Loader2,
+  Check,
+  ShoppingCart,
+  Zap,
+  HelpCircle,
   type LucideIcon,
 } from 'lucide-react';
-import { DocumentType } from '../../types/documents';
+import { DocumentType, DocumentoFormalData } from '../../types/documents';
 import {
-  suggestDocument,
-  AiSuggestionResponse,
+  diagnoseLegalCase,
+  generateCustomDocument,
+  DiagnosticResult,
+  DiagnosticOption,
 } from '../../services/aiService';
 
 interface Props {
-  onSelectDoc?: (id: DocumentType) => void;
+  onSelectDoc?: (id: DocumentType, customData?: any) => void;
   className?: string;
 }
 
@@ -44,34 +43,24 @@ interface ExampleCase {
 
 const QUICK_EXAMPLES: ExampleCase[] = [
   {
-    label: 'Garantía de producto',
-    icon: ShoppingCart,
-    text: 'Compré una nevera hace 2 semanas, falló y en el almacén no me quieren devolver el dinero ni dar garantía...',
-  },
-  {
-    label: 'Renuncia de trabajo',
-    icon: Briefcase,
-    text: 'Voy a cambiarme de trabajo y necesito presentar mi renuncia formal pidiendo que me exoneren del preaviso y me paguen la liquidación.',
-  },
-  {
-    label: 'Cobro de honorarios',
-    icon: DollarSign,
-    text: 'Terminé un proyecto freelance de diseño y necesito presentar mi cuenta de cobro con retención en la fuente e ICA.',
-  },
-  {
-    label: 'Retiro de patios',
-    icon: Car,
-    text: 'Inmovilizaron mi moto en los patios de tránsito y necesito autorizar a un familiar con poder especial para que la retire.',
-  },
-  {
-    label: 'No renovar arriendo',
+    label: 'Inquilino no paga arriendo',
     icon: Home,
-    text: 'Soy arrendador y quiero notificar a mi inquilino con 3 meses de anticipación que no prorrogaré el contrato de arrendamiento.',
+    text: 'Mi inquilino lleva 2 meses sin pagar el arriendo y no quiere entregar el apartamento.',
   },
   {
-    label: 'Reporte Datacrédito',
-    icon: CreditCard,
-    text: 'Pagué una deuda hace más de un año y todavía aparezco con reporte negativo en Datacrédito, necesito que lo eliminen por borrón y cuenta nueva.',
+    label: 'Garantía de electrodoméstico',
+    icon: ShoppingCart,
+    text: 'Compré una nevera hace 2 semanas, vino defectuosa y en el almacén se niegan a devolverme el dinero o cambiarla.',
+  },
+  {
+    label: 'Renuncia con liquidación',
+    icon: Briefcase,
+    text: 'Voy a renunciar a mi trabajo actual y necesito pedir que me exoneren del preaviso y me paguen la liquidación completa.',
+  },
+  {
+    label: 'Cobro indebido en banco',
+    icon: DollarSign,
+    text: 'El banco me está cobrando un seguro que nunca solicité ni autoricé y no me quieren hacer el reembolso.',
   },
 ];
 
@@ -80,41 +69,41 @@ export const AiDocumentSuggester: React.FC<Props> = ({
   className = '',
 }) => {
   const [caseDescription, setCaseDescription] = useState('');
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<AiSuggestionResponse>({
-    status: 'empty',
-    alternatives: [],
-    queryAnalyzed: '',
-    source: 'offline_heuristic',
-  });
+  const [isDiagnosing, setIsDiagnosing] = useState(false);
+  const [isGeneratingDoc, setIsGeneratingDoc] = useState(false);
+  const [diagnosticResult, setDiagnosticResult] = useState<DiagnosticResult | null>(null);
+  const [selectedOptionId, setSelectedOptionId] = useState<string>('');
+  const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // Ejecuta el análisis con debounce para evitar llamadas excesivas
+  // Análisis automático con debounce cuando el usuario escribe
   useEffect(() => {
     const trimmed = caseDescription.trim();
-    if (!trimmed || trimmed.length < 5) {
-      setAnalysisResult({
-        status: 'empty',
-        alternatives: [],
-        queryAnalyzed: '',
-        source: 'offline_heuristic',
-      });
-      setIsAnalyzing(false);
+    if (!trimmed || trimmed.length < 8) {
+      setDiagnosticResult(null);
+      setSelectedOptionId('');
+      setUserAnswers({});
+      setIsDiagnosing(false);
       return;
     }
 
     const controller = new AbortController();
-    setIsAnalyzing(true);
+    setIsDiagnosing(true);
+    setErrorMessage('');
 
     const timer = setTimeout(async () => {
       try {
-        const result = await suggestDocument(trimmed, controller.signal);
-        setAnalysisResult(result);
+        const result = await diagnoseLegalCase(trimmed, controller.signal);
+        setDiagnosticResult(result);
+        if (result.options && result.options.length > 0) {
+          setSelectedOptionId(result.options[0].id);
+        }
       } catch (err: any) {
         if (err?.name !== 'AbortError') {
           console.error(err);
         }
       } finally {
-        setIsAnalyzing(false);
+        setIsDiagnosing(false);
       }
     }, 450);
 
@@ -126,117 +115,131 @@ export const AiDocumentSuggester: React.FC<Props> = ({
 
   const handleSelectExample = async (text: string) => {
     setCaseDescription(text);
-    setIsAnalyzing(true);
+    setIsDiagnosing(true);
+    setErrorMessage('');
     try {
-      const result = await suggestDocument(text);
-      setAnalysisResult(result);
+      const result = await diagnoseLegalCase(text);
+      setDiagnosticResult(result);
+      if (result.options && result.options.length > 0) {
+        setSelectedOptionId(result.options[0].id);
+      }
     } catch (err) {
       console.error(err);
     } finally {
-      setIsAnalyzing(false);
+      setIsDiagnosing(false);
     }
   };
 
   const handleClear = () => {
     setCaseDescription('');
+    setDiagnosticResult(null);
+    setSelectedOptionId('');
+    setUserAnswers({});
+    setErrorMessage('');
   };
 
-  // Renderiza icono correspondiente según el documento
-  const renderDocIcon = (docId: DocumentType) => {
-    switch (docId) {
-      case 'cuenta_cobro':
-        return <Receipt className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />;
-      case 'propuesta_servicios':
-        return <DollarSign className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />;
-      case 'carta_renuncia':
-        return <UserMinus className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />;
-      case 'certificado_laboral':
-        return <UserCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />;
-      case 'permiso_laboral':
-        return <Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />;
-      case 'contrato_arrendamiento':
-        return <Home className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />;
-      case 'no_renovacion_arriendo':
-        return <Key className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />;
-      case 'acta_entrega':
-        return <Home className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />;
-      case 'contrato_prestacion':
-        return <Briefcase className="w-5 h-5 text-violet-600 dark:text-violet-400" />;
-      case 'acuerdo_nda':
-        return <ShieldCheck className="w-5 h-5 text-violet-600 dark:text-violet-400" />;
-      case 'derecho_peticion':
-        return <Scale className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
-      case 'poder_autorizacion':
-        return <FileText className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
-      case 'habeas_data':
-        return <Scale className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
-      case 'compraventa_vehiculo':
-        return <Car className="w-5 h-5 text-sky-600 dark:text-sky-400" />;
-      case 'autorizacion_patios':
-        return <Key className="w-5 h-5 text-sky-600 dark:text-sky-400" />;
-      default:
-        return <FileText className="w-5 h-5 text-slate-600 dark:text-slate-400" />;
+  const handleToggleAnswer = (questionId: string, optionValue: string) => {
+    setUserAnswers((prev) => ({
+      ...prev,
+      [questionId]: prev[questionId] === optionValue ? '' : optionValue,
+    }));
+  };
+
+  // Acción principal: Redactar o abrir el documento
+  const handleProceedWithDocument = async (option: DiagnosticOption) => {
+    if (!onSelectDoc) return;
+
+    // Si es una plantilla fija y no se requiere redacción especial de IA
+    if (option.isStandardCatalogDoc && option.standardDocId && option.standardDocId !== 'documento_formal') {
+      onSelectDoc(option.standardDocId);
+      return;
+    }
+
+    // Si es redacción de documento formal a la medida con IA
+    try {
+      setIsGeneratingDoc(true);
+      setErrorMessage('');
+
+      const res = await generateCustomDocument({
+        caseDescription,
+        selectedOptionTitle: option.title,
+        answers: userAnswers,
+      });
+
+      if (res.success && res.document) {
+        onSelectDoc('documento_formal', res.document);
+      } else {
+        setErrorMessage(res.error || 'No se pudo generar el documento. Intenta nuevamente.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'Error de conexión al redactar el documento.');
+    } finally {
+      setIsGeneratingDoc(false);
     }
   };
 
+  const selectedOption = diagnosticResult?.options?.find((o) => o.id === selectedOptionId);
+
   return (
-    <div className={`space-y-5 ${className}`}>
-      {/* 1. Header & Text Area Input Card */}
-      <div className="bg-slate-50/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4 transition-colors">
+    <div className={`space-y-6 ${className}`}>
+      {/* 1. Paso 1: Entrada accesible para cualquier persona */}
+      <div className="bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-5 sm:p-7 space-y-4 shadow-2xs transition-colors">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400">
-              <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <div className="flex items-center gap-2.5">
+            <span className="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-400">
+              <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             </span>
-            <label
-              htmlFor="ai-case-input"
-              className="text-sm font-semibold text-slate-900 dark:text-slate-100"
-            >
-              Describe tu caso en lenguaje natural
-            </label>
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+                Paso 1: ¿Qué te ocurrió o qué necesitas tramitar?
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Escríbelo con tus propias palabras, sin enredos legales. La IA te explicará tus opciones.
+              </p>
+            </div>
           </div>
+
           <div className="flex items-center gap-2">
-            {isAnalyzing && (
-              <span className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-2 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
-                <Loader2 className="w-3 h-3 animate-spin text-indigo-600 dark:text-indigo-400" />
-                Consultando IA...
+            {isDiagnosing && (
+              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-3 py-1 rounded-full flex items-center gap-1.5 animate-pulse">
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Analizando tu caso...</span>
               </span>
             )}
-            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full flex items-center gap-1">
-              <Lock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
-              100% privado en tu navegador
+            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-full flex items-center gap-1">
+              <Lock className="w-3 h-3 text-slate-400" />
+              100% privado en tu equipo
             </span>
           </div>
         </div>
 
-        {/* Text Area */}
+        {/* Textarea grande y accesible */}
         <div className="relative">
           <textarea
-            id="ai-case-input"
             rows={3}
             value={caseDescription}
             onChange={(e) => setCaseDescription(e.target.value)}
-            placeholder="Escribe qué te ocurrió o qué necesitas tramitar (ej: 'Compré una nevera hace 2 semanas, falló y en el almacén no me quieren devolver el dinero ni dar garantía...')"
-            className="w-full p-3.5 pr-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:border-transparent transition shadow-2xs resize-none"
+            placeholder="Ejemplo: Mi inquilino lleva 2 meses sin pagarme el arriendo y no quiere entregar el apartamento..."
+            className="w-full p-4 pr-24 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl text-base text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition shadow-2xs resize-none leading-relaxed"
           />
           {caseDescription && (
             <button
               type="button"
               onClick={handleClear}
-              className="absolute top-3 right-3 text-xs text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer min-h-[36px] flex items-center gap-1"
+              className="absolute top-3.5 right-3.5 text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-semibold px-2.5 py-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer min-h-[36px] flex items-center gap-1.5"
             >
-              <RotateCcw className="w-3 h-3" />
-              Limpiar
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Borrar</span>
             </button>
           )}
         </div>
 
-        {/* Quick Example Chips */}
+        {/* Ejemplos rápidos en 1 clic */}
         <div className="space-y-2 pt-1">
-          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-            <span>Ejemplos rápidos para probar en un clic:</span>
-          </div>
-          <div className="flex flex-wrap gap-2">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">
+            O toca uno de estos ejemplos cotidianos para probar:
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {QUICK_EXAMPLES.map((ex) => {
               const IconComp = ex.icon;
               const isSelected = caseDescription === ex.text;
@@ -245,14 +248,14 @@ export const AiDocumentSuggester: React.FC<Props> = ({
                   key={ex.label}
                   type="button"
                   onClick={() => handleSelectExample(ex.text)}
-                  className={`min-h-[44px] text-xs font-medium px-3 py-1.5 rounded-xl border transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                  className={`min-h-[44px] text-xs font-semibold px-3 py-2 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2 ${
                     isSelected
-                      ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white shadow-2xs font-semibold'
-                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100/80 dark:hover:bg-slate-700/80 hover:border-slate-300 dark:hover:border-slate-600'
+                      ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 shadow-xs'
+                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/80'
                   }`}
                 >
-                  <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'text-white dark:text-slate-900' : 'text-slate-500 dark:text-slate-400'}`} />
-                  <span>{ex.label}</span>
+                  <IconComp className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white dark:text-slate-900' : 'text-indigo-600 dark:text-indigo-400'}`} />
+                  <span className="truncate">{ex.label}</span>
                 </button>
               );
             })}
@@ -260,260 +263,221 @@ export const AiDocumentSuggester: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* 2. Analysis Results Section */}
-      {analysisResult.status === 'matched' && analysisResult.bestMatch && (
-        <div className="space-y-4">
-          {/* Main Recommended Card */}
-          <div className="bg-gradient-to-b from-indigo-50/40 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 rounded-2xl border-2 border-indigo-500/30 dark:border-indigo-500/40 p-5 sm:p-6 shadow-sm space-y-5 transition-all">
-            {/* Top Badge & Confidence */}
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300">
+      {/* 2. Paso 2: Diagnóstico y Opciones Claras */}
+      {diagnosticResult && !diagnosticResult.isOutOfScope && (
+        <div className="bg-white dark:bg-slate-900 border-2 border-indigo-500/30 dark:border-indigo-500/40 rounded-3xl p-5 sm:p-7 space-y-6 shadow-md animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {/* Header del Diagnóstico */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-300">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                <span>Trámite Recomendado por Inteligencia Legal</span>
+                <span>Paso 2: Diagnóstico y Rutas de Solución</span>
               </div>
-              <div className="flex items-center gap-2">
-                {analysisResult.source === 'gemini_cloud' ? (
-                  <span className="text-[11px] font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
-                    Gemini 2.0 Flash
-                  </span>
-                ) : (
-                  <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3 text-slate-500 dark:text-slate-400" />
-                    Motor Offline Local
-                  </span>
-                )}
-                <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                  Coincidencia {analysisResult.bestMatch.confidence === 'alta' ? 'Alta (Recomendado)' : 'Moderada'}
-                </span>
-              </div>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 mt-1">
+                ¿Qué dice la ley y qué documento te conviene generar?
+              </h3>
             </div>
 
-            {/* Document Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-start sm:items-center gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xs flex items-center justify-center shrink-0">
-                  {renderDocIcon(analysisResult.bestMatch.document.id)}
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-snug">
-                    {analysisResult.bestMatch.document.title}
-                  </h3>
-                  <div className="flex flex-wrap items-center gap-2 mt-1">
-                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                      {analysisResult.bestMatch.document.categoryName}
-                    </span>
-                    <span className="text-slate-300 dark:text-slate-700">•</span>
-                    <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
-                      {analysisResult.bestMatch.document.estimatedMinutes || '2 min'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Button: Empezar este trámite */}
-              {onSelectDoc && (
-                <button
-                  type="button"
-                  onClick={() => onSelectDoc(analysisResult.bestMatch!.document.id)}
-                  className="min-h-[44px] px-5 py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 text-sm font-semibold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer shrink-0"
-                >
-                  <span>Empezar este trámite</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+            <div className="flex items-center gap-2">
+              {diagnosticResult.cached ? (
+                <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-full flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                  Caché ultra rápida (0 ms)
+                </span>
+              ) : diagnosticResult.source === 'gemini_cloud' ? (
+                <span className="text-[11px] font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-2.5 py-1 rounded-full flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+                  Gemini 2.0 Flash
+                </span>
+              ) : (
+                <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-full flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-slate-500" />
+                  Motor Offline
+                </span>
               )}
-            </div>
-
-            {/* Reasoning & Legal Justification */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
-              {/* Practical Reasoning */}
-              <div className="bg-slate-50/80 dark:bg-slate-800/60 rounded-xl p-3.5 border border-slate-200/70 dark:border-slate-700/70 space-y-1.5">
-                <div className="text-xs font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <Info className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                  <span>Por qué aplica a tu caso</span>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  {analysisResult.bestMatch.reasoning}
-                </p>
-              </div>
-
-              {/* Legal Justification */}
-              <div className="bg-amber-50/50 dark:bg-amber-950/30 rounded-xl p-3.5 border border-amber-200/70 dark:border-amber-800/70 space-y-1.5">
-                <div className="text-xs font-semibold text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
-                  <Scale className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                  <span>Fundamento Legal Colombiano</span>
-                </div>
-                <p className="text-xs text-amber-900 dark:text-amber-300/90 leading-relaxed font-normal">
-                  {analysisResult.bestMatch.legalJustification}
-                </p>
-              </div>
-            </div>
-
-            {/* Key Advantages Checklist */}
-            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-y-2 gap-x-4">
-              {analysisResult.bestMatch.keyPoints.map((point, idx) => (
-                <span
-                  key={idx}
-                  className="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1.5 font-medium"
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                  <span>{point}</span>
-                </span>
-              ))}
             </div>
           </div>
 
-          {/* Secondary / Alternative Suggestions */}
-          {analysisResult.alternatives.length > 0 && (
-            <div className="space-y-2 pt-2">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
-                Otras opciones que también podrían aplicar:
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {analysisResult.alternatives.map((alt) => (
+          {/* Explicación en lenguaje sencillo */}
+          <div className="bg-indigo-50/60 dark:bg-slate-800/60 rounded-2xl p-4 border border-indigo-100 dark:border-slate-700/80 space-y-1">
+            <span className="text-xs font-bold text-indigo-950 dark:text-indigo-300 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <span>Resumen sencillo de tu situación:</span>
+            </span>
+            <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+              {diagnosticResult.plainSummary}
+            </p>
+          </div>
+
+          {/* Selector de Opciones Documentales */}
+          <div className="space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+              Elige el documento que deseas redactar:
+            </span>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {diagnosticResult.options.map((opt) => {
+                const isSelected = selectedOptionId === opt.id;
+                return (
                   <div
-                    key={alt.document.id}
-                    className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3.5 flex items-center justify-between gap-3 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition"
+                    key={opt.id}
+                    onClick={() => setSelectedOptionId(opt.id)}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
+                      isSelected
+                        ? 'bg-indigo-50/50 dark:bg-indigo-950/40 border-indigo-600 dark:border-indigo-500 shadow-xs'
+                        : 'bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                    }`}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0">
-                        {renderDocIcon(alt.document.id)}
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-xs font-semibold text-slate-900 dark:text-slate-100 block truncate">
-                          {alt.document.shortTitle || alt.document.title}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span
+                          className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${
+                            opt.badge?.toLowerCase().includes('recomendado')
+                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300'
+                              : 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300'
+                          }`}
+                        >
+                          {opt.badge || 'Opción'}
                         </span>
-                        <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate">
-                          {alt.document.categoryName}
-                        </span>
+                        <div
+                          className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                            isSelected
+                              ? 'bg-indigo-600 border-indigo-600 text-white'
+                              : 'border-slate-300 dark:border-slate-600'
+                          }`}
+                        >
+                          {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                        </div>
                       </div>
+
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-snug">
+                        {opt.title}
+                      </h4>
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {opt.purpose}
+                      </p>
                     </div>
-                    {onSelectDoc && (
-                      <button
-                        type="button"
-                        onClick={() => onSelectDoc(alt.document.id)}
-                        className="min-h-[44px] px-3 py-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 bg-indigo-50/70 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 rounded-lg transition cursor-pointer shrink-0 flex items-center gap-1"
-                      >
-                        <span>Elegir</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </button>
+
+                    {opt.legalBasisShort && (
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center gap-1.5 text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                        <Scale className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                        <span className="truncate">{opt.legalBasisShort}</span>
+                      </div>
                     )}
                   </div>
-                ))}
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Preguntas rápidas de afinación (Chips) */}
+          {diagnosticResult.clarificationQuestions &&
+            diagnosticResult.clarificationQuestions.length > 0 && (
+              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700 space-y-3">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                  <HelpCircle className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span>Aclara estos detalles para que la carta quede más exacta (opcional):</span>
+                </span>
+
+                <div className="space-y-3">
+                  {diagnosticResult.clarificationQuestions.map((q) => (
+                    <div key={q.id} className="space-y-1.5">
+                      <p className="text-xs font-medium text-slate-800 dark:text-slate-200">{q.question}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {q.options.map((optVal) => {
+                          const isPicked = userAnswers[q.id] === optVal;
+                          return (
+                            <button
+                              key={optVal}
+                              type="button"
+                              onClick={() => handleToggleAnswer(q.id, optVal)}
+                              className={`min-h-[44px] text-xs font-semibold px-3.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
+                                isPicked
+                                  ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 shadow-2xs'
+                                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+                              }`}
+                            >
+                              {optVal}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
+            )}
+
+          {/* Mensaje de error si falla la generación */}
+          {errorMessage && (
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
+          {/* Botón Principal de Redacción del Documento */}
+          {selectedOption && (
+            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="text-xs text-slate-500 dark:text-slate-400">
+                <span>Generando: </span>
+                <strong className="text-slate-900 dark:text-slate-100 font-semibold">
+                  {selectedOption.title}
+                </strong>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleProceedWithDocument(selectedOption)}
+                disabled={isGeneratingDoc}
+                className="min-h-[50px] px-7 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-sm sm:text-base font-bold rounded-2xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
+              >
+                {isGeneratingDoc ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Redactando documento formal con IA...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5 text-indigo-200" />
+                    <span>Redactar Documento Formal</span>
+                    <ArrowRight className="w-5 h-5 ml-1" />
+                  </>
+                )}
+              </button>
             </div>
           )}
         </div>
       )}
 
-      {/* 3. Out-Of-Scope / Institutional Guidance Card */}
-      {analysisResult.status === 'out_of_scope' && analysisResult.entityGuidance && (
-        <div className="bg-amber-50/70 dark:bg-amber-950/30 border-2 border-amber-300 dark:border-amber-800/80 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 flex items-center justify-center shrink-0 mt-0.5">
+      {/* 3. Caso Fuera de Alcance Privado (Delito Penal, ICBF, etc.) */}
+      {diagnosticResult?.isOutOfScope && (
+        <div className="bg-amber-50/80 dark:bg-amber-950/30 border-2 border-amber-300 dark:border-amber-800/80 rounded-3xl p-6 sm:p-7 shadow-sm space-y-4 animate-in fade-in">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 flex items-center justify-center shrink-0">
               <AlertCircle className="w-6 h-6 text-amber-700 dark:text-amber-400" />
             </div>
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-200/80 dark:bg-amber-900/80 text-amber-900 dark:text-amber-200">
-                <span>Orientación Ciudadana Especializada</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold bg-amber-200/80 dark:bg-amber-900/80 text-amber-900 dark:text-amber-200">
+                <span>Orientación Ciudadana Oficial</span>
               </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
-                Este caso requiere intervención ante una entidad pública u oficial
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+                Este caso requiere intervención de una autoridad pública
               </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                {analysisResult.entityGuidance.description}
+              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                {diagnosticResult.plainSummary}
               </p>
             </div>
           </div>
 
-          {/* Official Entity Box */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-amber-200/80 dark:border-amber-800/60 space-y-2.5 shadow-2xs">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
-              <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                <Building2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                {analysisResult.entityGuidance.entityName}
-              </span>
-              <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700">
-                {analysisResult.entityGuidance.entityCategory}
-              </span>
-            </div>
-
-            <div className="text-xs text-slate-700 dark:text-slate-300 space-y-1">
-              <strong className="block text-slate-900 dark:text-slate-100">Paso recomendado:</strong>
-              <p>{analysisResult.entityGuidance.actionRequired}</p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
-              <span className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">
-                Norma: {analysisResult.entityGuidance.legalBasis}
-              </span>
-              <span className="text-indigo-600 dark:text-indigo-400 font-semibold flex items-center gap-1">
-                <span>Canal: {analysisResult.entityGuidance.officialCanal}</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Optional Petition Fallback */}
-          {analysisResult.entityGuidance.canUsePetitionAsFirstStep && onSelectDoc && (
-            <div className="bg-white/80 dark:bg-slate-900/80 rounded-xl p-3 border border-amber-200 dark:border-amber-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                <Scale className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                <span>¿Deseas radicar primero una solicitud formal escrita antes de acudir a la entidad?</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => onSelectDoc('derecho_peticion')}
-                className="min-h-[44px] px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold rounded-lg transition cursor-pointer flex items-center gap-1.5 shadow-xs"
-              >
-                <span>Redactar Derecho de Petición</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* 4. No Match Card */}
-      {analysisResult.status === 'no_match' && (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 text-center space-y-3 shadow-2xs">
-          <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 mx-auto flex items-center justify-center text-slate-500 dark:text-slate-400">
-            <Info className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-              No detectamos un trámite legal o contractual específico
-            </h4>
-            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto mt-1 leading-relaxed">
-              TrámiteFácil cuenta con 15 plantillas para contratos, honorarios, trámites laborales, peticiones y vehículos. Describe con más detalle tu situación o prueba haciendo clic en uno de los ejemplos superiores.
-            </p>
-          </div>
-          {onSelectDoc && (
-            <div className="pt-2 flex flex-wrap justify-center gap-2">
-              <button
-                type="button"
-                onClick={() => onSelectDoc('derecho_peticion')}
-                className="min-h-[44px] px-3.5 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
-              >
-                <Scale className="w-3.5 h-3.5" />
-                <span>Ver Derecho de Petición</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onSelectDoc('cuenta_cobro')}
-                className="min-h-[44px] px-3.5 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
-              >
-                <Receipt className="w-3.5 h-3.5" />
-                <span>Ver Cuenta de Cobro</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onSelectDoc('carta_renuncia')}
-                className="min-h-[44px] px-3.5 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
-              >
-                <Briefcase className="w-3.5 h-3.5" />
-                <span>Ver Carta de Renuncia</span>
-              </button>
+          {diagnosticResult.entityAdvice && (
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-amber-200 dark:border-amber-800 space-y-2 text-xs">
+              <strong className="block text-slate-900 dark:text-slate-100 font-bold">
+                Entidad o canal competente:
+              </strong>
+              <p className="text-slate-700 dark:text-slate-300 font-medium">
+                {diagnosticResult.entityAdvice}
+              </p>
             </div>
           )}
         </div>

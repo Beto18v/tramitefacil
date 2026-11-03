@@ -230,6 +230,31 @@ export function injectProfileIntoDocument(
       };
       break;
     }
+    case 'documento_formal': {
+      const sigs = [...(updated.documentoFormal.signatures || [])];
+      if (sigs.length === 0) {
+        sigs.push({
+          role: 'SOLICITANTE',
+          name: profile.nombreCompleto,
+          idNumber: `${profile.tipoDocumento} No. ${profile.numeroDocumento}`,
+          phone: profile.telefono,
+          email: profile.correo,
+        });
+      } else {
+        sigs[0] = {
+          ...sigs[0],
+          name: profile.nombreCompleto || sigs[0].name,
+          idNumber: profile.numeroDocumento ? `${profile.tipoDocumento} No. ${profile.numeroDocumento}` : sigs[0].idNumber,
+          phone: profile.telefono || sigs[0].phone,
+          email: profile.correo || sigs[0].email,
+        };
+      }
+      updated.documentoFormal = {
+        ...updated.documentoFormal,
+        signatures: sigs,
+      };
+      break;
+    }
   }
 
   // If user profile has a saved signature, inject it
@@ -250,6 +275,7 @@ export function injectProfileIntoDocument(
       acuerdo_nda: 'acuerdoNda',
       compraventa_vehiculo: 'compraventaVehiculo',
       autorizacion_patios: 'autorizacionPatios',
+      documento_formal: 'documentoFormal',
     };
     const key = docKeyMap[docType];
     if (key && updated[key]) {

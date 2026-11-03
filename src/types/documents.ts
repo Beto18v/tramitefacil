@@ -27,7 +27,9 @@ export type DocumentType =
   | 'habeas_data'
   // Vehículos & Transporte
   | 'compraventa_vehiculo'
-  | 'autorizacion_patios';
+  | 'autorizacion_patios'
+  // Documento a Medida / Oficio Universal
+  | 'documento_formal';
 
 export interface DocumentMeta {
   id: DocumentType;
@@ -565,6 +567,36 @@ export interface AutorizacionPatiosData {
   signatureDataUrl?: string;
 }
 
+// 16. Documento Formal y Oficio Personalizado con IA
+export interface DocumentoFormalRecipient {
+  name: string;
+  titleOrCompany: string;
+  address?: string;
+}
+
+export interface DocumentoFormalSignature {
+  role: string;
+  name: string;
+  idNumber: string;
+  phone?: string;
+  email?: string;
+}
+
+export interface DocumentoFormalData {
+  title: string;
+  cityAndDate: string;
+  recipient: DocumentoFormalRecipient;
+  subject: string;
+  openingGreeting: string;
+  facts: string[];
+  legalBasis: string[];
+  petitions: string[];
+  closing: string;
+  signatures: DocumentoFormalSignature[];
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
 // Master AllDocumentsData state container
 export interface AllDocumentsData {
   cuentaCobro: CuentaCobroData;
@@ -582,6 +614,7 @@ export interface AllDocumentsData {
   acuerdoNda: AcuerdoNdaData;
   compraventaVehiculo: CompraventaVehiculoData;
   autorizacionPatios: AutorizacionPatiosData;
+  documentoFormal: DocumentoFormalData;
 }
 
 // Master state stored in localStorage (Key: tramite_facil_state_v1)

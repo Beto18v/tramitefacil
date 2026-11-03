@@ -15,6 +15,7 @@ import { poderAutorizacionDefinition } from './legal/poder_autorizacion';
 import { habeasDataDefinition } from './legal/habeas_data';
 import { compraventaVehiculoDefinition } from './vehiculos/compraventa_vehiculo';
 import { autorizacionPatiosDefinition } from './vehiculos/autorizacion_patios';
+import { documentoFormalDefinition } from './legal/documento_formal';
 
 export type AnyDocumentDefinition = DocumentDefinition<any>;
 
@@ -34,6 +35,7 @@ export const DOC_TYPE_TO_DATA_KEY: Record<DocumentType, keyof AllDocumentsData> 
   acuerdo_nda: 'acuerdoNda',
   compraventa_vehiculo: 'compraventaVehiculo',
   autorizacion_patios: 'autorizacionPatios',
+  documento_formal: 'documentoFormal',
 };
 
 export const DOCUMENT_DEFINITIONS: Record<DocumentType, AnyDocumentDefinition> = {
@@ -63,6 +65,9 @@ export const DOCUMENT_DEFINITIONS: Record<DocumentType, AnyDocumentDefinition> =
   // Vehículos
   compraventa_vehiculo: compraventaVehiculoDefinition,
   autorizacion_patios: autorizacionPatiosDefinition,
+
+  // Universal / IA
+  documento_formal: documentoFormalDefinition,
 };
 
 export function getDocumentDefinition(docType: DocumentType): AnyDocumentDefinition {
