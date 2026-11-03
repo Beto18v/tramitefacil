@@ -7,12 +7,11 @@ import {
   Scale,
   SlidersHorizontal,
   Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  PenTool,
+  HelpCircle,
 } from 'lucide-react';
 import { DocumentType } from '../../types/documents';
 import { AiDocumentSuggester } from '../ai/AiDocumentSuggester';
+import { OnboardingModal } from '../../components/shared/OnboardingModal';
 
 export type QuickCategoryFilter =
   | 'all'
@@ -43,6 +42,7 @@ export const Hero: React.FC<Props> = ({
   defaultMode = 'standard',
 }) => {
   const [searchMode, setSearchMode] = useState<SearchMode>(defaultMode);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
   const categoryPills: {
     id: QuickCategoryFilter;
@@ -58,56 +58,26 @@ export const Hero: React.FC<Props> = ({
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-6 transition-colors">
-      {/* Title & Subtitle */}
-      <div className="max-w-3xl space-y-2">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
-          Generador de Documentos & Trámites Legales
-        </h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
-          Redacta, personaliza y descarga documentos formales en segundos. 100% privado en tu navegador.
-        </p>
-      </div>
-
-      {/* 3-Step Value Onboarding Banner */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-3.5 bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 rounded-2xl">
-        <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-7 h-7 rounded-xl bg-indigo-600 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center font-mono text-xs font-bold shrink-0 shadow-xs">
-            1
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-              <span>Elige tu trámite</span>
-              <ArrowRight className="w-3 h-3 text-indigo-400 dark:text-slate-400 hidden lg:inline" />
-            </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">15+ formatos colombianos vigentes</p>
-          </div>
+      {/* Title, Subtitle & Onboarding Action */}
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div className="max-w-3xl space-y-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
+            Generador de Documentos & Trámites Legales
+          </h1>
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
+            Redacta, personaliza y descarga documentos formales en segundos. 100% privado en tu navegador.
+          </p>
         </div>
 
-        <div className="flex items-center gap-3 px-3 py-2 border-t md:border-t-0 md:border-l border-slate-200/60 dark:border-slate-800">
-          <div className="w-7 h-7 rounded-xl bg-indigo-600 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center font-mono text-xs font-bold shrink-0 shadow-xs">
-            2
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-              <span>Diligencia o autocompleta</span>
-              <PenTool className="w-3 h-3 text-indigo-400 dark:text-slate-500 hidden lg:inline" />
-            </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">Autocompleta con 1 clic tus datos</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 px-3 py-2 border-t md:border-t-0 md:border-l border-slate-200/60 dark:border-slate-800">
-          <div className="w-7 h-7 rounded-xl bg-indigo-600 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center font-mono text-xs font-bold shrink-0 shadow-xs">
-            3
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-              <span>Descarga PDF o Word</span>
-              <CheckCircle2 className="w-3 h-3 text-emerald-500 dark:text-emerald-400 hidden lg:inline" />
-            </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">Listo para imprimir o firmar</p>
-          </div>
-        </div>
+        <button
+          type="button"
+          onClick={() => setIsOnboardingOpen(true)}
+          className="self-start sm:self-auto min-h-[44px] inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white bg-slate-100/90 dark:bg-slate-800 hover:bg-indigo-50/80 dark:hover:bg-slate-700/90 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs transition-all cursor-pointer shrink-0"
+          title="Ver cómo funciona en 3 sencillos pasos"
+        >
+          <HelpCircle className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <span>¿Cómo funciona?</span>
+        </button>
       </div>
 
       {/* Mode Selector Tabs: [ Buscar por nombre ] vs [ Describir mi caso con IA ] */}
@@ -212,6 +182,12 @@ export const Hero: React.FC<Props> = ({
         /* Mode 2: AI Document Suggester & Router */
         <AiDocumentSuggester onSelectDoc={onSelectDoc} />
       )}
+
+      {/* Modal interactivo de Onboarding / Guía de uso */}
+      <OnboardingModal
+        isOpen={isOnboardingOpen}
+        onClose={() => setIsOnboardingOpen(false)}
+      />
     </div>
   );
 };
