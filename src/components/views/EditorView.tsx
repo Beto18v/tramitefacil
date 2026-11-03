@@ -211,7 +211,7 @@ export const EditorView: React.FC<Props> = ({
             type="button"
             onClick={() => setIsAutofillModalOpen(true)}
             className="min-h-[44px] px-2.5 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 rounded-2xl flex items-center justify-center cursor-pointer shadow-2xs"
-            title="Autollenar con IA"
+            title="Completar con asistente"
           >
             <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
           </button>
@@ -219,15 +219,15 @@ export const EditorView: React.FC<Props> = ({
 
         {/* Right Desktop Actions */}
         <div className="hidden lg:flex items-center flex-wrap gap-2 text-xs">
-          {/* Autollenar con IA (Prompt-to-Document) */}
+          {/* Completar datos con asistente */}
           <button
             type="button"
             onClick={() => setIsAutofillModalOpen(true)}
             className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-200 dark:border-indigo-800 rounded-xl shadow-2xs transition cursor-pointer"
-            title="Autollenar campos dictando o pegando tu caso con IA"
+            title="Completar las casillas contando tu caso con tus propias palabras"
           >
             <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            <span>Llenar con IA</span>
+            <span>Completar con Asistente</span>
           </button>
 
           {/* Autocompletar con perfil */}

@@ -88,7 +88,7 @@ export const AiAutofillModal: React.FC<Props> = ({
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
-                Autollenar con IA (Prompt-to-Document)
+                Completar Datos con el Asistente
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 {docTitle}
@@ -99,7 +99,7 @@ export const AiAutofillModal: React.FC<Props> = ({
             type="button"
             onClick={handleClose}
             className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
-            title="Cerrar modal"
+            title="Cerrar ventana"
           >
             <X className="w-5 h-5" />
           </button>
@@ -109,10 +109,10 @@ export const AiAutofillModal: React.FC<Props> = ({
         <div className="bg-indigo-50/60 dark:bg-slate-800/60 rounded-2xl p-3.5 border border-indigo-100 dark:border-slate-700/80 space-y-1 text-xs text-slate-600 dark:text-slate-300">
           <div className="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
             <Info className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
-            <span>Pega o redacta los datos de tu trámite</span>
+            <span>Escribe o pega la información de tu trámite</span>
           </div>
           <p className="leading-relaxed text-[11px]">
-            Escribe en lenguaje natural nombres, fechas, valores monetarios o cláusulas. La IA de costo ultrabajo mapeará los datos a los campos de este documento sin inventar información.
+            Cuéntanos los datos (nombres, fechas, valores o direcciones) con tus propias palabras. El asistente completará automáticamente cada casilla del formulario.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ export const AiAutofillModal: React.FC<Props> = ({
           <div className="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
             <span className="flex items-center gap-1">
               <Lock className="w-3 h-3 text-slate-400" />
-              Entrada protegida con sanitización anti-inyección
+              Tus datos son 100% privados y seguros en tu dispositivo
             </span>
             <span className="font-mono">{narrative.length}/2500</span>
           </div>
@@ -177,12 +177,12 @@ export const AiAutofillModal: React.FC<Props> = ({
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Procesando con Gemini...</span>
+                  <span>Completando información...</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  <span>Extraer y Autollenar</span>
+                  <span>Completar Casillas</span>
                 </>
               )}
             </button>
@@ -193,7 +193,7 @@ export const AiAutofillModal: React.FC<Props> = ({
               className="min-h-[44px] px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition flex items-center gap-2 cursor-pointer shadow-xs"
             >
               <CheckCircle2 className="w-4 h-4" />
-              <span>Aplicar al Formulario</span>
+              <span>Guardar en el Formulario</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           )}

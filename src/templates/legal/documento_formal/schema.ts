@@ -2,27 +2,26 @@ import { DocumentoFormalData, DocumentMeta } from '../../../types/documents';
 
 export const meta: DocumentMeta = {
   id: 'documento_formal',
-  title: 'Documento Jurídico y Oficio Formal con IA',
+  title: 'Documento Formal y Oficio Personalizado',
   shortTitle: 'Documento a Medida',
   category: 'legal',
   categoryName: 'Trámites Ciudadanos & Legales',
   categoryIcon: 'Sparkles',
   description:
-    'Documento formal y oficio redactado a la medida de tu caso por IA, estructurado con hechos, fundamentos jurídicos colombianos y peticiones.',
+    'Documento formal y oficio redactado a la medida de tu caso, estructurado con hechos, fundamentos legales colombianos y peticiones.',
   iconName: 'FileText',
   lawReference: 'Estructura Jurídica Institucional Colombiana',
   tags: [
     'oficio',
     'carta formal',
     'reclamación',
-    'ia',
     'documento a medida',
     'personalizado',
     'solicitud',
     'acuerdo',
   ],
   estimatedMinutes: '1 min',
-  featuredTags: ['Generado con IA', '100% Personalizado', 'Formato A4 Oficial'],
+  featuredTags: ['A tu Medida', 'Formato Oficial', 'Listo para Firmar'],
   subfilter: 'Derechos Ciudadanos',
 };
 

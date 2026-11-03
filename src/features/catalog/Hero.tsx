@@ -135,7 +135,7 @@ export const Hero: React.FC<Props> = ({
             }`}
           >
             <Sparkles className="w-4 h-4 text-indigo-200 dark:text-slate-600" />
-            <span>Describir mi caso con IA</span>
+            <span>Contar mi caso</span>
             <span
               className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider ml-1 ${
                 searchMode === 'assistant'
