@@ -7,25 +7,25 @@ export type DocumentCategory =
   | 'vehiculos';
 
 export type DocumentType =
-  // Finanzas, Freelance & Honorarios
+  // Freelance & Finanzas
   | 'cuenta_cobro'
   | 'propuesta_servicios'
   // Laboral & Talento Humano
   | 'carta_renuncia'
   | 'certificado_laboral'
   | 'permiso_laboral'
-  // Inmobiliario & Propiedad
+  // Inmobiliario & Arriendos
   | 'contrato_arrendamiento'
   | 'no_renovacion_arriendo'
   | 'acta_entrega'
-  // Comercial & Negocios
+  // Comercial & Contratos
   | 'contrato_prestacion'
   | 'acuerdo_nda'
-  // Trámites Ciudadanos & Legales
+  // Trámites Administrativos
   | 'derecho_peticion'
   | 'poder_autorizacion'
   | 'habeas_data'
-  // Vehículos & Transporte
+  // Vehículos
   | 'compraventa_vehiculo'
   | 'autorizacion_patios'
   // Documento a Medida / Oficio Universal
@@ -65,94 +65,94 @@ export interface CategoryHubConfig {
 
 export const CATEGORIES_CONFIG: CategoryHubConfig[] = [
   {
-    id: 'freelance',
-    name: 'Finanzas, Freelance & Honorarios',
-    icon: 'Briefcase',
-    tagline: 'Cuentas de cobro, cotizaciones e ingresos',
-    description: 'Cuentas de cobro multilínea con cálculo de retenciones (ReteFuente e ICA) y propuestas comerciales con hitos.',
-    colorTheme: {
-      bg: 'bg-indigo-50/70',
-      text: 'text-indigo-700',
-      border: 'border-indigo-100',
-      hoverBg: 'hover:border-indigo-300',
-      accent: 'indigo',
-    },
-    subfilters: ['Todos', 'Cuentas de Cobro', 'Cotizaciones'],
-  },
-  {
     id: 'laboral',
     name: 'Laboral & Talento Humano',
     icon: 'Building2',
     tagline: 'Renuncias, constancias y licencias de trabajo',
     description: 'Cartas de renuncia con selector de exoneración de preaviso, solicitudes de certificado laboral y permisos remunerados.',
     colorTheme: {
-      bg: 'bg-blue-50/70',
-      text: 'text-blue-700',
-      border: 'border-blue-100',
-      hoverBg: 'hover:border-blue-300',
-      accent: 'blue',
+      bg: 'bg-slate-100 dark:bg-slate-800/80',
+      text: 'text-slate-700 dark:text-slate-300',
+      border: 'border-slate-200 dark:border-slate-700/80',
+      hoverBg: 'hover:border-slate-300 dark:hover:border-slate-600',
+      accent: 'slate',
     },
     subfilters: ['Todos', 'Renuncias', 'Certificados', 'Permisos'],
   },
   {
     id: 'inmobiliario',
-    name: 'Inmobiliario & Propiedad',
+    name: 'Inmobiliario & Arriendos',
     icon: 'Home',
-    tagline: 'Vivienda, arrendamiento y entrega de inmuebles',
+    tagline: 'Arriendos, vivienda y entrega de inmuebles',
     description: 'Contratos de vivienda urbana con fiador/codeudor solidario, avisos de no renovación y actas de entrega con inventario.',
     colorTheme: {
-      bg: 'bg-emerald-50/70',
-      text: 'text-emerald-700',
-      border: 'border-emerald-100',
-      hoverBg: 'hover:border-emerald-300',
+      bg: 'bg-emerald-50/70 dark:bg-emerald-950/40',
+      text: 'text-emerald-700 dark:text-emerald-400',
+      border: 'border-emerald-200/60 dark:border-emerald-900/60',
+      hoverBg: 'hover:border-emerald-300 dark:hover:border-emerald-700',
       accent: 'emerald',
     },
     subfilters: ['Todos', 'Arrendamiento', 'Terminación', 'Inventario'],
   },
   {
     id: 'comercial',
-    name: 'Comercial & Negocios',
+    name: 'Comercial & Contratos',
     icon: 'Handshake',
-    tagline: 'Contratos mercantiles y acuerdos de confidencialidad',
+    tagline: 'Contratos de servicios y acuerdos de confidencialidad',
     description: 'Acuerdos de confidencialidad (NDA), contratos de prestación de servicios con cláusulas de propiedad intelectual y penalidades.',
     colorTheme: {
-      bg: 'bg-violet-50/70',
-      text: 'text-violet-700',
-      border: 'border-violet-100',
-      hoverBg: 'hover:border-violet-300',
-      accent: 'violet',
+      bg: 'bg-slate-100 dark:bg-slate-800/80',
+      text: 'text-slate-700 dark:text-slate-300',
+      border: 'border-slate-200 dark:border-slate-700/80',
+      hoverBg: 'hover:border-slate-300 dark:hover:border-slate-600',
+      accent: 'slate',
     },
     subfilters: ['Todos', 'Contratos', 'Confidencialidad (NDA)'],
   },
   {
     id: 'legal',
-    name: 'Trámites Ciudadanos & Legales',
+    name: 'Trámites Administrativos',
     icon: 'Scale',
-    tagline: 'Peticiones, poderes y defensa de datos',
+    tagline: 'Derechos de petición, habeas data y poderes',
     description: 'Derechos de petición con hechos dinámicos y términos de ley, poderes especiales con recuadro de huella y reclamos Habeas Data.',
     colorTheme: {
-      bg: 'bg-amber-50/70',
-      text: 'text-amber-700',
-      border: 'border-amber-100',
-      hoverBg: 'hover:border-amber-300',
+      bg: 'bg-amber-50/70 dark:bg-amber-950/40',
+      text: 'text-amber-700 dark:text-amber-400',
+      border: 'border-amber-200/60 dark:border-amber-900/60',
+      hoverBg: 'hover:border-amber-300 dark:hover:border-amber-700',
       accent: 'amber',
     },
-    subfilters: ['Todos', 'Peticiones', 'Poderes', 'Habeas Data'],
+    subfilters: ['Todos', 'Peticiones', 'Poderes', 'Derechos Ciudadanos'],
   },
   {
     id: 'vehiculos',
-    name: 'Vehículos & Transporte',
+    name: 'Vehículos',
     icon: 'Car',
     tagline: 'Compraventa automotriz y trámites de tránsito',
     description: 'Contrato formal de compraventa de carro o moto con paz y salvo de multas y autorizaciones de retiro de patios de tránsito.',
     colorTheme: {
-      bg: 'bg-sky-50/70',
-      text: 'text-sky-700',
-      border: 'border-sky-100',
-      hoverBg: 'hover:border-sky-300',
-      accent: 'sky',
+      bg: 'bg-slate-100 dark:bg-slate-800/80',
+      text: 'text-slate-700 dark:text-slate-300',
+      border: 'border-slate-200 dark:border-slate-700/80',
+      hoverBg: 'hover:border-slate-300 dark:hover:border-slate-600',
+      accent: 'slate',
     },
-    subfilters: ['Todos', 'Compraventa', 'Tránsito & Patios'],
+    subfilters: ['Todos', 'Vehículos'],
+  },
+  {
+    id: 'freelance',
+    name: 'Freelance & Finanzas',
+    icon: 'Briefcase',
+    tagline: 'Cuentas de cobro, propuestas e ingresos',
+    description: 'Cuentas de cobro multilínea con cálculo de retenciones (ReteFuente e ICA) y propuestas comerciales con hitos.',
+    colorTheme: {
+      bg: 'bg-emerald-50/70 dark:bg-emerald-950/40',
+      text: 'text-emerald-700 dark:text-emerald-400',
+      border: 'border-emerald-200/60 dark:border-emerald-900/60',
+      hoverBg: 'hover:border-emerald-300 dark:hover:border-emerald-700',
+      accent: 'emerald',
+    },
+    subfilters: ['Todos', 'Cuentas de Cobro', 'Cotizaciones'],
   },
 ];
 

@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Derecho de Petición Estándar Multilínea',
   shortTitle: 'Derecho de Petición',
   category: 'legal',
-  categoryName: 'Trámites Ciudadanos & Legales',
+  categoryName: 'Trámites Administrativos',
   categoryIcon: 'Scale',
   description:
     'Petición formal basada en el Art. 23 de la Constitución con lista dinámica de hechos y pretensiones numeradas para salud, bancos o servicios.',

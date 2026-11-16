@@ -140,7 +140,7 @@ export const SignaturePad: React.FC<Props> = ({
             onClick={() => onSignatureChange('text')}
             className={`min-h-[36px] px-3 py-1 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition cursor-pointer ${
               signatureType === 'text'
-                ? 'bg-slate-900 dark:bg-indigo-600 text-white shadow-xs'
+                ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700/60'
             }`}
           >
@@ -152,7 +152,7 @@ export const SignaturePad: React.FC<Props> = ({
             onClick={() => onSignatureChange('draw', signatureDataUrl)}
             className={`min-h-[36px] px-3 py-1 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition cursor-pointer ${
               signatureType === 'draw'
-                ? 'bg-slate-900 dark:bg-indigo-600 text-white shadow-xs'
+                ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700/60'
             }`}
           >
@@ -175,7 +175,7 @@ export const SignaturePad: React.FC<Props> = ({
       ) : (
         <div className="space-y-2.5">
           {/* Canvas container */}
-          <div className="relative bg-white rounded-xl border-2 border-dashed border-indigo-200 dark:border-indigo-900/60 shadow-xs overflow-hidden touch-none select-none">
+          <div className="relative bg-white rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 shadow-xs overflow-hidden touch-none select-none">
             <canvas
               ref={canvasRef}
               onMouseDown={startDrawing}
@@ -212,7 +212,7 @@ export const SignaturePad: React.FC<Props> = ({
                 type="button"
                 onClick={handleSaveToProfile}
                 disabled={!hasDrawn && !signatureDataUrl}
-                className="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-1.5 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 rounded-xl transition cursor-pointer font-medium disabled:opacity-40"
+                className="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-1.5 text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800 rounded-xl transition cursor-pointer font-medium disabled:opacity-40"
               >
                 {savedToProfileSuccess ? (
                   <>
@@ -221,7 +221,7 @@ export const SignaturePad: React.FC<Props> = ({
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                     <span>Guardar firma en mi perfil</span>
                   </>
                 )}

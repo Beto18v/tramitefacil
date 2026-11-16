@@ -54,7 +54,7 @@ export const DocumentView: React.FC<DocumentViewProps<DocumentoFormalData>> = ({
                   <p className="text-[11px] text-slate-700 font-mono">{sig.idNumber}</p>
                 )}
                 {sig.role && (
-                  <p className="text-[11px] text-indigo-700 font-semibold">{sig.role}</p>
+                  <p className="text-[11px] text-emerald-800 font-semibold">{sig.role}</p>
                 )}
                 {sig.phone && <p className="text-[11px] text-slate-600">Tel: {sig.phone}</p>}
                 {sig.email && <p className="text-[11px] text-slate-600">{sig.email}</p>}
@@ -93,7 +93,7 @@ export const DocumentView: React.FC<DocumentViewProps<DocumentoFormalData>> = ({
             <div className="space-y-1.5 text-justify text-slate-800 text-xs md:text-sm leading-relaxed">
               {data.legalBasis.map((law, idx) => (
                 <div key={idx} className="flex items-start gap-2">
-                  <span className="font-bold text-indigo-700 shrink-0">•</span>
+                  <span className="font-bold text-emerald-700 shrink-0">•</span>
                   <p>{law}</p>
                 </div>
               ))}

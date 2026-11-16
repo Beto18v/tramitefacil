@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Contrato de Compraventa de Vehículo Automotor',
   shortTitle: 'Compraventa de Vehículo',
   category: 'vehiculos',
-  categoryName: 'Trámites de Tránsito & Vehículos',
+  categoryName: 'Vehículos',
   categoryIcon: 'Car',
   description:
     'Promesa y contrato de compraventa de automotores (carros, motos, camionetas) con cláusula de saneamiento, RUNT, SIMIT y división de gastos.',

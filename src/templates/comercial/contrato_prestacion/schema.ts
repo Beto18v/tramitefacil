@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Contrato de Prestación de Servicios Profesionales',
   shortTitle: 'Contrato de Servicios',
   category: 'comercial',
-  categoryName: 'Comercial & Negocios',
+  categoryName: 'Comercial & Contratos',
   categoryIcon: 'Handshake',
   description:
     'Contrato civil y comercial con autonomía técnica, sin subordinación, con interruptores de confidencialidad y cláusula penal.',

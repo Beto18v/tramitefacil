@@ -50,19 +50,19 @@ export const UserProfileModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
-      <div className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in zoom-in-95 my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
+      <div className="relative w-full max-w-xl bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden animate-in fade-in zoom-in-95 my-8 text-white">
         {/* Header */}
-        <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-5 sm:p-6 flex items-start justify-between border-b border-slate-200/90 dark:border-slate-800">
+        <div className="bg-slate-900 text-white p-5 sm:p-6 flex items-start justify-between border-b border-slate-800">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 text-[11px] font-semibold border border-indigo-200/70 dark:border-indigo-800">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-emerald-400 text-[11px] font-semibold border border-slate-700">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" strokeWidth={1.75} />
               Almacenamiento 100% Privado en tu Navegador
             </div>
-            <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
               Perfil del Emisor / Firmante
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
+            <p className="text-xs text-slate-400">
               Guarda tus datos personales una sola vez para autocompletar automáticamente cualquier trámite o contrato.
             </p>
           </div>
@@ -70,10 +70,10 @@ export const UserProfileModal: React.FC<Props> = ({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+            className="text-slate-400 hover:text-white min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl hover:bg-slate-800 transition cursor-pointer"
             aria-label="Cerrar modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" strokeWidth={1.75} />
           </button>
         </div>
 
@@ -98,7 +98,7 @@ export const UserProfileModal: React.FC<Props> = ({
                 value={profile.nombreCompleto}
                 onChange={(e) => handleChange('nombreCompleto', e.target.value)}
                 placeholder="Ej. Juan Andrés Pérez Gómez"
-                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none"
+                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none"
               />
             </div>
 
@@ -111,7 +111,7 @@ export const UserProfileModal: React.FC<Props> = ({
                 value={profile.cargoOProfesion}
                 onChange={(e) => handleChange('cargoOProfesion', e.target.value)}
                 placeholder="Ej. Diseñador Gráfico / Ingeniero"
-                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none"
+                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none"
               />
             </div>
           </div>
@@ -125,7 +125,7 @@ export const UserProfileModal: React.FC<Props> = ({
               <select
                 value={profile.tipoDocumento}
                 onChange={(e) => handleChange('tipoDocumento', e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none font-medium"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none font-medium"
               >
                 <option value="Cédula de Ciudadanía">C.C. (Cédula de Ciudadanía)</option>
                 <option value="NIT">NIT (Número Tributario)</option>
@@ -145,7 +145,7 @@ export const UserProfileModal: React.FC<Props> = ({
                 value={profile.numeroDocumento}
                 onChange={(e) => handleChange('numeroDocumento', e.target.value)}
                 placeholder="Ej. 1.032.456.789"
-                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none font-mono"
+                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none font-mono"
               />
             </div>
 
@@ -158,7 +158,7 @@ export const UserProfileModal: React.FC<Props> = ({
                 value={profile.expedicionDocumento}
                 onChange={(e) => handleChange('expedicionDocumento', e.target.value)}
                 placeholder="Ej. Medellín"
-                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none"
+                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none"
               />
             </div>
           </div>
@@ -174,7 +174,7 @@ export const UserProfileModal: React.FC<Props> = ({
                 value={profile.ciudad}
                 onChange={(e) => handleChange('ciudad', e.target.value)}
                 placeholder="Ej. Cali"
-                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none"
+                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none"
               />
             </div>
 
@@ -187,7 +187,7 @@ export const UserProfileModal: React.FC<Props> = ({
                 value={profile.telefono}
                 onChange={(e) => handleChange('telefono', e.target.value)}
                 placeholder="Ej. +57 300 123 4567"
-                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none"
+                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none"
               />
             </div>
 
@@ -200,7 +200,7 @@ export const UserProfileModal: React.FC<Props> = ({
                 value={profile.correo}
                 onChange={(e) => handleChange('correo', e.target.value)}
                 placeholder="Ej. correo@ejemplo.com"
-                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none"
+                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none"
               />
             </div>
           </div>
@@ -215,14 +215,14 @@ export const UserProfileModal: React.FC<Props> = ({
               value={profile.direccion}
               onChange={(e) => handleChange('direccion', e.target.value)}
               placeholder="Ej. Calle 45 # 12-34, Apto 502"
-              className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none"
+              className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none"
             />
           </div>
 
           {/* Datos Bancarios (opcional para cuentas de cobro y propuestas) */}
           <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wide mb-2.5 flex items-center gap-1.5">
-              <CreditCard className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              <CreditCard className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
               Datos Bancarios (Opcional - para cuentas de cobro)
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
@@ -235,7 +235,7 @@ export const UserProfileModal: React.FC<Props> = ({
                   value={profile.banco}
                   onChange={(e) => handleChange('banco', e.target.value)}
                   placeholder="Ej. Bancolombia / Davivienda / Nequi"
-                  className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none"
+                  className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none"
                 />
               </div>
 
@@ -246,7 +246,7 @@ export const UserProfileModal: React.FC<Props> = ({
                 <select
                   value={profile.tipoCuenta}
                   onChange={(e) => handleChange('tipoCuenta', e.target.value as 'Ahorros' | 'Corriente')}
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none font-medium"
+                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none font-medium"
                 >
                   <option value="Ahorros">Cuenta de Ahorros</option>
                   <option value="Corriente">Cuenta Corriente</option>
@@ -262,7 +262,7 @@ export const UserProfileModal: React.FC<Props> = ({
                   value={profile.numeroCuenta}
                   onChange={(e) => handleChange('numeroCuenta', e.target.value)}
                   placeholder="Ej. 1234567890"
-                  className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none font-mono"
+                  className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:outline-none font-mono"
                 />
               </div>
             </div>
@@ -288,7 +288,7 @@ export const UserProfileModal: React.FC<Props> = ({
                     onApplyToCurrentDoc();
                     onClose();
                   }}
-                  className="min-h-[44px] px-3.5 py-2 text-xs font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 rounded-xl transition border border-indigo-200 dark:border-indigo-800 cursor-pointer"
+                  className="min-h-[44px] px-3.5 py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 rounded-xl transition border border-emerald-200 dark:border-emerald-800 cursor-pointer"
                 >
                   Guardar y autocompletar ahora
                 </button>
@@ -296,11 +296,11 @@ export const UserProfileModal: React.FC<Props> = ({
 
               <button
                 type="submit"
-                className="min-h-[44px] px-5 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
+                className="min-h-[44px] px-6 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
               >
                 {savedSuccess ? (
                   <>
-                    <Check className="w-4 h-4 text-emerald-400" />
+                    <Check className="w-4 h-4 text-white" strokeWidth={2} />
                     <span>¡Guardado!</span>
                   </>
                 ) : (

@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Contrato de Arrendamiento de Vivienda Urbana',
   shortTitle: 'Contrato de Arrendamiento',
   category: 'inmobiliario',
-  categoryName: 'Inmobiliario & Propiedad',
+  categoryName: 'Inmobiliario & Arriendos',
   categoryIcon: 'Home',
   description:
     'Contrato completo para casa o apartamento urbano con switch para fiador / codeudor solidario, cuota de administración y servicios.',

@@ -46,7 +46,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DocumentoFormalData>> = ({
       {/* Sección 1: Información del Documento */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-          <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <FileText className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
             Encabezado y Asunto
           </h3>
@@ -78,7 +78,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DocumentoFormalData>> = ({
       {/* Sección 2: A quién va dirigido */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-          <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <Building2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
             A quién va dirigido (Destinatario)
           </h3>
@@ -110,7 +110,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DocumentoFormalData>> = ({
       {/* Sección 3: Hechos y Antecedentes */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-          <ListOrdered className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <ListOrdered className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
             Hechos y Antecedentes (Separados por renglones)
           </h3>
@@ -188,7 +188,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DocumentoFormalData>> = ({
       {/* Sección 6: Datos de quien firma */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-          <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <User className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
             Tus Datos (Firma del Solicitante)
           </h3>

@@ -52,13 +52,13 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
         step="Paso 01"
         title="Propietario y Persona Autorizada"
         subtitle="Identificación del titular del automotor y de quien retirará el vehículo"
-        icon={<UserCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<UserCheck className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
           {/* Propietario */}
-          <div className="p-3 bg-sky-50/50 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/40 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-sky-800 dark:text-sky-300 uppercase tracking-wide">
+          <div className="p-3 bg-emerald-950/30 border border-emerald-900/40 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wide">
               Datos del Propietario (Poderdante):
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -164,7 +164,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
         step="Paso 02"
         title="Vehículo e Inmovilización"
         subtitle="Placa, patio de custodia y organismo de tránsito"
-        icon={<Car className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Car className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -225,7 +225,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
         step="Paso 03"
         title="Facultades Expresas y Huella"
         subtitle="Acciones autorizadas para retirar y firmar inventario"
-        icon={<Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Shield className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -250,7 +250,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
                 value={fac}
                 onChange={(e) => handleUpdateFacultad(idx, e.target.value)}
                 placeholder={`Facultad ${idx + 1}...`}
-                className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20"
+                className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-emerald-500/20"
               />
               <button
                 type="button"
@@ -277,7 +277,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AutorizacionPatiosData>> =
         step="Paso 04"
         title="Firma del Propietario"
         subtitle="Firma manuscrita en pantalla o renglón notarial"
-        icon={<FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<FileText className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <SignaturePad

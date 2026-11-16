@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Solicitud de Habeas Data Financiero',
   shortTitle: 'Habeas Data',
   category: 'legal',
-  categoryName: 'Trámites Ciudadanos & Legales',
+  categoryName: 'Trámites Administrativos',
   categoryIcon: 'Scale',
   description:
     'Petición formal para actualización, rectificación o eliminación de reporte negativo en centrales de riesgo (DataCrédito, TransUnion/CIFIN).',

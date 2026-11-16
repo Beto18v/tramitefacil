@@ -167,7 +167,7 @@ export const EditorView: React.FC<Props> = ({
               <div className="flex items-center gap-1.5">
                 <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-indigo-600 dark:bg-indigo-500 transition-all duration-300"
+                    className="h-full bg-emerald-500 transition-all duration-300"
                     style={{ width: `${completionPercentage}%` }}
                   ></div>
                 </div>
@@ -187,8 +187,8 @@ export const EditorView: React.FC<Props> = ({
               onClick={() => setActiveMobileTab('form')}
               className={`min-h-[44px] px-3.5 py-1.5 text-xs font-medium rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
                 activeMobileTab === 'form'
-                  ? 'bg-indigo-600 text-white shadow-xs font-semibold'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-slate-100'
+                  ? 'bg-emerald-600 text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-slate-100'
               }`}
             >
               <PenTool className="w-3.5 h-3.5" />
@@ -199,8 +199,8 @@ export const EditorView: React.FC<Props> = ({
               onClick={() => setActiveMobileTab('preview')}
               className={`min-h-[44px] px-3.5 py-1.5 text-xs font-medium rounded-xl flex items-center gap-1.5 transition-all cursor-pointer ${
                 activeMobileTab === 'preview'
-                  ? 'bg-indigo-600 text-white shadow-xs font-semibold'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-slate-100'
+                  ? 'bg-emerald-600 text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-slate-100'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -210,10 +210,10 @@ export const EditorView: React.FC<Props> = ({
           <button
             type="button"
             onClick={() => setIsAutofillModalOpen(true)}
-            className="min-h-[44px] px-2.5 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 rounded-2xl flex items-center justify-center cursor-pointer shadow-2xs"
+            className="min-h-[44px] px-2.5 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-2xl flex items-center justify-center cursor-pointer shadow-2xs"
             title="Completar con asistente"
           >
-            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </button>
         </div>
 
@@ -223,10 +223,10 @@ export const EditorView: React.FC<Props> = ({
           <button
             type="button"
             onClick={() => setIsAutofillModalOpen(true)}
-            className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-200 dark:border-indigo-800 rounded-xl shadow-2xs transition cursor-pointer"
+            className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 font-medium text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800 rounded-xl shadow-2xs transition cursor-pointer"
             title="Completar las casillas contando tu caso con tus propias palabras"
           >
-            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>Completar con Asistente</span>
           </button>
 
@@ -296,7 +296,7 @@ export const EditorView: React.FC<Props> = ({
             type="button"
             onClick={handleDownloadPdf}
             disabled={isExportingPdf}
-            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 rounded-xl shadow-xs transition cursor-pointer disabled:opacity-50"
+            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-xl shadow-xs transition cursor-pointer disabled:opacity-50"
             title="Descargar documento en PDF"
           >
             {isExportingPdf ? (
@@ -352,7 +352,7 @@ export const EditorView: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={onApplyProfile}
-                  className="min-h-[44px] px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white text-xs font-semibold transition cursor-pointer shadow-xs"
+                  className="min-h-[44px] px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-semibold transition cursor-pointer shadow-xs"
                 >
                   {userProfile?.nombreCompleto ? 'Autocompletar con mi perfil' : 'Configurar perfil'}
                 </button>
@@ -409,14 +409,14 @@ export const EditorView: React.FC<Props> = ({
       </div>
 
       {/* 3. Barra inferior de descarga fija para móviles (Bottom Sheet Bar) */}
-      <div className="lg:hidden no-print fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-3 py-2.5 shadow-2xl safe-area-bottom">
+      <div className="lg:hidden no-print fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#051C15]/95 backdrop-blur-md border-t-2 border-slate-900/30 dark:border-emerald-500/40 px-3 py-2.5 shadow-2xl safe-area-bottom">
         <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
           {/* Botón 1: Descargar PDF */}
           <button
             type="button"
             onClick={handleDownloadPdf}
             disabled={isExportingPdf}
-            className="min-h-[44px] flex flex-col items-center justify-center p-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 dark:bg-indigo-600 text-white text-[11px] font-semibold shadow-xs transition active:scale-95 disabled:opacity-50 cursor-pointer"
+            className="min-h-[44px] flex flex-col items-center justify-center p-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 dark:bg-emerald-600 text-white text-[11px] font-semibold shadow-xs transition active:scale-95 disabled:opacity-50 cursor-pointer"
           >
             {isExportingPdf ? (
               <Loader2 className="w-4 h-4 text-white dark:text-slate-900 animate-spin mb-0.5" />

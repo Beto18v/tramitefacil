@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Documento Formal y Oficio Personalizado',
   shortTitle: 'Documento a Medida',
   category: 'legal',
-  categoryName: 'Trámites Ciudadanos & Legales',
+  categoryName: 'Trámites Administrativos',
   categoryIcon: 'Sparkles',
   description:
     'Documento formal y oficio redactado a la medida de tu caso, estructurado con hechos, fundamentos legales colombianos y peticiones.',

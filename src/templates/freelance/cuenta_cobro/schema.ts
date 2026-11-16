@@ -6,7 +6,7 @@ export const meta: DocumentMetaInfo = {
   title: 'Cuenta de Cobro con Retenciones',
   shortTitle: 'Cuenta de Cobro',
   category: 'freelance',
-  categoryName: 'Finanzas, Freelance & Honorarios',
+  categoryName: 'Freelance & Finanzas',
   categoryIcon: 'Briefcase',
   description:
     'Documento equivalente para cobro de honorarios profesionales y servicios independientes. Soporte multilínea de conceptos, cálculo automático de retención en la fuente (ReteFuente) y ReteICA paramétrico, datos bancarios y constancias de aportes a seguridad social.',

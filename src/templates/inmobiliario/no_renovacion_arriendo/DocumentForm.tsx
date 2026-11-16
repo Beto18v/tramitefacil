@@ -72,7 +72,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 01"
         title="Rol y Partes del Arrendamiento"
         subtitle="Identificación del Remitente y Destinatario"
-        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<User className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div>
@@ -85,7 +85,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
               onClick={() => update('rolRemitente', 'arrendador')}
               className={`min-h-[52px] p-3 text-xs rounded-xl border text-left transition-all cursor-pointer ${
                 data.rolRemitente === 'arrendador'
-                  ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200 font-bold ring-2 ring-indigo-600/20'
+                  ? 'border-emerald-600 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold ring-2 ring-emerald-600/20'
                   : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800'
               }`}
             >
@@ -100,7 +100,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
               onClick={() => update('rolRemitente', 'arrendatario')}
               className={`min-h-[52px] p-3 text-xs rounded-xl border text-left transition-all cursor-pointer ${
                 data.rolRemitente === 'arrendatario'
-                  ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200 font-bold ring-2 ring-indigo-600/20'
+                  ? 'border-emerald-600 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold ring-2 ring-emerald-600/20'
                   : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800'
               }`}
             >
@@ -162,7 +162,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 02"
         title="Inmueble y Fechas Contractuales"
         subtitle="Dirección del predio y fecha de restitución de llaves"
-        icon={<Home className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Home className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -220,7 +220,7 @@ export const DocumentForm: React.FC<DocumentFormProps<NoRenovacionArriendoData>>
         step="Paso 03"
         title="Causal Legal e Inspección Conjunta"
         subtitle="Motivación de no prórroga e instrucciones para inventario"
-        icon={<Key className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Key className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">

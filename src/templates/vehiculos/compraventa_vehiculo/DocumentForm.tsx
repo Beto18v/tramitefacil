@@ -45,13 +45,13 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 01"
         title="Vendedor y Comprador"
         subtitle="Identificación y contacto de las partes contratantes"
-        icon={<Users className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Users className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
           {/* Vendedor */}
-          <div className="p-3 bg-sky-50/50 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/40 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-sky-800 dark:text-sky-300 uppercase tracking-wide">
+          <div className="p-3 bg-emerald-950/30 border border-emerald-900/40 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wide">
               Datos del Vendedor:
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -167,7 +167,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 02"
         title="Datos del Vehículo"
         subtitle="Placa, marca, modelo, motor, chasis y clase de automotor"
-        icon={<Car className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Car className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -262,7 +262,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 03"
         title="Precio, Pago y Traspaso"
         subtitle="Valor convenido, división de gastos de traspaso e impuestos"
-        icon={<DollarSign className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<DollarSign className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -309,7 +309,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CompraventaVehiculoData>> 
         step="Paso 04"
         title="Firma del Vendedor"
         subtitle="Dibuja tu firma en pantalla o imprímela con línea formal"
-        icon={<FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<FileText className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <SignaturePad

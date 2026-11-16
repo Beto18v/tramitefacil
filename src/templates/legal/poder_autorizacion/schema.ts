@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Poder Especial / Autorización Amplia a Terceros',
   shortTitle: 'Poder Especial / Autorización',
   category: 'legal',
-  categoryName: 'Trámites Ciudadanos & Legales',
+  categoryName: 'Trámites Administrativos',
   categoryIcon: 'Scale',
   description:
     'Mandato con facultades expresas de radicación, firma y retiro, incluyendo espacio para firma y recuadro de huella dactilar.',

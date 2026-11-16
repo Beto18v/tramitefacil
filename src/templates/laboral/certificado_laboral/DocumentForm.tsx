@@ -26,7 +26,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 01"
         title="Empresa y Área Destinataria"
         subtitle="Entidad a la que se solicita la constancia"
-        icon={<Building2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Building2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -71,7 +71,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 02"
         title="Tus Datos y Cargo Laborado"
         subtitle="Nombre, documento y tiempo de servicios"
-        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<User className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -123,7 +123,7 @@ export const DocumentForm: React.FC<DocumentFormProps<CertificadoLaboralData>> =
         step="Paso 03"
         title="Opciones y Destino del Certificado"
         subtitle="Salario, funciones y correo para recepción"
-        icon={<Award className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Award className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">

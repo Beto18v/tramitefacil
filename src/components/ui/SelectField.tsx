@@ -36,7 +36,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
         className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-between"
       >
         <span>{label}</span>
-        {props.required && <span className="text-indigo-600 dark:text-indigo-400 font-normal">* Requerido</span>}
+        {props.required && <span className="text-emerald-600 dark:text-emerald-400 font-normal">* Requerido</span>}
       </label>
 
       <div className="relative flex items-center">
@@ -54,7 +54,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
           } ${
             error
               ? 'border-rose-400 dark:border-rose-500 focus:ring-rose-500/20 text-rose-900 dark:text-rose-200'
-              : 'border-slate-300 dark:border-slate-700 focus:ring-indigo-500/20 dark:focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-500'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-emerald-500/20 dark:focus:ring-emerald-500/20 focus:border-emerald-600 dark:focus:border-emerald-500'
           } ${disabled ? 'bg-slate-100 dark:bg-slate-900/50 text-slate-500 dark:text-slate-500 cursor-not-allowed' : ''} ${className}`}
           {...props}
         >

@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Acuerdo de Confidencialidad y No Divulgación (NDA)',
   shortTitle: 'Acuerdo NDA',
   category: 'comercial',
-  categoryName: 'Comercial & Negocios',
+  categoryName: 'Comercial & Contratos',
   categoryIcon: 'Handshake',
   description:
     'Pacto formal de protección de secretos comerciales, propiedad intelectual, información financiera y cláusula penal indemnizatoria.',

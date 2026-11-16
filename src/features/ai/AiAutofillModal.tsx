@@ -111,13 +111,13 @@ export const AiAutofillModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-xl w-full p-6 shadow-xl space-y-5 transition-colors overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-5 transition-colors overflow-hidden text-white">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-400 flex items-center justify-center shadow-xs">
-              <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+            <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shadow-xs">
+              <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
@@ -139,9 +139,9 @@ export const AiAutofillModal: React.FC<Props> = ({
         </div>
 
         {/* Instructions */}
-        <div className="bg-indigo-50/60 dark:bg-slate-800/60 rounded-2xl p-3.5 border border-indigo-100 dark:border-slate-700/80 space-y-1 text-xs text-slate-600 dark:text-slate-300">
+        <div className="bg-emerald-50/60 dark:bg-slate-800/60 rounded-2xl p-3.5 border border-emerald-100 dark:border-slate-700/80 space-y-1 text-xs text-slate-600 dark:text-slate-300">
           <div className="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-            <Info className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+            <Info className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>Escribe o pega la información de tu trámite</span>
           </div>
           <p className="leading-relaxed text-[11px]">
@@ -158,7 +158,7 @@ export const AiAutofillModal: React.FC<Props> = ({
             disabled={isLoading}
             maxLength={NARRATIVE_MAX_LENGTH}
             placeholder="Ejemplo: Arriendo apartamento 402 en la Calle 123 # 45-67 de Bogotá a Juan Camilo Pérez con cédula 1.020.304.505 por un valor mensual de 1.800.000 pesos por un término de 12 meses iniciando el 1 de diciembre de 2026..."
-            className="w-full p-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 transition shadow-2xs resize-none"
+            className="w-full p-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 transition shadow-2xs resize-none"
           />
           <div className="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
             <span className="flex items-center gap-1">
@@ -208,7 +208,7 @@ export const AiAutofillModal: React.FC<Props> = ({
               type="button"
               onClick={handleAnalyze}
               disabled={isLoading || narrative.trim().length < 5}
-              className="min-h-[44px] px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-semibold rounded-xl transition flex items-center gap-2 cursor-pointer shadow-xs"
+              className="min-h-[44px] px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-semibold rounded-xl transition flex items-center gap-2 cursor-pointer shadow-xs"
             >
               {isLoading ? (
                 <>

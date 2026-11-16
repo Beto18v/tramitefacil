@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Autorización y Poder para Retiro de Patios',
   shortTitle: 'Retiro de Patios',
   category: 'vehiculos',
-  categoryName: 'Trámites de Tránsito & Vehículos',
+  categoryName: 'Vehículos',
   categoryIcon: 'Car',
   description:
     'Poder especial amplio para retiro de automotores inmovilizados en patios oficiales ante secretarías y organismos de tránsito.',

@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Acta de Entrega y Estado de Inmueble',
   shortTitle: 'Acta de Entrega Inmueble',
   category: 'inmobiliario',
-  categoryName: 'Inmobiliario & Propiedad',
+  categoryName: 'Inmobiliario & Arriendos',
   categoryIcon: 'Home',
   description:
     'Constancia física de entrega de llaves, verificación del estado de paredes y pisos, inventario y lecturas de servicios públicos.',

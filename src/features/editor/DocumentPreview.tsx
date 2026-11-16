@@ -35,9 +35,9 @@ export const DocumentPreview: React.FC<Props> = ({
   const currentDocData = data[dataKey];
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-100/90 dark:bg-[#0B0F19] overflow-hidden relative transition-colors">
+    <div className="flex-1 flex flex-col h-full bg-[#F2FBF6] dark:bg-[#04120E] bg-emerald-grid overflow-hidden relative transition-colors">
       {/* Top preview toolbar: Zoom + Typography styling controls */}
-      <div className="no-print bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs border-b border-slate-200 dark:border-slate-800 px-3 sm:px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400 shrink-0 shadow-2xs">
+      <div className="no-print bg-white/95 dark:bg-[#051C15]/95 backdrop-blur-xs border-b-2 border-slate-900/20 dark:border-emerald-500/40 px-3 sm:px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-300 shrink-0 shadow-2xs">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -82,7 +82,7 @@ export const DocumentPreview: React.FC<Props> = ({
             }`}
             title={styleConfig.includeWatermark !== false ? 'Sello institucional activo (Clic para ocultar en la descarga)' : 'Sello institucional oculto (Clic para activar)'}
           >
-            <ShieldCheck className={`w-3.5 h-3.5 ${styleConfig.includeWatermark !== false ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'}`} />
+            <ShieldCheck className={`w-3.5 h-3.5 ${styleConfig.includeWatermark !== false ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`} />
             <span>Sello TrámiteFácil</span>
           </button>
         </div>

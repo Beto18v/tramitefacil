@@ -51,7 +51,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 01"
         title="Central de Riesgo y Fuente"
         subtitle="DataCrédito, TransUnion/CIFIN o Procrédito"
-        icon={<Building2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Building2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -113,7 +113,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 02"
         title="Causal Legal de Habeas Data y Hechos"
         subtitle="Caducidad, suplantación, pago o inexistencia"
-        icon={<ShieldAlert className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<ShieldAlert className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -160,7 +160,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
               <button
                 type="button"
                 onClick={handleAddAnexo}
-                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer"
+                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" /> Agregar anexo
               </button>
@@ -172,7 +172,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
                   value={anexo}
                   onChange={(e) => handleUpdateAnexo(idx, e.target.value)}
                   placeholder={`Anexo ${idx + 1}...`}
-                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20"
+                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-emerald-500/20"
                 />
                 <button
                   type="button"
@@ -193,7 +193,7 @@ export const DocumentForm: React.FC<DocumentFormProps<HabeasDataData>> = ({
         step="Paso 03"
         title="Datos del Titular y Notificaciones"
         subtitle="Nombre, documento y canal para recibir la respuesta"
-        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<User className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={false}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

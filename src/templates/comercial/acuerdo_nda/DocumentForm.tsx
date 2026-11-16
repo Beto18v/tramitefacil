@@ -48,7 +48,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
         step="Paso 01"
         title="Modalidad y Lugar"
         subtitle="Tipo de confidencialidad, ciudad y fecha de suscripción"
-        icon={<ShieldCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<ShieldCheck className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -94,13 +94,13 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
         step="Paso 02"
         title="Partes Intervinientes"
         subtitle="Identificación de la parte emisora y de la parte receptora"
-        icon={<Users className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Users className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
           {/* Emisora */}
-          <div className="p-3 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 rounded-xl space-y-2">
-            <span className="text-[11px] font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wide">
+          <div className="p-3 bg-emerald-950/20 border border-emerald-900/40 rounded-xl space-y-2">
+            <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wide">
               {data.tipoNda === 'bilateral'
                 ? 'Parte 1 (Divulgante y Receptora):'
                 : 'Parte Emisora / Divulgante (Dueña de la Información):'}
@@ -191,14 +191,14 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
         step="Paso 03"
         title="Propósito y Penalidad"
         subtitle="Finalidad autorizada y cláusula penal de indemnización"
-        icon={<Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Calendar className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
           {/* Quick Picker */}
           <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-3 space-y-1.5">
             <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
-              <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <Sparkles className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
               <span>Plantillas Rápidas de Propósito (1 toque):</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -207,7 +207,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
                   key={item.label}
                   type="button"
                   onClick={() => update('propositoNegociacion', item.text)}
-                  className="min-h-[38px] px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-700 dark:hover:text-indigo-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl transition cursor-pointer shadow-2xs"
+                  className="min-h-[38px] px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-700 hover:text-emerald-700 dark:hover:text-emerald-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl transition cursor-pointer shadow-2xs"
                 >
                   + {item.label}
                 </button>
@@ -244,7 +244,7 @@ export const DocumentForm: React.FC<DocumentFormProps<AcuerdoNdaData>> = ({
         step="Paso 04"
         title="Firma del Acuerdo"
         subtitle="Firma manuscrita en pantalla o pie notarial formal"
-        icon={<DollarSign className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<DollarSign className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <SignaturePad

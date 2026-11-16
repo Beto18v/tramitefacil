@@ -6,7 +6,7 @@ export const meta: DocumentMetaInfo = {
   title: 'Propuesta de Servicios y Cotización',
   shortTitle: 'Propuesta Comercial',
   category: 'freelance',
-  categoryName: 'Finanzas, Freelance & Honorarios',
+  categoryName: 'Freelance & Finanzas',
   categoryIcon: 'Briefcase',
   description:
     'Oferta comercial y cotización profesional estructurada con objetivos, alcance detallado, lista de entregables, cronograma en semanas, honorarios y condiciones de pago.',

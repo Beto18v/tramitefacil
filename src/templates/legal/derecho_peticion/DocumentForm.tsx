@@ -167,8 +167,8 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
   return (
     <div className="space-y-4 pb-8">
       {/* Tip legal */}
-      <div className="p-4 bg-indigo-50/80 dark:bg-indigo-950/20 border border-indigo-200/80 dark:border-indigo-900/40 rounded-2xl text-xs text-indigo-950 dark:text-indigo-200 flex items-start gap-3">
-        <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+      <div className="p-4 bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 rounded-2xl text-xs text-amber-950 dark:text-amber-200 flex items-start gap-3">
+        <Scale className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
           <strong>Garantía Constitucional (Art. 23 C.P. & Ley 1755 de 2015):</strong> Las entidades públicas,
           EPS, bancos y prestadoras de servicios públicos tienen por regla general{' '}
@@ -179,7 +179,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
       {/* Quick Claim Templates */}
       <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-3.5 space-y-2">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
-          <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <Sparkles className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           <span>Plantillas de Reclamación Preconfiguradas (1 toque):</span>
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -188,7 +188,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
               key={t.label}
               type="button"
               onClick={() => applyClaimTemplate(t)}
-              className="min-h-[38px] px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-700 dark:hover:text-indigo-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl transition cursor-pointer shadow-2xs"
+              className="min-h-[38px] px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-700 hover:text-emerald-700 dark:hover:text-emerald-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl transition cursor-pointer shadow-2xs"
             >
               + {t.label}
             </button>
@@ -201,7 +201,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
         step="Paso 01"
         title="Entidad o Autoridad Destinataria"
         subtitle="Institución pública, EPS o empresa a la que se dirige"
-        icon={<Building2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Building2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -278,7 +278,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
         step="Paso 02"
         title="Asunto y Hechos Cronológicos"
         subtitle="Motivo principal y narración de lo ocurrido"
-        icon={<Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Scale className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">
@@ -305,7 +305,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
               <button
                 type="button"
                 onClick={handleAddHecho}
-                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer"
+                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" /> Agregar hecho
               </button>
@@ -318,7 +318,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                   value={stripLeadingNumber(hecho)}
                   onChange={(e) => handleUpdateHecho(idx, e.target.value)}
                   placeholder={`Describa el hecho ${idx + 1}...`}
-                  className="flex-1 text-xs p-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20 leading-relaxed"
+                  className="flex-1 text-xs p-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-emerald-500/20 leading-relaxed"
                 />
                 <button
                   type="button"
@@ -338,7 +338,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
         step="Paso 03"
         title="Pretensiones y Documentos Anexos"
         subtitle="Lo que se solicita concretamente a la entidad"
-        icon={<Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<Scale className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-4">
@@ -349,20 +349,20 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
               <button
                 type="button"
                 onClick={handleAddPretension}
-                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer"
+                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" /> Agregar pretensión
               </button>
             </div>
             {(data.pretensiones || []).map((pret, idx) => (
               <div key={idx} className="flex gap-2 items-start">
-                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mt-3">{idx + 1}.</span>
+                <span className="text-xs font-bold text-emerald-500 dark:text-emerald-400 mt-3">{idx + 1}.</span>
                 <textarea
                   rows={2}
                   value={pret}
                   onChange={(e) => handleUpdatePretension(idx, e.target.value)}
                   placeholder={`Solicito a la entidad que...`}
-                  className="flex-1 text-xs p-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20 leading-relaxed font-medium"
+                  className="flex-1 text-xs p-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-emerald-500/20 leading-relaxed font-medium"
                 />
                 <button
                   type="button"
@@ -389,7 +389,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
               <button
                 type="button"
                 onClick={handleAddAnexo}
-                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 cursor-pointer"
+                className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" /> Agregar anexo
               </button>
@@ -401,7 +401,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
                   value={anexo}
                   onChange={(e) => handleUpdateAnexo(idx, e.target.value)}
                   placeholder={`Ej: Copia de fórmula médica del 12/03/2026...`}
-                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-indigo-500/20"
+                  className="flex-1 min-h-[44px] text-xs px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-emerald-500/20"
                 />
                 <button
                   type="button"
@@ -421,7 +421,7 @@ export const DocumentForm: React.FC<DocumentFormProps<DerechoPeticionData>> = ({
         step="Paso 04"
         title="Tus Datos y Notificación"
         subtitle="Nombre, documento, correo electrónico y firma"
-        icon={<User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        icon={<User className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
         defaultOpen={true}
       >
         <div className="space-y-3">

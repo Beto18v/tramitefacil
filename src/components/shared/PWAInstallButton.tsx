@@ -42,17 +42,17 @@ export const PWAInstallButton: React.FC = () => {
         className="min-h-[40px] inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300/80 dark:border-slate-700 transition cursor-pointer shadow-2xs"
         title="Instalar TrámiteFácil Hub en tu dispositivo para acceso rápido y sin internet"
       >
-        <Download className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+        <Download className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
         <span className="hidden sm:inline">Instalar App</span>
       </button>
 
       {/* 1. iOS Safari Modal Guide */}
       {showIOSGuide && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xs p-4 overflow-y-auto">
-          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-slate-900 p-6 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="w-full max-w-sm rounded-3xl bg-slate-900 p-6 shadow-2xl border border-slate-800 animate-in fade-in zoom-in-95 my-8 text-white">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <Smartphone className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <Smartphone className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
                 Instalar en iPhone o iPad
               </h3>
               <button
@@ -71,7 +71,7 @@ export const PWAInstallButton: React.FC = () => {
 
             <div className="mt-4 space-y-3 text-xs text-slate-700 dark:text-slate-300">
               <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800">
-                <div className="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
                   <Share2 className="w-4 h-4" />
                 </div>
                 <div>
@@ -81,7 +81,7 @@ export const PWAInstallButton: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800">
-                <div className="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
                   <PlusSquare className="w-4 h-4" />
                 </div>
                 <div>
@@ -99,7 +99,7 @@ export const PWAInstallButton: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowIOSGuide(false)}
-              className="mt-5 w-full min-h-[44px] rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 py-2.5 text-xs font-semibold text-white transition cursor-pointer"
+              className="mt-5 w-full min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 text-xs font-semibold text-white transition cursor-pointer"
             >
               Entendido
             </button>
@@ -109,11 +109,11 @@ export const PWAInstallButton: React.FC = () => {
 
       {/* 2. Universal / Desktop / Android Browser Modal Guide */}
       {showUniversalGuide && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xs p-4 overflow-y-auto">
-          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 p-6 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="w-full max-w-md rounded-3xl bg-slate-900 p-6 shadow-2xl border border-slate-800 animate-in fade-in zoom-in-95 my-8 text-white">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center">
                   <Download className="w-4 h-4" />
                 </div>
                 <div>
@@ -140,7 +140,7 @@ export const PWAInstallButton: React.FC = () => {
               {/* Chrome / Edge option */}
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-1.5">
                 <div className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
-                  <Laptop className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <Laptop className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                   <span>En Google Chrome o Microsoft Edge (PC / Mac)</span>
                 </div>
                 <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
@@ -151,7 +151,7 @@ export const PWAInstallButton: React.FC = () => {
               {/* Android option */}
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-1.5">
                 <div className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
-                  <Smartphone className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <Smartphone className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                   <span>En Celulares Android (Chrome / Brave / Edge)</span>
                 </div>
                 <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
@@ -162,7 +162,7 @@ export const PWAInstallButton: React.FC = () => {
               {/* Firefox / other browsers */}
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-1.5">
                 <div className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                   <span>En Mozilla Firefox u otros navegadores</span>
                 </div>
                 <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
@@ -180,7 +180,7 @@ export const PWAInstallButton: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowUniversalGuide(false)}
-              className="mt-5 w-full min-h-[44px] rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 py-2.5 text-xs font-semibold text-white transition cursor-pointer"
+              className="mt-5 w-full min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 text-xs font-semibold text-white transition cursor-pointer"
             >
               Entendido
             </button>

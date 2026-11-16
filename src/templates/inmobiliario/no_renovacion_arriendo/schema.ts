@@ -5,7 +5,7 @@ export const meta: DocumentMeta = {
   title: 'Notificación de No Renovación de Arrendamiento',
   shortTitle: 'No Renovación Arriendo',
   category: 'inmobiliario',
-  categoryName: 'Inmobiliario & Propiedad',
+  categoryName: 'Inmobiliario & Arriendos',
   categoryIcon: 'Home',
   description:
     'Aviso formal con preaviso legal de 3 meses para terminación o no prórroga de contrato de arrendamiento sin penalidad.',
