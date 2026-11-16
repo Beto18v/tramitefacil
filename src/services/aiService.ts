@@ -4,6 +4,10 @@ import {
   analyzeCaseDescription,
   SuggestionResult,
 } from '../utils/aiDocumentSuggester';
+import {
+  buildOfflineCustomDocument,
+  extractOfflineFields,
+} from '../utils/aiOfflineDocumentBuilder';
 
 export interface AiSuggestionResponse extends SuggestionResult {
   source: 'gemini_cloud' | 'offline_heuristic';
@@ -13,7 +17,7 @@ export interface AiSuggestionResponse extends SuggestionResult {
 
 export interface AutofillResponse {
   success: boolean;
-  source: 'gemini_cloud' | 'none';
+  source: 'gemini_cloud' | 'offline_heuristic' | 'none';
   extractedFields?: Record<string, any>;
   error?: string;
 }
@@ -47,14 +51,25 @@ export interface DiagnosticResult {
 // ==========================================
 // Helper de Caché de Cliente (sessionStorage)
 // ==========================================
+/**
+ * Normaliza el texto y genera una clave estable de caché de cliente.
+ * Se usa un hash simple (djb2) cuando el texto es largo para evitar
+ * colisiones por truncado y claves gigantes en sessionStorage.
+ */
 function getClientCacheKey(prefix: string, text: string): string {
   const norm = text
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]/g, '')
-    .slice(0, 100);
-  return `tf_cache_${prefix}_${norm}`;
+    .replace(/[^a-z0-9]/g, '');
+  if (norm.length <= 80) {
+    return `tf_cache_${prefix}_${norm}`;
+  }
+  let hash = 5381;
+  for (let i = 0; i < norm.length; i++) {
+    hash = ((hash << 5) + hash + norm.charCodeAt(i)) | 0;
+  }
+  return `tf_cache_${prefix}_${norm.slice(0, 40)}_${(hash >>> 0).toString(36)}_${norm.length}`;
 }
 
 function getFromClientCache<T>(prefix: string, text: string): T | null {
@@ -192,13 +207,40 @@ function buildOfflineDiagnostic(trimmed: string): DiagnosticResult {
 
 /**
  * Redacta el documento formal completo en base al caso y opciones elegidas.
+ * Si la nube no está disponible (sin red, clave no configurada, límite
+ * alcanzado o falla temporal), conmuta de forma transparente al motor
+ * heurístico local y devuelve `offline: true` para que la interfaz muestre
+ * un aviso amable en lugar de un error.
  */
 export async function generateCustomDocument(payload: {
   caseDescription: string;
   selectedOptionTitle: string;
   answers?: Record<string, string>;
   userProfile?: any;
-}): Promise<{ success: boolean; document?: DocumentoFormalData; error?: string }> {
+}): Promise<{
+  success: boolean;
+  document?: DocumentoFormalData;
+  error?: string;
+  offline?: boolean;
+}> {
+  const trimmed = (payload?.caseDescription || '').trim();
+  if (trimmed.length < 5) {
+    return {
+      success: false,
+      error: 'Cuéntanos un poco más de tu caso para preparar el documento.',
+    };
+  }
+
+  // 1. Sin conexión: preparación 100% local desde el inicio
+  if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    return {
+      success: true,
+      document: buildOfflineCustomDocument(payload),
+      offline: true,
+    };
+  }
+
+  // 2. Intento en la nube con conmutación silenciosa a modo privado
   try {
     const res = await fetch('/api/ai', {
       method: 'POST',
@@ -209,20 +251,27 @@ export async function generateCustomDocument(payload: {
       }),
     });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      return { success: false, error: err.error || 'No se pudo generar el documento con IA.' };
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.document) {
+        return { success: true, document: data.document };
+      }
     }
-
-    const data = await res.json();
-    if (data.success && data.document) {
-      return { success: true, document: data.document };
-    }
-
-    return { success: false, error: 'La IA no devolvió el documento estructurado.' };
+    // 429 / 503 / 5xx / respuesta malformada: conmutamos a modo privado
+    console.warn(
+      'Conmutación a preparación local del documento (respuesta del servicio:',
+      res.status,
+      ')'
+    );
   } catch (err: any) {
-    return { success: false, error: err?.message || 'Error de conexión al generar el documento.' };
+    console.warn('Conmutación a preparación local del documento:', err?.message || err);
   }
+
+  return {
+    success: true,
+    document: buildOfflineCustomDocument(payload),
+    offline: true,
+  };
 }
 
 /**
@@ -312,7 +361,11 @@ export async function suggestDocument(
 }
 
 /**
- * Cliente para autollenado guiado (Prompt-to-Document)
+ * Cliente para autollenado guiado (Completar Datos con el Asistente).
+ * Si la nube no está disponible, intenta una extracción heurística local
+ * (cédulas, fechas, valores, direcciones, correos y teléfonos) mapeada a las
+ * casillas reales del formulario. Si tampoco logra reconocer datos útiles,
+ * devuelve un mensaje humano; nunca un error técnico crudo.
  */
 export async function autofillDocumentWithAi(
   docType: DocumentType,
@@ -324,6 +377,12 @@ export async function autofillDocumentWithAi(
     return { success: false, source: 'none', error: 'La narración es muy corta.' };
   }
 
+  // 1. Sin conexión: extracción 100% local desde el inicio
+  if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    return tryOfflineAutofill(trimmed, currentData);
+  }
+
+  // 2. Intento en la nube con conmutación silenciosa a modo privado
   try {
     const res = await fetch('/api/ai', {
       method: 'POST',
@@ -334,22 +393,33 @@ export async function autofillDocumentWithAi(
       }),
     });
 
-    if (!res.ok) {
-      const errJson = await res.json().catch(() => ({}));
-      return {
-        success: false,
-        source: 'none',
-        error: errJson.error || 'No se pudo completar el autollenado con IA.',
-      };
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.extractedFields) {
+        return { success: true, source: 'gemini_cloud', extractedFields: data.extractedFields };
+      }
     }
-
-    const data = await res.json();
-    if (data.success && data.extractedFields) {
-      return { success: true, source: 'gemini_cloud', extractedFields: data.extractedFields };
-    }
-
-    return { success: false, source: 'none', error: 'La IA no devolvió campos reconocibles.' };
+    console.warn(
+      'Conmutación a extracción local de datos (respuesta del servicio:',
+      res.status,
+      ')'
+    );
   } catch (err: any) {
-    return { success: false, source: 'none', error: err?.message || 'Error de conexión.' };
+    console.warn('Conmutación a extracción local de datos:', err?.message || err);
   }
+
+  return tryOfflineAutofill(trimmed, currentData);
+}
+
+function tryOfflineAutofill(trimmed: string, currentData?: any): AutofillResponse {
+  const fields = extractOfflineFields(trimmed, currentData);
+  if (Object.keys(fields).length > 0) {
+    return { success: true, source: 'offline_heuristic', extractedFields: fields };
+  }
+  return {
+    success: false,
+    source: 'none',
+    error:
+      'No hay conexión en este momento y el asistente no pudo completar las casillas. Puedes llenarlas manualmente.',
+  };
 }

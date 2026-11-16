@@ -21,6 +21,30 @@ interface Props {
   onTriggerToast: (message: string, type?: 'success' | 'info' | 'error') => void;
 }
 
+// Límite de narración alineado con el procesamiento del asistente
+const NARRATIVE_MAX_LENGTH = 2000;
+
+/**
+ * Convierte cualquier mensaje de falla en un texto cálido y comprensible.
+ * Nunca expone códigos internos ni errores técnicos crudos.
+ */
+function humanizeError(rawError?: string): string {
+  const message = (rawError || '').trim();
+  if (!message) {
+    return 'El asistente no pudo completar las casillas en este momento. Inténtalo de nuevo en unos segundos.';
+  }
+  // Mensajes que ya son humanos y pueden mostrarse tal cual
+  if (
+    /no hay conexión|llenarlas manualmente|muchas solicitudes|espera unos segundos|de nuevo en unos segundos|no está disponible|mantenimiento/i.test(
+      message
+    )
+  ) {
+    return message;
+  }
+  // Cualquier otro caso (códigos internos, errores en inglés, etc.): mensaje genérico
+  return 'El asistente no pudo completar las casillas en este momento. Inténtalo de nuevo en unos segundos.';
+}
+
 export const AiAutofillModal: React.FC<Props> = ({
   isOpen,
   onClose,
@@ -50,13 +74,22 @@ export const AiAutofillModal: React.FC<Props> = ({
 
       if (res.success && res.extractedFields) {
         setExtractedPreview(res.extractedFields);
-        onTriggerToast('¡Datos extraídos con éxito! Revisa la vista previa y aplícalos.', 'success');
+        if (res.source === 'offline_heuristic') {
+          onTriggerToast(
+            'Completamos algunas casillas en modo privado sin conexión. Revísalas antes de aplicarlas.',
+            'info'
+          );
+        } else {
+          onTriggerToast('¡Datos extraídos con éxito! Revisa la vista previa y aplícalos.', 'success');
+        }
       } else {
-        onTriggerToast(res.error || 'No se pudieron extraer los datos con IA.', 'error');
+        onTriggerToast(humanizeError(res.error), 'error');
       }
-    } catch (err: any) {
-      console.error(err);
-      onTriggerToast('Error de comunicación con el servicio de IA.', 'error');
+    } catch {
+      onTriggerToast(
+        'No pudimos completar las casillas en este momento. Inténtalo de nuevo en unos segundos.',
+        'error'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -121,8 +154,9 @@ export const AiAutofillModal: React.FC<Props> = ({
           <textarea
             rows={4}
             value={narrative}
-            onChange={(e) => setNarrative(e.target.value)}
+            onChange={(e) => setNarrative(e.target.value.slice(0, NARRATIVE_MAX_LENGTH))}
             disabled={isLoading}
+            maxLength={NARRATIVE_MAX_LENGTH}
             placeholder="Ejemplo: Arriendo apartamento 402 en la Calle 123 # 45-67 de Bogotá a Juan Camilo Pérez con cédula 1.020.304.505 por un valor mensual de 1.800.000 pesos por un término de 12 meses iniciando el 1 de diciembre de 2026..."
             className="w-full p-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 transition shadow-2xs resize-none"
           />
@@ -131,7 +165,9 @@ export const AiAutofillModal: React.FC<Props> = ({
               <Lock className="w-3 h-3 text-slate-400" />
               Tus datos son 100% privados y seguros en tu dispositivo
             </span>
-            <span className="font-mono">{narrative.length}/2500</span>
+            <span className="font-mono">
+              {narrative.length}/{NARRATIVE_MAX_LENGTH}
+            </span>
           </div>
         </div>
 

@@ -98,6 +98,15 @@ function getCacheKey(action: string, text: string): string {
   return `${action}:${norm}`;
 }
 
+// Inserta en la caché recortando la entrada más antigua al alcanzar el límite
+function cacheSet(key: string, data: any) {
+  if (responseCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = responseCache.keys().next().value;
+    if (firstKey) responseCache.delete(firstKey);
+  }
+  responseCache.set(key, { data, expiresAt: Date.now() + CACHE_TTL_MS });
+}
+
 // Limpieza periódica de memoria cada 5 minutos
 const cleanupInterval = setInterval(() => {
   const now = Date.now();
@@ -132,6 +141,17 @@ function checkRateLimit(ip: string): boolean {
 
   entry.count++;
   return true;
+}
+
+// Aplica el límite de solicitudes y responde con un mensaje humano en caso de excederlo
+function enforceRateLimit(ip: string, res: ServerResponse): boolean {
+  if (checkRateLimit(ip)) return true;
+  sendJson(res, 429, {
+    success: false,
+    error:
+      'El asistente está recibiendo muchas solicitudes ahora mismo. Espera unos segundos e inténtalo de nuevo.',
+  });
+  return false;
 }
 
 // Sanitización contra Prompt Injection
@@ -184,10 +204,18 @@ function sendJson(res: ServerResponse, status: number, data: any) {
   res.end(JSON.stringify(data));
 }
 
+// Límite de ejecución serverless (Vercel): evita muertes prematuras del reintento por modelos
+export const maxDuration = 60;
+
+// Tiempo máximo de espera por intento de modelo antes de pasar al siguiente
+const MODEL_ATTEMPT_TIMEOUT_MS = 9000;
+
 /**
  * Handler Serverless de Vercel
  */
-// Invocador resiliente de Gemini con fallback automático entre modelos económicos
+// Invocador resiliente de Gemini con fallback automático entre modelos económicos.
+// Cada intento tiene un tiempo máximo de espera; si un modelo se agota o falla,
+// continúa con el siguiente. Si todos fallan, devuelve un error controlado.
 async function callGeminiApi(
   apiKey: string,
   preferredModel: string,
@@ -205,11 +233,14 @@ async function callGeminiApi(
 
   for (const model of uniqueModels) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), MODEL_ATTEMPT_TIMEOUT_MS);
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestPayload),
+        signal: controller.signal,
       });
 
       if (response.status === 404) {
@@ -219,12 +250,122 @@ async function callGeminiApi(
       }
       return response;
     } catch {
-      // Fallo de red
+      // Fallo de red o tiempo de espera agotado: continuar con el siguiente modelo
+    } finally {
+      clearTimeout(timeoutId);
     }
   }
 
   if (lastResponse) return lastResponse;
-  throw new Error('No se pudo establecer conexión con los modelos de Gemini.');
+  throw new Error('El asistente no está disponible en este momento.');
+}
+
+/**
+ * Cierra llaves/corchetes abiertos de un fragmento JSON truncado.
+ * Devuelve null si el fragmento termina dentro de una cadena sin cerrar.
+ */
+function closeOpenBrackets(fragment: string): string | null {
+  const stack: string[] = [];
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < fragment.length; i++) {
+    const ch = fragment[i];
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (ch === '\\') {
+        escaped = true;
+      } else if (ch === '"') {
+        inString = false;
+      }
+      continue;
+    }
+    if (ch === '"') {
+      inString = true;
+      continue;
+    }
+    if (ch === '{' || ch === '[') {
+      stack.push(ch === '{' ? '}' : ']');
+    } else if (ch === '}' || ch === ']') {
+      stack.pop();
+    }
+  }
+  if (inString) return null;
+  return fragment + stack.reverse().join('');
+}
+
+/**
+ * Detecta objetos JSON sin contenido (cero claves), señal de respuesta degenerada.
+ */
+function isEmptyJsonObject(value: any): boolean {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    Object.keys(value).length === 0
+  );
+}
+
+/**
+ * Parseo resiliente del JSON devuelto por el asistente.
+ * Ante una respuesta truncada intenta un rescate básico (recorte al último
+ * campo completo y cierre de estructuras abiertas) antes de reportar la falla.
+ */
+function parseModelJson(rawText: string): any {
+  const text = rawText
+    .trim()
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/```\s*$/, '')
+    .trim();
+
+  let directParsed: any = null;
+  let directParseFailed = false;
+  try {
+    directParsed = JSON.parse(text);
+  } catch {
+    directParseFailed = true;
+  }
+  if (!directParseFailed) {
+    // Un objeto sin contenido (incluidos los cuerpos degenerados que el
+    // rescate "repara" en {}) se trata como fallo de parseo, no como resultado
+    if (isEmptyJsonObject(directParsed)) {
+      throw new Error('La respuesta del asistente no llegó completa.');
+    }
+    return directParsed;
+  }
+
+  const openings = [text.indexOf('{'), text.indexOf('[')].filter((i) => i >= 0);
+  if (openings.length === 0) {
+    throw new Error('La respuesta del asistente no llegó completa.');
+  }
+  const body = text.slice(Math.min(...openings));
+
+  // Puntos de corte: el texto completo y, luego, cada coma desde el final
+  const cutIndexes: number[] = [body.length - 1];
+  for (let i = body.length - 1; i >= 0 && cutIndexes.length < 25; i--) {
+    if (body[i] === ',') {
+      const cut = i - 1 >= 0 ? i - 1 : 0;
+      if (!cutIndexes.includes(cut)) cutIndexes.push(cut);
+    }
+  }
+
+  for (const cut of cutIndexes) {
+    const fragment = body.slice(0, cut + 1);
+    if (!fragment) continue;
+    const repaired = closeOpenBrackets(fragment);
+    if (repaired === null) continue;
+    try {
+      const parsed = JSON.parse(repaired);
+      if (!parsed || typeof parsed !== 'object') continue;
+      // Un objeto vacío tras el rescate también es señal de cuerpo degenerado
+      if (isEmptyJsonObject(parsed)) continue;
+      return parsed;
+    } catch {
+      // Probar el siguiente punto de corte
+    }
+  }
+
+  throw new Error('La respuesta del asistente no llegó completa.');
 }
 
 export default async function handler(req: any, res: any) {
@@ -241,33 +382,28 @@ export default async function handler(req: any, res: any) {
     return sendJson(res, 405, { error: 'Solo se acepta POST.' });
   }
 
-  // 1. Rate Limiting por IP
-  const clientIp = getClientIp(req);
-  if (!checkRateLimit(clientIp)) {
-    return sendJson(res, 429, {
-      error: 'Has alcanzado el límite de solicitudes por minuto (15 máx). Por favor espera un momento.',
-    });
-  }
-
-  // 2. Parseo
+  // 1. Parseo (la cuota por IP se consume solo después de revisar la caché)
   let body: any;
   try {
     body = req.body && typeof req.body === 'object' ? req.body : await parseJsonBody(req);
   } catch {
-    return sendJson(res, 400, { error: 'Cuerpo JSON inválido o demasiado grande.' });
+    return sendJson(res, 400, { error: 'No pudimos leer la información enviada. Inténtalo de nuevo.' });
   }
 
   const { action, payload } = body || {};
   if (!action || !payload) {
-    return sendJson(res, 400, { error: 'Faltan parámetros requeridos: "action" y "payload".' });
+    return sendJson(res, 400, { error: 'No pudimos procesar la solicitud. Inténtalo de nuevo.' });
   }
 
-  // 3. Verificación de Clave Gemini
+  const clientIp = getClientIp(req);
+
+  // 2. Verificación de Clave
   const apiKey = resolveEnvKey('GEMINI_API_KEY');
   if (!apiKey) {
     return sendJson(res, 503, {
-      error: 'GEMINI_API_KEY_NOT_CONFIGURED',
-      message: 'GEMINI_API_KEY no configurada. El sistema usará el motor heurístico local.',
+      success: false,
+      error:
+        'El asistente no está disponible en este momento. Tu información se mantiene privada en tu dispositivo.',
     });
   }
 
@@ -284,12 +420,15 @@ export default async function handler(req: any, res: any) {
       return sendJson(res, 400, { error: 'La descripción del caso es demasiado corta.' });
     }
 
-    // Revisión en Caché de Memoria
+    // Revisión en Caché de Memoria (las peticiones servidas por caché no consumen cuota)
     const cacheKey = getCacheKey('diagnose', sanitizedCase);
     const cached = responseCache.get(cacheKey);
     if (cached && Date.now() < cached.expiresAt) {
       return sendJson(res, 200, { success: true, result: cached.data, cached: true });
     }
+
+    // Límite de solicitudes para peticiones reales
+    if (!enforceRateLimit(clientIp, res)) return;
 
     const systemPrompt = `Eres el Orientador Jurídico Accesible de TrámiteFácil Hub Colombia.
 Tu labor es explicarle al ciudadano qué derechos tiene con lenguaje 100% sencillo, cálido y comprensible para cualquier persona (sin jerga técnica confusa), y proponerle 2 o 3 opciones documentales concretas.
@@ -338,32 +477,36 @@ ${sanitizedCase}
         contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }] }],
           generationConfig: {
             temperature: 0.1,
-            maxOutputTokens: 750,
+            maxOutputTokens: 900,
             responseMimeType: 'application/json',
           },
         });
 
       if (!response.ok) {
-        return sendJson(res, 502, { error: 'Error del proveedor de IA.', details: response.statusText });
+        return sendJson(res, 502, {
+          error: 'El asistente no está disponible en este momento. Inténtalo de nuevo en unos segundos.',
+        });
       }
 
       const geminiResult = await response.json();
       const rawText = geminiResult.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!rawText) return sendJson(res, 502, { error: 'Respuesta vacía de IA.' });
+      if (!rawText) {
+        return sendJson(res, 502, {
+          error: 'El asistente no está disponible en este momento. Inténtalo de nuevo en unos segundos.',
+        });
+      }
 
-      const parsedData = JSON.parse(rawText);
+      const parsedData = parseModelJson(rawText);
 
       // Guardar en Caché de Memoria
-      if (responseCache.size >= MAX_CACHE_SIZE) {
-        const firstKey = responseCache.keys().next().value;
-        if (firstKey) responseCache.delete(firstKey);
-      }
-      responseCache.set(cacheKey, { data: parsedData, expiresAt: Date.now() + CACHE_TTL_MS });
+      cacheSet(cacheKey, parsedData);
 
       return sendJson(res, 200, { success: true, result: parsedData });
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error en diagnose:', err);
-      return sendJson(res, 500, { error: 'Error interno en diagnóstico.', message: err?.message });
+      return sendJson(res, 502, {
+        error: 'El asistente no pudo analizar tu caso. Inténtalo de nuevo en unos segundos.',
+      });
     }
   }
 
@@ -374,6 +517,9 @@ ${sanitizedCase}
     const { caseDescription, selectedOptionTitle, answers, userProfile } = payload;
     const sanitizedCase = sanitizeInput(caseDescription, 2000);
     const sanitizedTitle = sanitizeInput(selectedOptionTitle, 150) || 'DOCUMENTO FORMAL';
+
+    // Límite de solicitudes para peticiones reales (sin caché en esta acción)
+    if (!enforceRateLimit(clientIp, res)) return;
 
     const systemPrompt = `Eres el Redactor Jurídico Oficial de TrámiteFácil Hub Colombia.
 Tu labor es redactar el documento legal formal COMPLETO, serio y pulcro en base al caso del ciudadano.
@@ -388,7 +534,7 @@ ESTRUCTURA JSON REQUERIDA:
     "titleOrCompany": "Cargo, empresa o calidad (o A QUIEN CORRESPONDA)",
     "address": "Dirección física o correo si se mencionó"
   },
-  "subject": "ASUNTO: Descripción clara de la solicitud o reclamo con cita legal",
+  "subject": "Descripción clara de la solicitud o reclamo (texto plano, SIN el prefijo 'ASUNTO:' porque la hoja ya lo imprime)",
   "openingGreeting": "Respetado(a) señor(a) o Distinguidos señores:",
   "facts": [
     "PRIMERO: ...",
@@ -427,24 +573,32 @@ Datos del perfil del usuario (si están disponibles): ${JSON.stringify(userProfi
         contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }] }],
           generationConfig: {
             temperature: 0.15,
-            maxOutputTokens: 1400,
+            maxOutputTokens: 1800,
             responseMimeType: 'application/json',
           },
         });
 
       if (!response.ok) {
-        return sendJson(res, 502, { error: 'Error del proveedor de IA en redacción.', details: response.statusText });
+        return sendJson(res, 502, {
+          error: 'El asistente no está disponible en este momento. Inténtalo de nuevo en unos segundos.',
+        });
       }
 
       const geminiResult = await response.json();
       const rawText = geminiResult.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!rawText) return sendJson(res, 502, { error: 'Respuesta vacía al redactar el documento.' });
+      if (!rawText) {
+        return sendJson(res, 502, {
+          error: 'El asistente no está disponible en este momento. Inténtalo de nuevo en unos segundos.',
+        });
+      }
 
-      const parsedDoc = JSON.parse(rawText);
+      const parsedDoc = parseModelJson(rawText);
       return sendJson(res, 200, { success: true, document: parsedDoc });
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error en generate_custom_document:', err);
-      return sendJson(res, 500, { error: 'Error al generar documento con IA.', message: err?.message });
+      return sendJson(res, 502, {
+        error: 'El asistente no pudo preparar tu documento. Inténtalo de nuevo en unos segundos.',
+      });
     }
   }
 
@@ -460,6 +614,9 @@ Datos del perfil del usuario (si están disponibles): ${JSON.stringify(userProfi
     if (cached && Date.now() < cached.expiresAt) {
       return sendJson(res, 200, { success: true, result: cached.data, cached: true });
     }
+
+    // Límite de solicitudes para peticiones reales
+    if (!enforceRateLimit(clientIp, res)) return;
 
     const systemPrompt = `Eres el Asesor Jurídico de TrámiteFácil Hub Colombia.
 Analiza la situación y determina el documento idóneo de la lista:
@@ -486,16 +643,27 @@ ESQUEMA:
           },
         });
 
-      if (!response.ok) return sendJson(res, 502, { error: 'Error de Gemini.' });
+      if (!response.ok) {
+        return sendJson(res, 502, {
+          error: 'El asistente no está disponible en este momento. Inténtalo de nuevo en unos segundos.',
+        });
+      }
       const geminiResult = await response.json();
       const rawText = geminiResult.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!rawText) return sendJson(res, 502, { error: 'Respuesta vacía.' });
+      if (!rawText) {
+        return sendJson(res, 502, {
+          error: 'El asistente no está disponible en este momento. Inténtalo de nuevo en unos segundos.',
+        });
+      }
 
-      const parsedData = JSON.parse(rawText);
-      responseCache.set(cacheKey, { data: parsedData, expiresAt: Date.now() + CACHE_TTL_MS });
+      const parsedData = parseModelJson(rawText);
+      cacheSet(cacheKey, parsedData);
       return sendJson(res, 200, { success: true, result: parsedData });
-    } catch (err: any) {
-      return sendJson(res, 500, { error: 'Error interno en sugerencia.', message: err?.message });
+    } catch (err) {
+      console.error('Error en suggest:', err);
+      return sendJson(res, 502, {
+        error: 'El asistente no pudo revisar tu caso. Inténtalo de nuevo en unos segundos.',
+      });
     }
   }
 
@@ -506,9 +674,12 @@ ESQUEMA:
     const { docType, narrative, currentData } = payload;
     const sanitizedDocType = typeof docType === 'string' ? docType.trim() : '';
     if (sanitizedDocType && !VALID_DOC_TYPES.includes(sanitizedDocType as any)) {
-      return sendJson(res, 400, { error: `Tipo de documento '${sanitizedDocType}' no soportado.` });
+      return sendJson(res, 400, { error: 'Este documento no admite el completado con asistente.' });
     }
     const sanitizedNarrative = sanitizeInput(narrative, 2000);
+
+    // Límite de solicitudes para peticiones reales (sin caché en esta acción)
+    if (!enforceRateLimit(clientIp, res)) return;
 
     const systemPrompt = `Extrae datos de la narración y devuelve un JSON plano para el documento '${sanitizedDocType}'. No inventes datos que no estén.`;
 
@@ -517,22 +688,33 @@ ESQUEMA:
         contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\nDatos actuales: ${JSON.stringify(currentData || {})}\n\nTexto: ${sanitizedNarrative}` }] }],
           generationConfig: {
             temperature: 0.1,
-            maxOutputTokens: 600,
+            maxOutputTokens: 800,
             responseMimeType: 'application/json',
           },
         });
 
-      if (!response.ok) return sendJson(res, 502, { error: 'Error en autofill.' });
+      if (!response.ok) {
+        return sendJson(res, 502, {
+          error: 'El asistente no está disponible en este momento. Inténtalo de nuevo en unos segundos.',
+        });
+      }
       const geminiResult = await response.json();
       const rawText = geminiResult.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!rawText) return sendJson(res, 502, { error: 'Respuesta vacía en autofill.' });
+      if (!rawText) {
+        return sendJson(res, 502, {
+          error: 'El asistente no está disponible en este momento. Inténtalo de nuevo en unos segundos.',
+        });
+      }
 
-      const extractedFields = JSON.parse(rawText);
+      const extractedFields = parseModelJson(rawText);
       return sendJson(res, 200, { success: true, extractedFields });
-    } catch (err: any) {
-      return sendJson(res, 500, { error: 'Error en autofill.', message: err?.message });
+    } catch (err) {
+      console.error('Error en autofill:', err);
+      return sendJson(res, 502, {
+        error: 'El asistente no pudo completar las casillas. Inténtalo de nuevo en unos segundos.',
+      });
     }
   }
 
-  return sendJson(res, 400, { error: `Acción '${action}' no reconocida.` });
+  return sendJson(res, 400, { error: 'No pudimos reconocer la solicitud. Inténtalo de nuevo.' });
 }

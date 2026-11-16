@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Sparkles,
   ArrowRight,
@@ -75,6 +75,23 @@ export const AiDocumentSuggester: React.FC<Props> = ({
   const [selectedOptionId, setSelectedOptionId] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [offlineNotice, setOfflineNotice] = useState<string>('');
+
+  // Referencia al AbortController del diagnóstico en curso (para abortar peticiones previas)
+  const diagnoseAbortRef = useRef<AbortController | null>(null);
+  // Referencia al aviso pendiente de navegación offline (para limpiarlo al desmontar)
+  const offlineNavTimeoutRef = useRef<number | null>(null);
+  // Último texto ya analizado con éxito (evita relanzar la consulta por el mismo caso)
+  const lastDiagnosedTextRef = useRef<string>('');
+
+  // Limpia el aviso de navegación pendiente si el componente se desmonta
+  useEffect(() => {
+    return () => {
+      if (offlineNavTimeoutRef.current !== null) {
+        window.clearTimeout(offlineNavTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Análisis automático con debounce cuando el usuario escribe
   useEffect(() => {
@@ -87,9 +104,14 @@ export const AiDocumentSuggester: React.FC<Props> = ({
       return;
     }
 
+    // Si este texto ya fue analizado con éxito, no relanzar la consulta
+    if (trimmed === lastDiagnosedTextRef.current) return;
+
     const controller = new AbortController();
+    diagnoseAbortRef.current = controller;
     setIsDiagnosing(true);
     setErrorMessage('');
+    setOfflineNotice('');
 
     const timer = setTimeout(async () => {
       try {
@@ -98,6 +120,7 @@ export const AiDocumentSuggester: React.FC<Props> = ({
         if (result.options && result.options.length > 0) {
           setSelectedOptionId(result.options[0].id);
         }
+        lastDiagnosedTextRef.current = trimmed;
       } catch (err: any) {
         if (err?.name !== 'AbortError') {
           console.error(err);
@@ -114,16 +137,38 @@ export const AiDocumentSuggester: React.FC<Props> = ({
   }, [caseDescription]);
 
   const handleSelectExample = async (text: string) => {
+    const trimmed = text.trim();
+    // Si este texto ya fue analizado con éxito, no relanzar la consulta
+    if (trimmed && trimmed === lastDiagnosedTextRef.current) {
+      setCaseDescription(text);
+      return;
+    }
+
+    // Aborta el diagnóstico previo (debounce) antes de lanzar la nueva consulta
+    diagnoseAbortRef.current?.abort();
+    const controller = new AbortController();
+    diagnoseAbortRef.current = controller;
+    // Marca el texto como en análisis para que el efecto del debounce no lo duplique
+    lastDiagnosedTextRef.current = trimmed;
+
     setCaseDescription(text);
     setIsDiagnosing(true);
     setErrorMessage('');
+    setOfflineNotice('');
     try {
-      const result = await diagnoseLegalCase(text);
+      const result = await diagnoseLegalCase(text, controller.signal);
       setDiagnosticResult(result);
       if (result.options && result.options.length > 0) {
         setSelectedOptionId(result.options[0].id);
       }
     } catch (err) {
+      // Si el fallo no fue por aborto propio, habilita el reintento del mismo texto
+      if (
+        (err as any)?.name !== 'AbortError' &&
+        diagnoseAbortRef.current === controller
+      ) {
+        lastDiagnosedTextRef.current = '';
+      }
       console.error(err);
     } finally {
       setIsDiagnosing(false);
@@ -136,6 +181,8 @@ export const AiDocumentSuggester: React.FC<Props> = ({
     setSelectedOptionId('');
     setUserAnswers({});
     setErrorMessage('');
+    setOfflineNotice('');
+    lastDiagnosedTextRef.current = '';
   };
 
   const handleToggleAnswer = (questionId: string, optionValue: string) => {
@@ -156,9 +203,13 @@ export const AiDocumentSuggester: React.FC<Props> = ({
     }
 
     // Si es redacción de documento formal a la medida con IA
+    // Indica si la navegación quedó programada con aviso offline: en ese caso el
+    // botón permanece ocupado hasta que la navegación se ejecute realmente.
+    let navigationScheduled = false;
     try {
       setIsGeneratingDoc(true);
       setErrorMessage('');
+      setOfflineNotice('');
 
       const res = await generateCustomDocument({
         caseDescription,
@@ -166,15 +217,36 @@ export const AiDocumentSuggester: React.FC<Props> = ({
         answers: userAnswers,
       });
 
-      if (res.success && res.document) {
-        onSelectDoc('documento_formal', res.document);
+      const documentData = res.document;
+      if (res.success && documentData) {
+        if (res.offline) {
+          // Aviso amable: el documento se preparó localmente sin conexión.
+          // Se muestra brevemente antes de abrir el editor.
+          setOfflineNotice(
+            'El asistente preparó tu documento en modo privado sin conexión. Puedes editarlo en el formulario.'
+          );
+          navigationScheduled = true;
+          offlineNavTimeoutRef.current = window.setTimeout(() => {
+            offlineNavTimeoutRef.current = null;
+            setIsGeneratingDoc(false);
+            onSelectDoc('documento_formal', documentData);
+          }, 1600);
+        } else {
+          onSelectDoc('documento_formal', documentData);
+        }
       } else {
-        setErrorMessage(res.error || 'No se pudo generar el documento. Intenta nuevamente.');
+        setErrorMessage(
+          'No se pudo preparar el documento en este momento. Espera unos segundos e inténtalo de nuevo.'
+        );
       }
-    } catch (err: any) {
-      setErrorMessage(err?.message || 'Error de conexión al redactar el documento.');
+    } catch {
+      setErrorMessage(
+        'No se pudo preparar el documento en este momento. Espera unos segundos e inténtalo de nuevo.'
+      );
     } finally {
-      setIsGeneratingDoc(false);
+      if (!navigationScheduled) {
+        setIsGeneratingDoc(false);
+      }
     }
   };
 
@@ -408,11 +480,30 @@ export const AiDocumentSuggester: React.FC<Props> = ({
               </div>
             )}
 
+          {/* Aviso amable cuando el documento se preparó en modo privado */}
+          {offlineNotice && (
+            <div className="p-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <span>{offlineNotice}</span>
+            </div>
+          )}
+
           {/* Mensaje de error si falla la generación */}
           {errorMessage && (
-            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-700 dark:text-rose-300 flex flex-wrap items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
-              <span>{errorMessage}</span>
+              <span className="flex-1 min-w-[8rem]">{errorMessage}</span>
+              {selectedOption && (
+                <button
+                  type="button"
+                  onClick={() => handleProceedWithDocument(selectedOption)}
+                  disabled={isGeneratingDoc}
+                  className="min-h-[36px] px-3 py-1.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-60 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 cursor-pointer shrink-0"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Reintentar</span>
+                </button>
+              )}
             </div>
           )}
 
