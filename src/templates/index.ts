@@ -10,6 +10,9 @@ export { propuestaServiciosDefinition } from './freelance/propuesta_servicios';
 export { cartaRenunciaDefinition } from './laboral/carta_renuncia';
 export { certificadoLaboralDefinition } from './laboral/certificado_laboral';
 export { permisoLaboralDefinition } from './laboral/permiso_laboral';
+export { liquidacionLaboralDefinition } from './laboral/liquidacion_laboral';
+export { memorandoLlamadoAtencionDefinition } from './laboral/memorando_llamado_atencion';
+export { otrosiLaboralDefinition } from './laboral/otrosi_laboral';
 
 // Inmobiliario
 export { contratoArrendamientoDefinition } from './inmobiliario/contrato_arrendamiento';

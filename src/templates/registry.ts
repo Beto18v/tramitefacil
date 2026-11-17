@@ -5,6 +5,9 @@ import { propuestaServiciosDefinition } from './freelance/propuesta_servicios';
 import { cartaRenunciaDefinition } from './laboral/carta_renuncia';
 import { certificadoLaboralDefinition } from './laboral/certificado_laboral';
 import { permisoLaboralDefinition } from './laboral/permiso_laboral';
+import { liquidacionLaboralDefinition } from './laboral/liquidacion_laboral';
+import { memorandoLlamadoAtencionDefinition } from './laboral/memorando_llamado_atencion';
+import { otrosiLaboralDefinition } from './laboral/otrosi_laboral';
 import { contratoArrendamientoDefinition } from './inmobiliario/contrato_arrendamiento';
 import { noRenovacionArriendoDefinition } from './inmobiliario/no_renovacion_arriendo';
 import { actaEntregaDefinition } from './inmobiliario/acta_entrega';
@@ -26,6 +29,9 @@ export const DOC_TYPE_TO_DATA_KEY: Record<DocumentType, string> = {
   carta_renuncia: 'cartaRenuncia',
   certificado_laboral: 'certificadoLaboral',
   permiso_laboral: 'permisoLaboral',
+  liquidacion_laboral: 'liquidacionLaboral',
+  memorando_llamado_atencion: 'memorandoLlamadoAtencion',
+  otrosi_laboral: 'otrosiLaboral',
   no_renovacion_arriendo: 'noRenovacionArriendo',
   contrato_arrendamiento: 'contratoArrendamiento',
   acta_entrega: 'actaEntrega',
@@ -47,6 +53,9 @@ export const DOCUMENT_DEFINITIONS: Record<DocumentType, AnyDocumentDefinition> =
   carta_renuncia: cartaRenunciaDefinition,
   certificado_laboral: certificadoLaboralDefinition,
   permiso_laboral: permisoLaboralDefinition,
+  liquidacion_laboral: liquidacionLaboralDefinition,
+  memorando_llamado_atencion: memorandoLlamadoAtencionDefinition,
+  otrosi_laboral: otrosiLaboralDefinition,
 
   // Inmobiliario
   contrato_arrendamiento: contratoArrendamientoDefinition,

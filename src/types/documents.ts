@@ -14,6 +14,9 @@ export type DocumentType =
   | 'carta_renuncia'
   | 'certificado_laboral'
   | 'permiso_laboral'
+  | 'liquidacion_laboral'
+  | 'memorando_llamado_atencion'
+  | 'otrosi_laboral'
   // Inmobiliario & Arriendos
   | 'contrato_arrendamiento'
   | 'no_renovacion_arriendo'
@@ -78,7 +81,7 @@ export const CATEGORIES_CONFIG: CategoryHubConfig[] = [
       hoverBg: 'hover:border-slate-300 dark:hover:border-slate-600',
       accent: 'slate',
     },
-    subfilters: ['Todos', 'Renuncias', 'Certificados', 'Permisos'],
+    subfilters: ['Todos', 'Renuncias', 'Certificados', 'Permisos', 'Liquidaciones', 'Disciplinario', 'Modificaciones'],
   },
   {
     id: 'inmobiliario',
@@ -329,6 +332,112 @@ export interface PermisoLaboralData {
   motivoDetallado: string;
   anexaSoportes: boolean;
   compensacionHoras: string;
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
+// 6b. Liquidación Definitiva de Contrato Laboral
+export interface LiquidacionLaboralData {
+  ciudad: string;
+  fecha: string;
+  nombreEmpresa: string;
+  nitEmpresa: string;
+  ciudadEmpresa: string;
+  nombreRepresentante: string;
+  nombreTrabajador: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  cargoTrabajador: string;
+  fechaIngreso: string;
+  fechaRetiro: string;
+  motivoRetiro: string;
+  salarioBase: number;
+  incluyeAuxilioTransporte: boolean;
+  auxilioTransporte: number;
+  salarioBaseLiquidacion: number;
+  diasCesantias: number;
+  diasPrima: number;
+  diasVacaciones: number;
+  cesantiasValor: number;
+  interesesCesantiasValor: number;
+  primaValor: number;
+  vacacionesValor: number;
+  otrosDevengos: number;
+  descripcionOtrosDevengos: string;
+  saludPensionDeducciones: number;
+  otrasDeducciones: number;
+  descripcionOtrasDeducciones: string;
+  totalLiquidacion: number;
+  totalEnLetras: string;
+  pazYSalvoDeclaracion: string;
+  incluirHuella: boolean;
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
+// 6c. Llamado de Atención y Memorando Disciplinario
+export interface MemorandoLlamadoAtencionData {
+  ciudad: string;
+  fecha: string;
+  numeroMemorando: string;
+  nombreEmpresa: string;
+  nitEmpresa: string;
+  ciudadEmpresa: string;
+  remitenteNombre: string;
+  remitenteCargo: string;
+  departamentoArea: string;
+  nombreTrabajador: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  cargoTrabajador: string;
+  tipoFalta:
+    | 'retardo_injustificado'
+    | 'inasistencia_injustificada'
+    | 'incumplimiento_funciones'
+    | 'conducta_inapropiada'
+    | 'desacato_ordenes'
+    | 'otro';
+  fechaFalta: string;
+  descripcionHechos: string;
+  normaVulnerada: string;
+  solicitaDescargos: boolean;
+  fechaDescargos: string;
+  horaDescargos: string;
+  lugarDescargos: string;
+  advertenciaReincidencia: string;
+  copiaHojaVida: boolean;
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
+// 6d. Otrosí Modificatorio de Contrato de Trabajo
+export interface OtrosiLaboralData {
+  ciudad: string;
+  fecha: string;
+  numeroOtrosi: string;
+  tipoContratoOriginal: string;
+  fechaContratoOriginal: string;
+  nombreEmpresa: string;
+  nitEmpresa: string;
+  nombreRepresentanteLegal: string;
+  tipoDocRepresentante: string;
+  numDocRepresentante: string;
+  nombreTrabajador: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  cargoTrabajador: string;
+  tipoModificacion:
+    | 'ajuste_salarial'
+    | 'cambio_cargo'
+    | 'prorroga_vigencia'
+    | 'cambio_lugar_modalidad'
+    | 'otra';
+  clausulaModificada: string;
+  textoAnterior: string;
+  textoNuevo: string;
+  fechaVigenciaModificacion: string;
+  incluyeRatificacion: boolean;
+  ratificacionTexto: string;
   signatureType?: 'text' | 'draw';
   signatureDataUrl?: string;
 }
@@ -607,6 +716,9 @@ export interface AllDocumentsData {
   cartaRenuncia: CartaRenunciaData;
   certificadoLaboral: CertificadoLaboralData;
   permisoLaboral: PermisoLaboralData;
+  liquidacionLaboral?: LiquidacionLaboralData;
+  memorandoLlamadoAtencion?: MemorandoLlamadoAtencionData;
+  otrosiLaboral?: OtrosiLaboralData;
   noRenovacionArriendo: NoRenovacionArriendoData;
   contratoArrendamiento: ContratoArrendamientoData;
   actaEntrega: ActaEntregaData;
