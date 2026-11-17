@@ -11,11 +11,15 @@ import { otrosiLaboralDefinition } from './laboral/otrosi_laboral';
 import { contratoArrendamientoDefinition } from './inmobiliario/contrato_arrendamiento';
 import { noRenovacionArriendoDefinition } from './inmobiliario/no_renovacion_arriendo';
 import { actaEntregaDefinition } from './inmobiliario/acta_entrega';
+import { prorrogaArrendamientoDefinition } from './inmobiliario/prorroga_arrendamiento';
+import { reciboPagoCanonDefinition } from './inmobiliario/recibo_pago_canon';
 import { contratoPrestacionDefinition } from './comercial/contrato_prestacion';
 import { acuerdoNdaDefinition } from './comercial/acuerdo_nda';
 import { derechoPeticionDefinition } from './legal/derecho_peticion';
 import { poderAutorizacionDefinition } from './legal/poder_autorizacion';
 import { habeasDataDefinition } from './legal/habeas_data';
+import { impugnacionFotomultasDefinition } from './legal/impugnacion_fotomultas';
+import { reclamoServiciosPublicosDefinition } from './legal/reclamo_servicios_publicos';
 import { compraventaVehiculoDefinition } from './vehiculos/compraventa_vehiculo';
 import { autorizacionPatiosDefinition } from './vehiculos/autorizacion_patios';
 import { documentoFormalDefinition } from './legal/documento_formal';
@@ -35,9 +39,13 @@ export const DOC_TYPE_TO_DATA_KEY: Record<DocumentType, string> = {
   no_renovacion_arriendo: 'noRenovacionArriendo',
   contrato_arrendamiento: 'contratoArrendamiento',
   acta_entrega: 'actaEntrega',
+  prorroga_arrendamiento: 'prorrogaArrendamiento',
+  recibo_pago_canon: 'reciboPagoCanon',
   derecho_peticion: 'derechoPeticion',
   poder_autorizacion: 'poderAutorizacion',
   habeas_data: 'habeasData',
+  impugnacion_fotomultas: 'impugnacionFotomultas',
+  reclamo_servicios_publicos: 'reclamoServiciosPublicos',
   acuerdo_nda: 'acuerdoNda',
   compraventa_vehiculo: 'compraventaVehiculo',
   autorizacion_patios: 'autorizacionPatios',
@@ -61,6 +69,8 @@ export const DOCUMENT_DEFINITIONS: Record<DocumentType, AnyDocumentDefinition> =
   contrato_arrendamiento: contratoArrendamientoDefinition,
   no_renovacion_arriendo: noRenovacionArriendoDefinition,
   acta_entrega: actaEntregaDefinition,
+  prorroga_arrendamiento: prorrogaArrendamientoDefinition,
+  recibo_pago_canon: reciboPagoCanonDefinition,
 
   // Comercial
   contrato_prestacion: contratoPrestacionDefinition,
@@ -70,6 +80,8 @@ export const DOCUMENT_DEFINITIONS: Record<DocumentType, AnyDocumentDefinition> =
   derecho_peticion: derechoPeticionDefinition,
   poder_autorizacion: poderAutorizacionDefinition,
   habeas_data: habeasDataDefinition,
+  impugnacion_fotomultas: impugnacionFotomultasDefinition,
+  reclamo_servicios_publicos: reclamoServiciosPublicosDefinition,
 
   // Vehículos
   compraventa_vehiculo: compraventaVehiculoDefinition,

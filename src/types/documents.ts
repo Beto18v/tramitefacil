@@ -21,6 +21,8 @@ export type DocumentType =
   | 'contrato_arrendamiento'
   | 'no_renovacion_arriendo'
   | 'acta_entrega'
+  | 'prorroga_arrendamiento'
+  | 'recibo_pago_canon'
   // Comercial & Contratos
   | 'contrato_prestacion'
   | 'acuerdo_nda'
@@ -28,6 +30,8 @@ export type DocumentType =
   | 'derecho_peticion'
   | 'poder_autorizacion'
   | 'habeas_data'
+  | 'impugnacion_fotomultas'
+  | 'reclamo_servicios_publicos'
   // Vehículos
   | 'compraventa_vehiculo'
   | 'autorizacion_patios'
@@ -707,6 +711,144 @@ export interface DocumentoFormalData {
   signatureDataUrl?: string;
 }
 
+// 17. Otrosí de Prórroga e Incremento de Arrendamiento
+export interface ProrrogaArrendamientoData {
+  ciudad: string;
+  fecha: string;
+  fechaContratoOriginal: string;
+  numeroContratoOriginal?: string;
+  direccionInmueble: string;
+  ciudadInmueble: string;
+  matriculaInmobiliaria?: string;
+  usoInmueble: 'vivienda' | 'comercial';
+  nombreArrendador: string;
+  tipoDocArrendador: string;
+  numDocArrendador: string;
+  telefonoArrendador?: string;
+  correoArrendador?: string;
+  nombreArrendatario: string;
+  tipoDocArrendatario: string;
+  numDocArrendatario: string;
+  telefonoArrendatario?: string;
+  correoArrendatario?: string;
+  incluyeCodeudor: boolean;
+  nombreCodeudor?: string;
+  tipoDocCodeudor?: string;
+  numDocCodeudor?: string;
+  telefonoCodeudor?: string;
+  fechaInicioProrroga: string;
+  fechaFinProrroga: string;
+  duracionMeses: number;
+  canonAnterior: number;
+  porcentajeIncremento: number;
+  nuevoCanon: number;
+  nuevoCanonLetras?: string;
+  formaDePago: string;
+  cuentaBancariaPago?: string;
+  ratificacionTexto: string;
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
+// 18. Recibo de Pago de Canon de Arrendamiento
+export interface ReciboPagoCanonData {
+  numeroConsecutivo: string;
+  ciudad: string;
+  fechaPago: string;
+  nombreArrendador: string;
+  tipoDocArrendador: string;
+  numDocArrendador: string;
+  telefonoArrendador?: string;
+  nombreArrendatario: string;
+  tipoDocArrendatario: string;
+  numDocArrendatario: string;
+  direccionInmueble: string;
+  ciudadInmueble: string;
+  periodoMes: string;
+  valorCanon: number;
+  incluyeAdministracion: boolean;
+  valorAdministracion?: number;
+  incluyeServicios: boolean;
+  valorServicios?: number;
+  otrosConceptosDescripcion?: string;
+  valorOtrosConceptos?: number;
+  valorTotal: number;
+  valorTotalLetras?: string;
+  formaPago: 'transferencia' | 'efectivo' | 'consignacion' | 'cheque';
+  referenciaPago?: string;
+  observaciones?: string;
+  declaraPazYSalvo: boolean;
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
+// 19. Impugnación de Fotodetección y Fotomultas
+export interface ImpugnacionFotomultasData {
+  ciudad: string;
+  fecha: string;
+  organismoTransito: string;
+  ciudadEntidad: string;
+  nombreSolicitante: string;
+  tipoDocSolicitante: string;
+  numDocSolicitante: string;
+  expedicionSolicitante?: string;
+  direccionNotificacion: string;
+  ciudadNotificacion: string;
+  telefonoSolicitante: string;
+  correoNotificacion: string;
+  calidadSolicitante: 'propietario' | 'conductor_autorizado' | 'apoderado';
+  numeroComparendo: string;
+  fechaComparendo: string;
+  horaComparendo?: string;
+  placaVehiculo: string;
+  lugarInfraccion: string;
+  codigoInfraccion: string;
+  descripcionInfraccion?: string;
+  causalFaltaIdentificacion: boolean;
+  causalFaltaNotificacion: boolean;
+  causalCalibracionSenalizacion: boolean;
+  hechosAdicionales?: string;
+  solicitaExoneracion: boolean;
+  solicitaArchivoComparendo: boolean;
+  solicitaPruebaTecnica: boolean;
+  peticionesAdicionales?: string;
+  anexos?: string;
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
+// 20. Reclamo y Derecho de Petición por Servicios Públicos
+export interface ReclamoServiciosPublicosData {
+  ciudad: string;
+  fecha: string;
+  empresaServicios: string;
+  ciudadEmpresa: string;
+  tipoServicio: 'energia' | 'acueducto' | 'gas' | 'aseo' | 'telecomunicaciones' | 'mixto';
+  nombreUsuario: string;
+  tipoDocUsuario: string;
+  numDocUsuario: string;
+  calidadUsuario: 'propietario' | 'suscriptor' | 'arrendatario' | 'usuario';
+  cuentaContrato: string;
+  direccionInmueble: string;
+  ciudadInmueble: string;
+  telefonoUsuario: string;
+  correoNotificaciones: string;
+  numeroFactura: string;
+  periodoFacturado: string;
+  valorReclamado: number;
+  consumoHistoricoPromedio?: string;
+  consumoCobrado?: string;
+  motivoReclamo: 'desviacion_significativa' | 'cobro_no_autorizado' | 'cobro_servicio_no_prestado' | 'cobro_reiterado' | 'falla_prestacion' | 'otro';
+  descripcionHechos: string;
+  solicitaInvestigacionDesviacion: boolean;
+  solicitaReliquidacion: boolean;
+  solicitaNoSuspension: boolean;
+  peticionesAdicionales?: string;
+  anexos?: string;
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
 // Master AllDocumentsData state container
 export interface AllDocumentsData {
   [key: string]: any;
@@ -722,9 +864,13 @@ export interface AllDocumentsData {
   noRenovacionArriendo: NoRenovacionArriendoData;
   contratoArrendamiento: ContratoArrendamientoData;
   actaEntrega: ActaEntregaData;
+  prorrogaArrendamiento?: ProrrogaArrendamientoData;
+  reciboPagoCanon?: ReciboPagoCanonData;
   derechoPeticion: DerechoPeticionData;
   poderAutorizacion: PoderAutorizacionData;
   habeasData: HabeasDataData;
+  impugnacionFotomultas?: ImpugnacionFotomultasData;
+  reclamoServiciosPublicos?: ReclamoServiciosPublicosData;
   acuerdoNda: AcuerdoNdaData;
   compraventaVehiculo: CompraventaVehiculoData;
   autorizacionPatios: AutorizacionPatiosData;

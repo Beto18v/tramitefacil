@@ -18,6 +18,8 @@ export { otrosiLaboralDefinition } from './laboral/otrosi_laboral';
 export { contratoArrendamientoDefinition } from './inmobiliario/contrato_arrendamiento';
 export { noRenovacionArriendoDefinition } from './inmobiliario/no_renovacion_arriendo';
 export { actaEntregaDefinition } from './inmobiliario/acta_entrega';
+export { prorrogaArrendamientoDefinition } from './inmobiliario/prorroga_arrendamiento';
+export { reciboPagoCanonDefinition } from './inmobiliario/recibo_pago_canon';
 
 // Comercial
 export { contratoPrestacionDefinition } from './comercial/contrato_prestacion';
@@ -27,6 +29,8 @@ export { acuerdoNdaDefinition } from './comercial/acuerdo_nda';
 export { derechoPeticionDefinition } from './legal/derecho_peticion';
 export { poderAutorizacionDefinition } from './legal/poder_autorizacion';
 export { habeasDataDefinition } from './legal/habeas_data';
+export { impugnacionFotomultasDefinition } from './legal/impugnacion_fotomultas';
+export { reclamoServiciosPublicosDefinition } from './legal/reclamo_servicios_publicos';
 
 // Vehículos
 export { compraventaVehiculoDefinition } from './vehiculos/compraventa_vehiculo';
