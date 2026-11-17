@@ -1,5 +1,6 @@
 export * from './types';
 export * from './registry';
+export * from './factory';
 
 // Freelance
 export { cuentaCobroDefinition } from './freelance/cuenta_cobro';

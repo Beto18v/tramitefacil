@@ -19,7 +19,7 @@ import { documentoFormalDefinition } from './legal/documento_formal';
 
 export type AnyDocumentDefinition = DocumentDefinition<any>;
 
-export const DOC_TYPE_TO_DATA_KEY: Record<DocumentType, keyof AllDocumentsData> = {
+export const DOC_TYPE_TO_DATA_KEY: Record<DocumentType, string> = {
   cuenta_cobro: 'cuentaCobro',
   propuesta_servicios: 'propuestaServicios',
   contrato_prestacion: 'contratoPrestacion',
@@ -77,3 +77,17 @@ export function getDocumentDefinition(docType: DocumentType): AnyDocumentDefinit
 export const DOCUMENT_CATALOG: DocumentMeta[] = Object.values(DOCUMENT_DEFINITIONS).map(
   (def) => def.meta
 );
+
+export function registerDocumentDefinition(def: AnyDocumentDefinition): void {
+  const id = def.meta.id;
+  DOCUMENT_DEFINITIONS[id] = def;
+  if (def.dataKey) {
+    DOC_TYPE_TO_DATA_KEY[id] = def.dataKey;
+  }
+  const existingIdx = DOCUMENT_CATALOG.findIndex((m) => m.id === id);
+  if (existingIdx >= 0) {
+    DOCUMENT_CATALOG[existingIdx] = def.meta;
+  } else {
+    DOCUMENT_CATALOG.push(def.meta);
+  }
+}

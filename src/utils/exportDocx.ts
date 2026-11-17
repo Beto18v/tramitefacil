@@ -12,21 +12,22 @@ import {
 } from 'docx';
 import { saveAs } from 'file-saver';
 import { DocumentType, AllDocumentsData } from '../types/documents';
+import { PartySignatureInfo, getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from '../templates';
 import { generarTextoPlano } from './plainTextGenerator';
 
-interface PartySignatureInfo {
-  role?: string;
-  name?: string;
-  doc?: string;
-  phone?: string;
-  address?: string;
-  note?: string;
-}
+export type { PartySignatureInfo };
 
 function extractSignaturesForDoc(
   docType: DocumentType,
   state: AllDocumentsData
-): { left: PartySignatureInfo; right: PartySignatureInfo } {
+): { left: PartySignatureInfo; right?: PartySignatureInfo } {
+  const def = getDocumentDefinition(docType);
+  const dataKey = DOC_TYPE_TO_DATA_KEY[docType] || def?.dataKey;
+
+  if (def?.getSignaturesForDocx && dataKey && state[dataKey]) {
+    return def.getSignaturesForDocx(state[dataKey]);
+  }
+
   // Helper to extract nested doc object
   const getDoc = (keyCamel: keyof AllDocumentsData, _keySnake?: string) =>
     (state[keyCamel] || {}) as unknown as Record<string, string | undefined>;
@@ -312,7 +313,20 @@ function extractSignaturesForDoc(
   }
 }
 
-function buildSignatureCell(info: PartySignatureInfo): TableCell {
+function buildSignatureCell(info?: PartySignatureInfo): TableCell {
+  if (!info || (!info.name && !info.role)) {
+    return new TableCell({
+      width: { size: 50, type: WidthType.PERCENTAGE },
+      borders: {
+        top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+        bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+        left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+        right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+      },
+      children: [new Paragraph({ children: [] })],
+    });
+  }
+
   const cellChildren: Paragraph[] = [
     // Spacing before signature line
     new Paragraph({
@@ -451,114 +465,123 @@ export async function exportDocx(
   title: string,
   filename: string
 ): Promise<void> {
-  const fullText = generarTextoPlano(docType, state);
-  const rawLines = fullText.split('\n');
+  const def = getDocumentDefinition(docType);
+  const dataKey = DOC_TYPE_TO_DATA_KEY[docType] || def?.dataKey;
 
-  // Filter out the trailing signature text from rawLines so it is cleanly rendered in the Table instead
-  const bodyLines: string[] = [];
-  let reachedSignatures = false;
+  let paragraphs: Paragraph[] = [];
 
-  for (let i = 0; i < rawLines.length; i++) {
-    const line = rawLines[i];
-    const trimmed = line.trim();
+  if (def?.buildDocxParagraphs && dataKey && state[dataKey]) {
+    paragraphs = def.buildDocxParagraphs(state[dataKey]);
+  } else {
+    const fullText = generarTextoPlano(docType, state);
+    const rawLines = fullText.split('\n');
 
-    // Check if we hit the signature marker
-    if (
-      trimmed.startsWith('___________________') ||
-      trimmed.startsWith('OTORGANTE (PODERDANTE):') ||
-      trimmed.startsWith('EL VENDEDOR:') ||
-      trimmed.startsWith('EL CONTRATANTE:') ||
-      trimmed.startsWith('EL ARRENDADOR:') ||
-      trimmed.startsWith('Atentamente,')
-    ) {
-      reachedSignatures = true;
-      break;
+    // Filter out the trailing signature text from rawLines so it is cleanly rendered in the Table instead
+    const bodyLines: string[] = [];
+    let reachedSignatures = false;
+
+    for (let i = 0; i < rawLines.length; i++) {
+      const line = rawLines[i];
+      const trimmed = line.trim();
+
+      // Check if we hit the signature marker
+      if (
+        trimmed.startsWith('___________________') ||
+        trimmed.startsWith('OTORGANTE (PODERDANTE):') ||
+        trimmed.startsWith('EL VENDEDOR:') ||
+        trimmed.startsWith('EL CONTRATANTE:') ||
+        trimmed.startsWith('EL ARRENDADOR:') ||
+        trimmed.startsWith('Atentamente,')
+      ) {
+        reachedSignatures = true;
+        break;
+      }
+
+      bodyLines.push(line);
     }
 
-    bodyLines.push(line);
-  }
-
-  const paragraphs: Paragraph[] = [
-    // 1. Formal Document Header Title (Centered, 14pt bold, subtle border)
-    new Paragraph({
-      alignment: AlignmentType.CENTER,
-      spacing: { before: 120, after: 240 },
-      border: {
-        bottom: {
-          color: '94A3B8',
-          space: 8,
-          style: BorderStyle.SINGLE,
-          size: 6,
+    paragraphs = [
+      // 1. Formal Document Header Title (Centered, 14pt bold, subtle border)
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 120, after: 240 },
+        border: {
+          bottom: {
+            color: '94A3B8',
+            space: 8,
+            style: BorderStyle.SINGLE,
+            size: 6,
+          },
         },
-      },
-      children: [
-        new TextRun({
-          text: title.toUpperCase(),
-          bold: true,
-          size: 28, // 14pt
-          font: 'Arial',
-          color: '0F172A',
-        }),
-      ],
-    }),
-  ];
+        children: [
+          new TextRun({
+            text: title.toUpperCase(),
+            bold: true,
+            size: 28, // 14pt
+            font: 'Arial',
+            color: '0F172A',
+          }),
+        ],
+      }),
+    ];
 
-  // 2. Format Body Lines (Justified, 11pt Arial, relaxed line spacing)
-  for (const line of bodyLines) {
-    const trimmed = line.trim();
+    // 2. Format Body Lines (Justified, 11pt Arial, relaxed line spacing)
+    for (const line of bodyLines) {
+      const trimmed = line.trim();
 
-    if (!trimmed) {
-      paragraphs.push(
-        new Paragraph({
-          spacing: { before: 60, after: 60 },
-          children: [],
-        })
-      );
-      continue;
-    }
+      if (!trimmed) {
+        paragraphs.push(
+          new Paragraph({
+            spacing: { before: 60, after: 60 },
+            children: [],
+          })
+        );
+        continue;
+      }
 
-    // Detect section headers
-    const isSectionHeader =
-      /^[A-ZÁÉÍÓÚÑ\s]{3,}:$/.test(trimmed) ||
-      /^(PRIMERA|SEGUNDA|TERCERA|CUARTA|QUINTA|SEXTA|SÉPTIMA|OCTAVA|NOVENA|DÉCIMA)[\.:]/i.test(trimmed) ||
-      /^[0-9]+\.\s+[A-ZÁÉÍÓÚÑ\s]{3,}/.test(trimmed) ||
-      trimmed.startsWith('ASUNTO:') ||
-      trimmed.startsWith('OBJETO:') ||
-      trimmed.startsWith('LIQUIDACIÓN:') ||
-      trimmed.startsWith('DATOS BANCARIOS:') ||
-      trimmed.startsWith('CONDICIONES ECONÓMICAS:');
+      // Detect section headers
+      const isSectionHeader =
+        /^[A-ZÁÉÍÓÚÑ\s]{3,}:$/.test(trimmed) ||
+        /^(PRIMERA|SEGUNDA|TERCERA|CUARTA|QUINTA|SEXTA|SÉPTIMA|OCTAVA|NOVENA|DÉCIMA)[\.:]/i.test(trimmed) ||
+        /^[0-9]+\.\s+[A-ZÁÉÍÓÚÑ\s]{3,}/.test(trimmed) ||
+        trimmed.startsWith('ASUNTO:') ||
+        trimmed.startsWith('OBJETO:') ||
+        trimmed.startsWith('LIQUIDACIÓN:') ||
+        trimmed.startsWith('DATOS BANCARIOS:') ||
+        trimmed.startsWith('CONDICIONES ECONÓMICAS:');
 
-    if (isSectionHeader) {
-      paragraphs.push(
-        new Paragraph({
-          alignment: AlignmentType.LEFT,
-          spacing: { before: 200, after: 80 },
-          children: [
-            new TextRun({
-              text: trimmed,
-              bold: true,
-              size: 22, // 11pt
-              font: 'Arial',
-              color: '0F172A',
-            }),
-          ],
-        })
-      );
-    } else {
-      paragraphs.push(
-        new Paragraph({
-          alignment: AlignmentType.JUSTIFIED,
-          spacing: { line: 276, before: 60, after: 60 }, // 1.15 line height, 120 total spacing
-          children: [
-            new TextRun({
-              text: line,
-              size: 22, // 11pt
-              font: 'Arial',
-              color: '1E293B',
-            }),
-          ],
-        })
-      );
+      if (isSectionHeader) {
+        paragraphs.push(
+          new Paragraph({
+            alignment: AlignmentType.LEFT,
+            spacing: { before: 200, after: 80 },
+            children: [
+              new TextRun({
+                text: trimmed,
+                bold: true,
+                size: 22, // 11pt
+                font: 'Arial',
+                color: '0F172A',
+              }),
+            ],
+          })
+        );
+      } else {
+        paragraphs.push(
+          new Paragraph({
+            alignment: AlignmentType.JUSTIFIED,
+            spacing: { line: 276, before: 60, after: 60 }, // 1.15 line height, 120 total spacing
+            children: [
+              new TextRun({
+                text: line,
+                size: 22, // 11pt
+                font: 'Arial',
+                color: '1E293B',
+              }),
+            ],
+          })
+        );
+      }
     }
   }
 

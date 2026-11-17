@@ -1,4 +1,5 @@
 import { UserProfile, DocumentType, AllDocumentsData } from '../types/documents';
+import { getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from '../templates';
 
 export const USER_PROFILE_STORAGE_KEY = 'tramitefacil_profile_v1';
 
@@ -47,8 +48,22 @@ export function injectProfileIntoDocument(
   profile: UserProfile
 ): AllDocumentsData {
   const updated = { ...currentData };
+  const def = getDocumentDefinition(docType);
+  const dataKey = (DOC_TYPE_TO_DATA_KEY[docType] || def?.dataKey) as keyof AllDocumentsData;
 
-  switch (docType) {
+  if (def?.injectProfile && dataKey && currentData[dataKey]) {
+    updated[dataKey] = def.injectProfile(currentData[dataKey], profile);
+  } else if (def?.profileFieldMap && dataKey && currentData[dataKey]) {
+    const docData = { ...currentData[dataKey] };
+    for (const [profKey, targetField] of Object.entries(def.profileFieldMap)) {
+      const val = (profile as any)[profKey];
+      if (val !== undefined && val !== '' && targetField) {
+        docData[targetField as string] = val;
+      }
+    }
+    updated[dataKey] = docData;
+  } else {
+    switch (docType) {
     case 'cuenta_cobro': {
       updated.cuentaCobro = {
         ...updated.cuentaCobro,
@@ -256,10 +271,11 @@ export function injectProfileIntoDocument(
       break;
     }
   }
+  }
 
   // If user profile has a saved signature, inject it
   if (profile.signatureDataUrl) {
-    const docKeyMap: Record<DocumentType, keyof AllDocumentsData> = {
+    const docKeyMap: Record<string, keyof AllDocumentsData> = {
       cuenta_cobro: 'cuentaCobro',
       propuesta_servicios: 'propuestaServicios',
       contrato_prestacion: 'contratoPrestacion',
@@ -277,7 +293,7 @@ export function injectProfileIntoDocument(
       autorizacion_patios: 'autorizacionPatios',
       documento_formal: 'documentoFormal',
     };
-    const key = docKeyMap[docType];
+    const key = dataKey || docKeyMap[docType];
     if (key && updated[key]) {
       const docWithSig = updated[key] as { signatureType?: 'text' | 'draw'; signatureDataUrl?: string };
       docWithSig.signatureType = 'draw';

@@ -1,5 +1,14 @@
 import { ReactElement } from 'react';
-import { DocumentType, DocumentCategory, DocumentStyleConfig } from '../types/documents';
+import { DocumentType, DocumentCategory, DocumentStyleConfig, UserProfile } from '../types/documents';
+
+export interface PartySignatureInfo {
+  role?: string;
+  name?: string;
+  doc?: string;
+  phone?: string;
+  address?: string;
+  note?: string;
+}
 
 export interface DocumentMetaInfo {
   id: DocumentType;
@@ -34,6 +43,11 @@ export interface DocumentDefinition<TData = any> {
   meta: DocumentMetaInfo;
   defaultData: TData;
   sampleData: TData;
+  dataKey?: string;
+  profileFieldMap?: Partial<Record<keyof UserProfile, keyof TData>>;
+  injectProfile?: (currentData: TData, profile: UserProfile) => TData;
+  getSignaturesForDocx?: (data: TData) => { left: PartySignatureInfo; right?: PartySignatureInfo };
+  buildDocxParagraphs?: (data: TData) => any[];
   getFilename: (data: TData, ext: 'pdf' | 'docx') => string;
   renderView: (props: DocumentComponentProps<TData>) => ReactElement | null;
   renderForm: (props: DocumentFormProps<TData>) => ReactElement | null;

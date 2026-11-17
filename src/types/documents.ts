@@ -29,7 +29,8 @@ export type DocumentType =
   | 'compraventa_vehiculo'
   | 'autorizacion_patios'
   // Documento a Medida / Oficio Universal
-  | 'documento_formal';
+  | 'documento_formal'
+  | (string & {});
 
 export interface DocumentMeta {
   id: DocumentType;
@@ -599,6 +600,7 @@ export interface DocumentoFormalData {
 
 // Master AllDocumentsData state container
 export interface AllDocumentsData {
+  [key: string]: any;
   cuentaCobro: CuentaCobroData;
   propuestaServicios: PropuestaServiciosData;
   contratoPrestacion: ContratoPrestacionData;
