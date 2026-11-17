@@ -118,7 +118,7 @@ export const HeroIntro: React.FC<Props> = ({
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-800 text-xs">
             <div className="bg-slate-800/40 p-3 rounded-xl border border-slate-800">
-              <div className="text-xl font-bold text-white font-mono">16+</div>
+              <div className="text-xl font-bold text-white font-mono">25+</div>
               <div className="text-slate-400 font-medium text-[11px]">Plantillas Legales</div>
             </div>
             <div className="bg-slate-800/40 p-3 rounded-xl border border-slate-800">

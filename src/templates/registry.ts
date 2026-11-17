@@ -15,6 +15,8 @@ import { prorrogaArrendamientoDefinition } from './inmobiliario/prorroga_arrenda
 import { reciboPagoCanonDefinition } from './inmobiliario/recibo_pago_canon';
 import { contratoPrestacionDefinition } from './comercial/contrato_prestacion';
 import { acuerdoNdaDefinition } from './comercial/acuerdo_nda';
+import { pagareInstruccionesDefinition } from './comercial/pagare_instrucciones';
+import { pazYSalvoDefinition } from './comercial/paz_y_salvo';
 import { derechoPeticionDefinition } from './legal/derecho_peticion';
 import { poderAutorizacionDefinition } from './legal/poder_autorizacion';
 import { habeasDataDefinition } from './legal/habeas_data';
@@ -47,6 +49,8 @@ export const DOC_TYPE_TO_DATA_KEY: Record<DocumentType, string> = {
   impugnacion_fotomultas: 'impugnacionFotomultas',
   reclamo_servicios_publicos: 'reclamoServiciosPublicos',
   acuerdo_nda: 'acuerdoNda',
+  pagare_instrucciones: 'pagareInstrucciones',
+  paz_y_salvo: 'pazYSalvo',
   compraventa_vehiculo: 'compraventaVehiculo',
   autorizacion_patios: 'autorizacionPatios',
   documento_formal: 'documentoFormal',
@@ -75,6 +79,8 @@ export const DOCUMENT_DEFINITIONS: Record<DocumentType, AnyDocumentDefinition> =
   // Comercial
   contrato_prestacion: contratoPrestacionDefinition,
   acuerdo_nda: acuerdoNdaDefinition,
+  pagare_instrucciones: pagareInstruccionesDefinition,
+  paz_y_salvo: pazYSalvoDefinition,
 
   // Legal
   derecho_peticion: derechoPeticionDefinition,

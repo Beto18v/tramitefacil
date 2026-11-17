@@ -911,6 +911,80 @@ const DOCUMENT_RULES: DocumentRule[] = [
       'Solicita reliquidación de la factura al promedio histórico real',
     ],
   },
+
+  // 24. PAGARÉ CON CARTA DE INSTRUCCIONES
+  {
+    id: 'pagare_instrucciones',
+    keyPhrases: [
+      { phrase: 'pagare con carta de instrucciones', weight: 52 },
+      { phrase: 'hacer un pagare', weight: 48 },
+      { phrase: 'pagare en blanco', weight: 46 },
+      { phrase: 'carta de instrucciones', weight: 46 },
+      { phrase: 'firmar un pagare', weight: 48 },
+      { phrase: 'garantia de prestamo', weight: 42 },
+      { phrase: 'respaldo de deuda', weight: 42 },
+      { phrase: 'pagare con codeudor', weight: 46 },
+      { phrase: 'titulo valor de credito', weight: 44 },
+      { phrase: 'prestamo de dinero con pagare', weight: 48 },
+      { phrase: 'pagare comercial', weight: 45 },
+    ],
+    keywords: [
+      { word: 'pagare', weight: 28 },
+      { word: 'instrucciones', weight: 16 },
+      { word: 'codeudor', weight: 16 },
+      { word: 'avalista', weight: 16 },
+      { word: 'prestamo', weight: 14 },
+      { word: 'deuda', weight: 12 },
+      { word: 'acreedor', weight: 14 },
+      { word: 'intereses', weight: 12 },
+      { word: 'credito', weight: 12 },
+      { word: 'aceleracion', weight: 14 },
+    ],
+    defaultLegalJustification: 'Artículos 622 y 709 a 711 del Código de Comercio de Colombia.',
+    defaultReasoning:
+      'Otorga un título valor ejecutivo idóneo para respaldo de préstamos y obligaciones dinerarias, facultando legalmente al acreedor para su cobro judicial expedito.',
+    keyPoints: [
+      'Título valor ejecutivo con promesa incondicional de pago',
+      'Carta de instrucciones conforme al Artículo 622 del Código de Comercio',
+      'Cláusulas de aceleración e intereses con espacio para firma y huella dactilar',
+    ],
+  },
+
+  // 25. CERTIFICADO DE PAZ Y SALVO GENERAL
+  {
+    id: 'paz_y_salvo',
+    keyPhrases: [
+      { phrase: 'paz y salvo', weight: 52 },
+      { phrase: 'certificado de paz y salvo', weight: 52 },
+      { phrase: 'carta de paz y salvo', weight: 50 },
+      { phrase: 'constancia de paz y salvo', weight: 50 },
+      { phrase: 'paz y salvo de deuda', weight: 48 },
+      { phrase: 'paz y salvo de contrato', weight: 48 },
+      { phrase: 'certificar que no me debe nada', weight: 46 },
+      { phrase: 'extincion de obligaciones', weight: 42 },
+      { phrase: 'finiquito comercial', weight: 44 },
+      { phrase: 'pago total de la obligacion', weight: 44 },
+    ],
+    keywords: [
+      { word: 'salvo', weight: 22 },
+      { word: 'finiquito', weight: 18 },
+      { word: 'cumplimiento', weight: 14 },
+      { word: 'cancelado', weight: 12 },
+      { word: 'saldada', weight: 14 },
+      { word: 'saldado', weight: 14 },
+      { word: 'liberacion', weight: 14 },
+      { word: 'extincion', weight: 14 },
+    ],
+    defaultLegalJustification:
+      'Artículo 1625 del Código Civil colombiano (Modos de extinción de las obligaciones).',
+    defaultReasoning:
+      'Certifica formal e irrevocablemente que el beneficiario se encuentra a paz y salvo total por obligaciones contractuales, comerciales o dinerarias, sin deudas ni reclamaciones pendientes.',
+    keyPoints: [
+      'Constancia formal de extinción de obligaciones civiles o comerciales',
+      'Declaración expresa de liberación de responsabilidad y renuncia a acciones legales',
+      'Aplicable a servicios profesionales, liquidación de contratos y deudas saldadas',
+    ],
+  },
 ];
 
 /**

@@ -24,6 +24,8 @@ export { reciboPagoCanonDefinition } from './inmobiliario/recibo_pago_canon';
 // Comercial
 export { contratoPrestacionDefinition } from './comercial/contrato_prestacion';
 export { acuerdoNdaDefinition } from './comercial/acuerdo_nda';
+export { pagareInstruccionesDefinition } from './comercial/pagare_instrucciones';
+export { pazYSalvoDefinition } from './comercial/paz_y_salvo';
 
 // Legal
 export { derechoPeticionDefinition } from './legal/derecho_peticion';

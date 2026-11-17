@@ -26,6 +26,8 @@ export type DocumentType =
   // Comercial & Contratos
   | 'contrato_prestacion'
   | 'acuerdo_nda'
+  | 'pagare_instrucciones'
+  | 'paz_y_salvo'
   // Trámites Administrativos
   | 'derecho_peticion'
   | 'poder_autorizacion'
@@ -115,7 +117,7 @@ export const CATEGORIES_CONFIG: CategoryHubConfig[] = [
       hoverBg: 'hover:border-slate-300 dark:hover:border-slate-600',
       accent: 'slate',
     },
-    subfilters: ['Todos', 'Contratos', 'Confidencialidad (NDA)'],
+    subfilters: ['Todos', 'Contratos', 'Confidencialidad (NDA)', 'Constancias'],
   },
   {
     id: 'legal',
@@ -626,6 +628,108 @@ export interface AcuerdoNdaData {
   signatureDataUrl?: string;
 }
 
+// 13b. Pagaré con Carta de Instrucciones (Arts. 622 y 709 C.Co)
+export interface PagareInstruccionesData {
+  numeroPagare: string;
+  ciudad: string;
+  fechaSuscripcion: string;
+  tipoVencimiento: 'fecha_fija' | 'a_la_vista' | 'segun_instrucciones';
+  fechaVencimiento: string;
+
+  // Acreedor / Tenedor legítimo
+  nombreAcreedor: string;
+  tipoDocAcreedor: string;
+  numDocAcreedor: string;
+  ciudadAcreedor: string;
+
+  // Deudor / Otorgante
+  nombreDeudor: string;
+  tipoDocDeudor: string;
+  numDocDeudor: string;
+  direccionDeudor: string;
+  ciudadDeudor: string;
+  telefonoDeudor: string;
+  correoDeudor?: string;
+
+  // Codeudor / Avalista solidario (opcional)
+  incluirCodeudor: boolean;
+  nombreCodeudor?: string;
+  tipoDocCodeudor?: string;
+  numDocCodeudor?: string;
+  direccionCodeudor?: string;
+  ciudadCodeudor?: string;
+  telefonoCodeudor?: string;
+  correoCodeudor?: string;
+
+  // Capital e intereses
+  capital: number;
+  capitalLetras?: string;
+  tasaInteresCorrienteMensual: number;
+  tasaInteresMora: string;
+  clausulaAceleracion: boolean;
+  renunciaRequerimientos: boolean;
+
+  // Carta de Instrucciones
+  incluirCartaInstrucciones: boolean;
+  objetoCredito?: string;
+  instruccionesLlenado: string;
+  eventoExigibilidad: string;
+
+  // Huella dactilar y firmas
+  incluirHuella: boolean;
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
+// 13c. Certificado de Paz y Salvo General (Art. 1625 C.C.)
+export interface PazYSalvoData {
+  ciudad: string;
+  fecha: string;
+  numeroCertificado: string;
+
+  // Emisor / Otorgante
+  nombreEmisor: string;
+  tipoDocEmisor: string;
+  numDocEmisor: string;
+  calidadEmisor: 'acreedor' | 'contratante' | 'prestador_servicios' | 'arrendador' | 'empresa' | 'otro';
+  cargoEmisor?: string;
+  telefonoEmisor?: string;
+  correoEmisor?: string;
+  direccionEmisor?: string;
+
+  // Beneficiario
+  nombreBeneficiario: string;
+  tipoDocBeneficiario: string;
+  numDocBeneficiario: string;
+  calidadBeneficiario?: string;
+
+  // Concepto u obligación
+  tipoConcepto:
+    | 'contrato_servicios'
+    | 'obligacion_comercial'
+    | 'entrega_inventario'
+    | 'liquidacion_cuotas'
+    | 'arrendamiento'
+    | 'acuerdo_privado'
+    | 'otro';
+  conceptoPersonalizado?: string;
+  referenciaContrato?: string;
+  fechaAcuerdoOriginal?: string;
+  montoTotalSaldado?: number;
+  montoLetras?: string;
+  detalleCumplimiento: string;
+
+  // Declaración formal
+  declaracionTexto: string;
+  renunciaAcciones: boolean;
+  incluyeNotaAclaratoria?: boolean;
+  notaAclaratoria?: string;
+
+  // Firma
+  signatureType?: 'text' | 'draw';
+  signatureDataUrl?: string;
+}
+
 // 14. Compraventa de Vehículo
 export interface CompraventaVehiculoData {
   ciudad: string;
@@ -872,6 +976,8 @@ export interface AllDocumentsData {
   impugnacionFotomultas?: ImpugnacionFotomultasData;
   reclamoServiciosPublicos?: ReclamoServiciosPublicosData;
   acuerdoNda: AcuerdoNdaData;
+  pagareInstrucciones?: PagareInstruccionesData;
+  pazYSalvo?: PazYSalvoData;
   compraventaVehiculo: CompraventaVehiculoData;
   autorizacionPatios: AutorizacionPatiosData;
   documentoFormal: DocumentoFormalData;
