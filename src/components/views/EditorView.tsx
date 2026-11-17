@@ -140,10 +140,10 @@ export const EditorView: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-57px)] w-full overflow-hidden bg-slate-50 dark:bg-[#0B0F19] transition-colors">
+    <div className="flex flex-col h-screen w-full overflow-hidden bg-slate-50 dark:bg-[#0B0F19] transition-colors">
       {/* 1. Top action & navigation bar */}
       <div className="no-print bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-2xs z-20">
-        {/* Left: Volver + Document Header */}
+        {/* Left: Volver + Brand + Document Header */}
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -155,7 +155,16 @@ export const EditorView: React.FC<Props> = ({
             <span>Catálogo</span>
           </button>
 
-          <div className="flex flex-col">
+          <div className="hidden md:flex items-center gap-2 border-l border-slate-200 dark:border-slate-800 pl-3">
+            <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
+              <FileText className="w-4 h-4" />
+            </div>
+            <span className="text-xs font-bold text-slate-900 dark:text-slate-200 leading-tight">
+              TrámiteFácil Hub
+            </span>
+          </div>
+
+          <div className="flex flex-col sm:border-l sm:border-slate-200 dark:sm:border-slate-800 sm:pl-3">
             <span className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">
               {docMeta.title}
             </span>
@@ -409,7 +418,7 @@ export const EditorView: React.FC<Props> = ({
       </div>
 
       {/* 3. Barra inferior de descarga fija para móviles (Bottom Sheet Bar) */}
-      <div className="lg:hidden no-print fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#051C15]/95 backdrop-blur-md border-t-2 border-slate-900/30 dark:border-emerald-500/40 px-3 py-2.5 shadow-2xl safe-area-bottom">
+      <div className="lg:hidden no-print fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-3 py-2.5 shadow-2xl safe-area-bottom">
         <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
           {/* Botón 1: Descargar PDF */}
           <button

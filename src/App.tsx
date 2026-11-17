@@ -11,7 +11,7 @@ import {
   getInitialFullStorageState,
 } from './data/initialData';
 import { getDocumentDefinition, DOC_TYPE_TO_DATA_KEY } from './templates';
-import { Header, Footer } from './components/layout';
+import { Footer } from './components/layout';
 import { CatalogView, EditorView } from './components/views';
 import { UserProfileModal } from './components/shared';
 import { loadUserProfile, saveUserProfile, injectProfileIntoDocument } from './utils/profileInjector';
@@ -28,7 +28,7 @@ interface ToastState {
 }
 
 export default function App() {
-  const [theme, toggleTheme] = useTheme();
+  useTheme();
   const [appState, setAppState] = useLocalStorage<AppStorageState>(
     STORAGE_KEY,
     getInitialFullStorageState,
@@ -171,19 +171,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] dark:bg-[#090D16] text-slate-900 dark:text-slate-100 font-sans selection:bg-emerald-600 selection:text-white dark:selection:bg-emerald-500 dark:selection:text-slate-950 overflow-x-hidden transition-colors">
-      {/* 1. Global Navigation Header */}
-      <Header
-        currentView={currentView}
-        selectedDocId={selectedDocId}
-        onGoToCatalog={handleGoToCatalog}
-        onSelectDoc={(id) => setSelectedDocId(id)}
-        userProfile={userProfile}
-        onOpenProfileModal={() => setIsProfileModalOpen(true)}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
-
-      {/* 2. Main Viewport */}
+      {/* Main Viewport */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {currentView === 'catalog' ? (
           <CatalogView

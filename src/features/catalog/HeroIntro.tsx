@@ -36,6 +36,26 @@ export const HeroIntro: React.FC<Props> = ({
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         {/* Left Column: Headline, Copy, Action Buttons */}
         <div className="lg:col-span-7 space-y-6">
+          {/* Brand Wordmark: TrámiteFácil Hub at top-left of Hero */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-xs shrink-0">
+              <FileText className="w-5 h-5" strokeWidth={2} />
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight">
+                  TrámiteFácil
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-800 text-emerald-400 border border-slate-700">
+                  Hub
+                </span>
+              </div>
+              <span className="text-xs text-slate-400 font-medium">
+                Notaría Digital & Trámites Oficiales de Colombia
+              </span>
+            </div>
+          </div>
+
           {/* Top Badge: Notaría Digital */}
           <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/80 text-xs backdrop-blur-md">
             <span className="flex h-2 w-2 relative">
